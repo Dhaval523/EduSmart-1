@@ -21,6 +21,21 @@ const moduleSchema = new mongoose.Schema({
         ref:"Quiz"
     },
 
+    resources:[
+        {
+            type:{
+                type:String,
+                enum:["link", "file"],
+                required:true
+            },
+            title:{ type:String },
+            url:{ type:String, required:true },
+            mimeType:{ type:String },
+            fileName:{ type:String },
+            publicId:{ type:String }
+        }
+    ],
+
     comments:[
         {
             type:mongoose.Schema.Types.ObjectId,

@@ -50,6 +50,10 @@ export const Register = async(req ,res)=>{
 
     } catch (error) {
         console.log(`error from register backend, ${error}`)
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        })
     }
 }
 
@@ -109,6 +113,10 @@ export const Login = async(req,res)=>{
         
     } catch (error) {
         console.log(`error from Login backend, ${error}`)
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        })
     }
 }
 
@@ -129,6 +137,10 @@ export const getUser = async(req,res)=>{
         return res.status(201).json(user)
     } catch (error) {
         console.log(`error from get User, ${error}`)
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        })
     }
 }
 
@@ -140,6 +152,10 @@ export const logout=async(req,res)=>{
         })
     } catch (error) {
         console.log(error)
+        return res.status(500).json({
+            success: false,
+            message: "Internal server error"
+        })
     }
 }
 

@@ -12,74 +12,30 @@ import DashboardAnalytics from '@/Pages/Admin/DashboardAnalytics'
 import DasbhoardProducts from '@/Pages/Admin/DasbhoardProducts'
 import CreateModule from '@/Pages/Admin/CreateModule'
 import Quiz from '@/Pages/User/Quiz'
+import AiLearningPath from '@/Pages/User/AiLearningPath'
 import Cancel from '@/Pages/Admin/Cancel'
 import PaymenSuccess from '@/Pages/Admin/PaymenSuccess'
 
 const MainRoutes = () => {
   return (
    <Routes>
+    <Route element={<ProtectedRoutes />}>
+      <Route path='/' element={<Home/>}/>
+      <Route path='/cancel' element={<Cancel/>}/>
+      <Route path='/purchase' element={<PaymenSuccess/>}/>
+      <Route path='/singleCourse/:id' element={<SingleCourse/>}/>
+      <Route path='/YourCourse' element={<YourCourse/>}/>
+      <Route path='/YourCourse/:id' element={<SinglePurchasedCourse/>}/>
+      <Route path='/quiz/:id' element={<Quiz/>}/>
+      <Route path='/ai-learning-path' element={<AiLearningPath/>}/>
 
-    <Route path='/' element={
-        <ProtectedRoutes>
-            <Home/>
-        </ProtectedRoutes>
-    }/>
-    <Route path='/cancel' element={
-        <ProtectedRoutes>
-            <Cancel/>
-        </ProtectedRoutes>
-    }/>
-    <Route path='/purchase' element={
-        <ProtectedRoutes>
-            <PaymenSuccess/>
-        </ProtectedRoutes>
-    }/>
-    <Route path='/singleCourse/:id' element={
-        <ProtectedRoutes>
-            <SingleCourse/>
-        </ProtectedRoutes>
-    }/>
-    <Route path='/YourCourse' element={
-        <ProtectedRoutes>
-            <YourCourse/>
-        </ProtectedRoutes>
-    }/>
-    <Route path='/YourCourse/:id' element={
-        <ProtectedRoutes>
-            <SinglePurchasedCourse/>
-        </ProtectedRoutes>
-    }/>
-    <Route path='/quiz/:id' element={
-        <ProtectedRoutes>
-            <Quiz/>
-        </ProtectedRoutes>
-    }/>
-
-    <Route path='/dashboard' element={
-        <ProtectedRoutes>
-
-            <Dashboard/>
-        </ProtectedRoutes>
-        } >
-      
-      <Route index  element={
-        <ProtectedRoutes>
-            
-            <DashboardAnalytics/>
-        </ProtectedRoutes>
-        }/>
-      <Route path='dashboardProduct' element={
-          <ProtectedRoutes>
-            <DasbhoardProducts/>
-
-        </ProtectedRoutes>
-        }/>
-        <Route path='CourseModule/:id' element={
-            <ProtectedRoutes>
-                <CreateModule/>
-            </ProtectedRoutes>
-        }/>
+      <Route path='/dashboard' element={<Dashboard/>}>
+        <Route index element={<DashboardAnalytics/>}/>
+        <Route path='dashboardProduct' element={<DasbhoardProducts/>}/>
+        <Route path='CourseModule/:id' element={<CreateModule/>}/>
+      </Route>
     </Route>
+
     <Route path='/login' element={<Login/>}/>
     <Route path='/register' element={<Register/>}/>
    </Routes>

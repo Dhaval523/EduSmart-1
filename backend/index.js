@@ -9,12 +9,26 @@ import quizRoute from './src/routes/quiz.route.js'
 import commentRoute from './src/routes/comment.route.js'
 import paymentRoute from './src/routes/payment.route.js'
 import analyticRoute from './src/routes/analytic.route.js'
+import progressRoute from './src/routes/progress.route.js'
+import aiRoute from './src/routes/ai.routes.js'
 import cors from 'cors'
 
 const app = express()
 
+const allowedOrigins = [
+    ENV.CLIENT_URL,
+    "http://localhost:5173",
+    "http://127.0.0.1:5173"
+].filter(Boolean)
+
 app.use(cors({
-    origin:ENV.CLIENT_URL,
+    origin: (origin, callback) => {
+        // Allow non-browser clients (no Origin) and known dev origins
+        if (!origin || allowedOrigins.includes(origin)) {
+            return callback(null, true)
+        }
+        return callback(new Error(`CORS blocked for origin: ${origin}`))
+    },
     credentials:true
 }))
 app.use(cookieParser())
@@ -30,6 +44,8 @@ app.use('/api/comment', commentRoute)
 
 app.use('/api/payment', paymentRoute)
 app.use('/api/analytic', analyticRoute)
+app.use('/api/progress', progressRoute)
+app.use('/api', aiRoute)
 
 
 

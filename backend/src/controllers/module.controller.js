@@ -10,20 +10,53 @@ export const createModule = async(req,res)=>{
             })
         }
 
-        if(!req.file){
+        const videoFile = req.files?.video?.[0];
+        if(!videoFile){
             return res.status(401).json({
                 message:"Please provide video"
             })
         }
 
-        const videoUrl = req.file.path
-        const publicId = req.file.filename
+        const videoUrl = videoFile.path
+        const publicId = videoFile.filename
+
+        const rawLinks = req.body.resourceLinks;
+        let linkList = []
+        if (Array.isArray(rawLinks)) {
+            linkList = rawLinks
+        } else if (typeof rawLinks === "string" && rawLinks.trim()) {
+            try {
+                const parsed = JSON.parse(rawLinks)
+                linkList = Array.isArray(parsed) ? parsed : [rawLinks]
+            } catch {
+                linkList = rawLinks.split(/\r?\n|,/g)
+            }
+        }
+
+        const linkResources = linkList
+            .map((link) => (typeof link === "string" ? link.trim() : ""))
+            .filter(Boolean)
+            .map((link) => ({
+                type:"link",
+                title:link,
+                url:link
+            }))
+
+        const fileResources = (req.files?.resources || []).map((file)=>({
+            type:"file",
+            title:file.originalname,
+            url:file.path,
+            mimeType:file.mimetype,
+            fileName:file.originalname,
+            publicId:file.filename
+        }))
 
         const module = await Modules.create({
             courseId,
             title,
             video:videoUrl,
-            videoPublicUrl :publicId
+            videoPublicUrl :publicId,
+            resources:[...linkResources, ...fileResources]
         })
         module.save()
 
@@ -35,6 +68,9 @@ export const createModule = async(req,res)=>{
         return res.status(201).json(module)
     } catch (error) {
         console.log(`error from create module, ${error}`)
+        return res.status(500).json({
+            message:"Internal server error"
+        })
     }
 }
 

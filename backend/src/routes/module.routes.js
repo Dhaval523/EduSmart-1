@@ -6,7 +6,16 @@ import { videoUpload } from "../middleware/videoUpload.js";
 const moduleRoute = express.Router()
 
 
-moduleRoute.post('/createModule', protectRoute, adminRoute, videoUpload.single('video'), createModule)
+moduleRoute.post(
+    '/createModule',
+    protectRoute,
+    adminRoute,
+    videoUpload.fields([
+        { name: 'video', maxCount: 1 },
+        { name: 'resources', maxCount: 10 }
+    ]),
+    createModule
+)
 moduleRoute.get('/getModule/:id', protectRoute, getSingleCourseModule)
 moduleRoute.get('/comment/:id', protectRoute, getComment)
 

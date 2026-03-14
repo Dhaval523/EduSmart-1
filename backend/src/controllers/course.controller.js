@@ -18,9 +18,15 @@ export const createCourse =async(req , res)=>{
             })
         }
 
+        if(!thumbnail){
+            return res.status(400).json({
+                message:"Thumbnail file is required"
+            })
+        }
+
         let imageUrl =""
         
-        const base64 = `data:${req.file.mimetype};base64,${thumbnail.buffer.toString("base64")}`;
+        const base64 = `data:${thumbnail.mimetype};base64,${thumbnail.buffer.toString("base64")}`;
 
         const uploadRes = await cloudinary.uploader.upload(base64,{
             folder:"lmsYT"
@@ -44,7 +50,12 @@ export const createCourse =async(req , res)=>{
         })
 
     } catch (error) {
-        console.log(`error from create course. ${error}`)
+        const safeError = error?.message || JSON.stringify(error)
+        console.log(`error from create course. ${safeError}`)
+        return res.status(500).json({
+            success:false,
+            message:"Internal server error"
+        })
     }
 }
 
@@ -55,7 +66,8 @@ export const getCourse = async(req, res)=>{
         
         const {search}  = req.query;
 
-        if(!search || !search.trim()===""){
+        const rawSearch = typeof search === "string" ? search.trim() : "";
+        if(!rawSearch){
             const allCourses = await Course.find()
 
             return res.status(201).json({
@@ -63,46 +75,64 @@ export const getCourse = async(req, res)=>{
             })
         }
 
-        const prompt =`You are an intelligent assistant for a learning managemenge platform System . A user is searching for courses. analyze the query and return the most relevant keyword from these categories
-        
-        -Artificial intelligence,
-        -MERN Stack,
-        -DevOps,
-        -Mobile Development
+        const prompt =`You are an intelligent assistant for a learning management platform. A user is searching for courses. Analyze the query and return 1-3 short keywords (comma-separated, no sentences) that best match the query.
 
-        only reply with one keyword that best matches the query no explanation
+        Allowed categories / synonyms:
+        - Artificial intelligence, AI, Machine Learning
+        - MERN Stack, Web Development, Full Stack
+        - DevOps, Cloud, Docker, Kubernetes
+        - Mobile Development, Android, iOS, React Native
+        - Frontend, UI, UI/UX, Design, HTML, CSS, JavaScript, React
 
-        user query: ${search}
+        Rules:
+        - Reply with keywords only, comma-separated.
+        - Prefer category terms over long phrases.
+        - If the query is in Hindi or mixed, still return English keywords.
+
+        user query: ${rawSearch}
         `
 
-        const result = await model.generateContent(prompt);
-
-        const aiText = result?.response?.candidates?.[0]?.content?.parts?.[0]?.text
-        ?.trim()
-        .replace(/[`"\n]/g, "") || "";
-
-        console.log("search ", search)
-        console.log("Ai text", aiText)
-
-        const searchTerm = aiText || search
-
-        const mongoQuery={
-            $or:[
-                {title:{$regex:searchTerm, $options:"i"}},
-                {description:{$regex:searchTerm, $options:"i"}},
-            ]
+        let aiText = ""
+        try {
+            const result = await model.generateContent(prompt);
+            aiText = result?.response?.candidates?.[0]?.content?.parts?.[0]?.text
+                ?.trim()
+                .replace(/[`"\n]/g, "") || "";
+        } catch (err) {
+            const safeError = err?.message || JSON.stringify(err)
+            console.log(`ai search error: ${safeError}`)
         }
 
-        const courses = await Course.find(mongoQuery).lean()
+        console.log("search ", rawSearch)
+        console.log("Ai text", aiText)
 
-        console.log(`found ,${courses.length} , courses ${search}`)
+        const aiTerms = aiText
+            ? aiText.split(",").map(t => t.trim()).filter(Boolean)
+            : [];
+
+        const termSet = new Set();
+        if (rawSearch) termSet.add(rawSearch);
+        aiTerms.forEach(t => termSet.add(t));
+
+        const terms = Array.from(termSet).slice(0, 6);
+
+        const mongoQuery = {
+            $or: terms.flatMap(term => ([
+                { title: { $regex: term, $options: "i" } },
+                { description: { $regex: term, $options: "i" } }
+            ]))
+        }
+
+        let courses = await Course.find(mongoQuery).lean()
+
+        console.log(`found ,${courses.length} , courses ${rawSearch}`)
 
 
         return res.status(201).json({
             success:true,
             courses,
             count:courses.length,
-            searchTerm:search,
+            searchTerm:rawSearch,
 
         })
 
@@ -112,7 +142,12 @@ export const getCourse = async(req, res)=>{
 
 
     } catch (error) {
-        console.log(`error from getCourse, ${error}`)
+        const safeError = error?.message || JSON.stringify(error)
+        console.log(`error from getCourse, ${safeError}`)
+        return res.status(500).json({
+            success:false,
+            message:"Internal server error"
+        })
     }
 }
 

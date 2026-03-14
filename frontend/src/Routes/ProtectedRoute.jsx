@@ -2,10 +2,9 @@ import { Spinner } from "@/components/ui/spinner"
 import { useGetUserHook } from "@/hooks/User.hook"
 import { useUserStore } from "@/Store/user.store"
 import { useEffect } from "react"
+import { Navigate, Outlet } from "react-router-dom"
 
-import { Navigate } from "react-router-dom"
-
-export const ProtectedRoutes =({children})=>{
+export const ProtectedRoutes =()=>{
     const setUser = useUserStore((state)=>state.setUser)
     const {data, isLoading, isError, error} = useGetUserHook()
 
@@ -16,7 +15,7 @@ export const ProtectedRoutes =({children})=>{
         setUser(data)
     }
 
-    })
+    }, [data, setUser])
     if(isLoading){
         return (
              <div className="h-screen w-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
@@ -33,5 +32,5 @@ export const ProtectedRoutes =({children})=>{
     return <Navigate to="/login" replace />
   }
 
-    return children
+    return <Outlet/>
 }

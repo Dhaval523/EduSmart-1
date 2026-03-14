@@ -8,8 +8,12 @@ const storage = new CloudinaryStorage({
     cloudinary:cloudinary,
     params:{
         folder:"courseModule",
-        resource_type:'video',
-        allowed_formats:['mp4', 'mov', 'avi']
+        resource_type:'auto',
+        allowed_formats:[
+            'mp4', 'mov', 'avi',
+            'pdf', 'ppt', 'pptx',
+            'jpg', 'jpeg', 'png', 'webp'
+        ]
     }
 })
 

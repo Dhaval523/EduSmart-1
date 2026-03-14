@@ -21,6 +21,14 @@ const CreateModule = () => {
     formData.append('title', data.title)
     formData.append('video', data.video[0])
     formData.append('courseId', id)
+    if (data.resourceLinks) {
+      formData.append('resourceLinks', data.resourceLinks)
+    }
+    if (data.resources?.length) {
+      Array.from(data.resources).forEach((file) => {
+        formData.append('resources', file)
+      })
+    }
 
     mutate(formData, {
       onSuccess: () => {
@@ -70,6 +78,27 @@ const CreateModule = () => {
                   accept='video/*' 
                   className='w-full px-4 py-3 border-2 border-slate-200 rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition-all cursor-pointer' 
                   {...register('video', { required: true })}
+                />
+              </div>
+
+              <div>
+                <label className='block text-sm font-semibold text-slate-700 mb-2'>Resource Links (one per line)</label>
+                <textarea
+                  rows={4}
+                  placeholder='https://example.com/notes.pdf&#10;https://docs.example.com/ui-guide'
+                  className='w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 focus:outline-none transition-all'
+                  {...register('resourceLinks')}
+                />
+              </div>
+
+              <div>
+                <label className='block text-sm font-semibold text-slate-700 mb-2'>Upload Resources (images, PDF, PPT)</label>
+                <input
+                  type="file"
+                  multiple
+                  accept=".pdf,.ppt,.pptx,image/*"
+                  className='w-full px-4 py-3 border-2 border-slate-200 rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition-all cursor-pointer'
+                  {...register('resources')}
                 />
               </div>
               
