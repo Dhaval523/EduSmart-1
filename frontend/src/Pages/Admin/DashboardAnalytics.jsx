@@ -1,87 +1,178 @@
-import { useGetDailyData, useGetDataHook } from '@/hooks/analytic.hook'
-import React, { useMemo } from 'react'
-import {
-  CartesianGrid,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts'
+import React from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAdminDashboard } from '@/hooks/analytic.hook'
+import { BookOpen, Layers, Users, DollarSign, CheckCircle2, PlusCircle, ShoppingBag, BarChart3 } from 'lucide-react'
+
+const StatCard = ({ title, value, icon: Icon }) => (
+  <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 flex items-center gap-4">
+    <div className="h-12 w-12 rounded-2xl bg-slate-900 text-white flex items-center justify-center">
+      <Icon className="w-5 h-5" />
+    </div>
+    <div>
+      <p className="text-xs font-semibold text-slate-500 uppercase tracking-[0.18em]">{title}</p>
+      <p className="text-2xl font-black text-slate-900">{value ?? '-'}</p>
+    </div>
+  </div>
+)
+
+const StatSkeleton = () => (
+  <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 animate-pulse">
+    <div className="h-4 w-24 bg-slate-200 rounded" />
+    <div className="h-8 w-20 bg-slate-200 rounded mt-3" />
+  </div>
+)
+
+const WidgetSkeleton = () => (
+  <div className="bg-white rounded-2xl border border-slate-200 p-6 animate-pulse">
+    <div className="h-4 w-40 bg-slate-200 rounded" />
+    <div className="mt-4 space-y-2">
+      <div className="h-4 w-full bg-slate-200 rounded" />
+      <div className="h-4 w-5/6 bg-slate-200 rounded" />
+      <div className="h-4 w-2/3 bg-slate-200 rounded" />
+    </div>
+  </div>
+)
 
 const DashboardAnalytics = () => {
-  const { data } = useGetDataHook()
+  const navigate = useNavigate()
+  const { data, isLoading } = useAdminDashboard()
 
-  const { startDate, endDate } = useMemo(() => {
-    const end = new Date()
-    const start = new Date()
-    start.setDate(end.getDate() - 6); // last 7 days
-    end.setDate(end.getDate()+2)
-    const toStr = (d) => d.toISOString().split('T')[0]
-
-    return {
-      startDate: toStr(start),
-      endDate: toStr(end),
-    }
-  }, [])
-
-  const { data: dailyData, isLoading } = useGetDailyData(startDate, endDate)
+  const kpis = data?.kpis || {}
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8 space-y-10">
-      {/* Page Header */}
-      <div>
-        <h1 className="text-3xl font-bold text-gray-900">Analytics Overview</h1>
-        <p className="text-gray-500 mt-1">
-          Track platform performance & revenue
-        </p>
+    <div className="min-h-screen bg-gray-50 p-8 space-y-8">
+      <div className="flex flex-col gap-2">
+        <h1 className="text-3xl font-black text-slate-900">Admin Overview</h1>
+        <p className="text-slate-600 text-sm">Operational overview of EduSmart</p>
       </div>
 
-      {/* KPI Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-        <StatCard title="Total Courses" value={data?.courses} />
-        <StatCard title="Enrollments" value={data?.totalEntrollments} />
-        <StatCard title="Revenue" value={`₹ ${data?.totalRevenue}`} />
-        <StatCard title="Users" value={data?.users} />
-      </div>
-
-      {/* Chart Section */}
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h2 className="text-xl font-semibold text-gray-900">
-              Revenue Trend
-            </h2>
-            <p className="text-sm text-gray-500">
-              Last 7 days performance
-            </p>
-          </div>
-        </div>
-
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {isLoading ? (
-          <ChartSkeleton />
+          [...Array(8)].map((_, idx) => <StatSkeleton key={idx} />)
         ) : (
-          <div className="h-[55vh]">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={dailyData || []}>
-                <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip
-                  formatter={(value) => [`₹ ${value}`, 'Revenue']}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="revenue"
-                  stroke="#2563eb"
-                  strokeWidth={3}
-                  dot={false}
-                  activeDot={{ r: 6 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
+          <>
+            <StatCard title="Total Courses" value={kpis.totalCourses} icon={BookOpen} />
+            <StatCard title="Published" value={kpis.publishedCourses} icon={CheckCircle2} />
+            <StatCard title="Drafts" value={kpis.draftCourses} icon={Layers} />
+            <StatCard title="Total Modules" value={kpis.totalModules} icon={Layers} />
+            <StatCard title="Enrollments" value={kpis.totalEnrollments} icon={Users} />
+            <StatCard title="Revenue" value={`₹ ${kpis.totalRevenue ?? 0}`} icon={DollarSign} />
+            <StatCard title="Completion Rate" value={`${kpis.completionRate ?? 0}%`} icon={CheckCircle2} />
+            <StatCard title="Top Selling" value={data?.topSellingCourses?.[0]?.course?.title || '—'} icon={ShoppingBag} />
+          </>
+        )}
+      </div>
+
+      <div className="flex flex-wrap gap-3">
+        <button
+          onClick={() => navigate('/admin/courses')}
+          className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white"
+        >
+          <PlusCircle className="w-4 h-4" /> Add Course
+        </button>
+        <button
+          onClick={() => navigate('/admin/courses')}
+          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700"
+        >
+          <ShoppingBag className="w-4 h-4" /> Manage Courses
+        </button>
+        <button
+          onClick={() => navigate('/admin/analytics')}
+          className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-700"
+        >
+          <BarChart3 className="w-4 h-4" /> View Analytics
+        </button>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {isLoading ? (
+          <>
+            <WidgetSkeleton />
+            <WidgetSkeleton />
+          </>
+        ) : (
+          <>
+            <div className="bg-white rounded-2xl border border-slate-200 p-6">
+              <h2 className="text-lg font-bold text-slate-900">Recent Courses</h2>
+              <div className="mt-4 space-y-3">
+                {(data?.recentCourses || []).map((course) => (
+                  <div key={course._id} className="flex items-center justify-between text-sm">
+                    <div>
+                      <p className="font-semibold text-slate-900">{course.title}</p>
+                      <p className="text-xs text-slate-500">{course.category || 'Uncategorized'}</p>
+                    </div>
+                    <span className="text-xs text-slate-500">{new Date(course.createdAt).toLocaleDateString()}</span>
+                  </div>
+                ))}
+                {!data?.recentCourses?.length ? (
+                  <p className="text-sm text-slate-500">No courses yet.</p>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl border border-slate-200 p-6">
+              <h2 className="text-lg font-bold text-slate-900">Recent Orders</h2>
+              <div className="mt-4 space-y-3">
+                {(data?.recentOrders || []).map((order) => (
+                  <div key={order._id} className="flex items-center justify-between text-sm">
+                    <div>
+                      <p className="font-semibold text-slate-900">{order.course?.title || 'Course'}</p>
+                      <p className="text-xs text-slate-500">₹ {order.totalAmount}</p>
+                    </div>
+                    <span className="text-xs text-slate-500">{new Date(order.createdAt).toLocaleDateString()}</span>
+                  </div>
+                ))}
+                {!data?.recentOrders?.length ? (
+                  <p className="text-sm text-slate-500">No orders yet.</p>
+                ) : null}
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {isLoading ? (
+          <>
+            <WidgetSkeleton />
+            <WidgetSkeleton />
+          </>
+        ) : (
+          <>
+            <div className="bg-white rounded-2xl border border-slate-200 p-6">
+              <h2 className="text-lg font-bold text-slate-900">Top Selling Courses</h2>
+              <div className="mt-4 space-y-3">
+                {(data?.topSellingCourses || []).map((item) => (
+                  <div key={item.course?._id} className="flex items-center justify-between text-sm">
+                    <div>
+                      <p className="font-semibold text-slate-900">{item.course?.title}</p>
+                      <p className="text-xs text-slate-500">{item.total} sales • ₹ {item.revenue}</p>
+                    </div>
+                  </div>
+                ))}
+                {!data?.topSellingCourses?.length ? (
+                  <p className="text-sm text-slate-500">No sales yet.</p>
+                ) : null}
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl border border-slate-200 p-6">
+              <h2 className="text-lg font-bold text-slate-900">Draft Courses</h2>
+              <div className="mt-4 space-y-3">
+                {(data?.recentCourses || []).filter((c) => !c.isPublished).map((course) => (
+                  <div key={course._id} className="flex items-center justify-between text-sm">
+                    <div>
+                      <p className="font-semibold text-slate-900">{course.title}</p>
+                      <p className="text-xs text-slate-500">Missing publish status</p>
+                    </div>
+                  </div>
+                ))}
+                {!data?.recentCourses?.filter((c) => !c.isPublished).length ? (
+                  <p className="text-sm text-slate-500">No draft courses.</p>
+                ) : null}
+              </div>
+            </div>
+          </>
         )}
       </div>
     </div>
@@ -89,19 +180,3 @@ const DashboardAnalytics = () => {
 }
 
 export default DashboardAnalytics
-
-
-const StatCard = ({ title, value }) => (
-  <div className="bg-white rounded-xl shadow-md p-6 border border-gray-100">
-    <p className="text-sm text-gray-500">{title}</p>
-    <h2 className="text-2xl font-bold text-gray-900 mt-2">
-      {value ?? '-'}
-    </h2>
-  </div>
-)
-
-const ChartSkeleton = () => (
-  <div className="h-[55vh] flex items-center justify-center">
-    <div className="animate-pulse w-full h-full bg-gray-100 rounded-xl" />
-  </div>
-)

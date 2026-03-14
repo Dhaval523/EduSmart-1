@@ -5,32 +5,53 @@ import {
   Dialog, DialogContent, DialogHeader, DialogTitle,DialogTrigger
 } from "@/components/ui/dialog"
 import { useForm } from 'react-hook-form'
-import { useCreateModule } from '@/hooks/module.hook'
+import { useCreateModule, useDeleteModule, useUpdateModule } from '@/hooks/module.hook'
 import { Spinner } from '@/components/ui/spinner'
+import { Trash2, Edit3 } from 'lucide-react'
 
 const CreateModule = () => {
   const { id } = useParams()
   const { data } = useGetSingleCourseHook(id)
   const [openModule, setOpenModule] = useState(false)
+  const [editingModule, setEditingModule] = useState(null)
 
-  const { register, handleSubmit, reset } = useForm()
+  const { register, handleSubmit, reset, setValue } = useForm()
   const { mutate, isPending } = useCreateModule()
+  const { mutate: updateModule, isPending: isUpdating } = useUpdateModule()
+  const { mutate: deleteModule } = useDeleteModule()
 
-  const moduleFormHandler = (data) => {
-    const formData = new FormData()
-    formData.append('title', data.title)
-    formData.append('video', data.video[0])
-    formData.append('courseId', id)
-    if (data.resourceLinks) {
-      formData.append('resourceLinks', data.resourceLinks)
+  const moduleFormHandler = (formData) => {
+    const payload = new FormData()
+    payload.append('title', formData.title)
+    payload.append('description', formData.description || '')
+    payload.append('order', formData.order || 0)
+    payload.append('duration', formData.duration || '')
+    payload.append('isPreviewFree', formData.isPreviewFree ? 'true' : 'false')
+    if (formData.video?.[0]) {
+      payload.append('video', formData.video[0])
     }
-    if (data.resources?.length) {
-      Array.from(data.resources).forEach((file) => {
-        formData.append('resources', file)
+    payload.append('courseId', id)
+    if (formData.resourceLinks) {
+      payload.append('resourceLinks', formData.resourceLinks)
+    }
+    if (formData.resources?.length) {
+      Array.from(formData.resources).forEach((file) => {
+        payload.append('resources', file)
       })
     }
 
-    mutate(formData, {
+    if (editingModule) {
+      updateModule({ id: editingModule._id, payload }, {
+        onSuccess: () => {
+          setOpenModule(false)
+          setEditingModule(null)
+          reset()
+        }
+      })
+      return
+    }
+
+    mutate(payload, {
       onSuccess: () => {
         setOpenModule(false)
         reset()
@@ -38,8 +59,23 @@ const CreateModule = () => {
     })
   }
 
+  const openEdit = (module) => {
+    setEditingModule(module)
+    setOpenModule(true)
+    setValue('title', module.title)
+    setValue('description', module.description)
+    setValue('order', module.order)
+    setValue('duration', module.duration)
+    setValue('isPreviewFree', module.isPreviewFree)
+  }
+
+  const handleDelete = (moduleId) => {
+    if (!window.confirm('Delete this module?')) return
+    deleteModule(moduleId)
+  }
+
   return (
-    <div className='p-8 max-w-4xl mx-auto'>
+    <div className='p-8 max-w-5xl mx-auto'>
       {/* Course Header */}
       <div className='mb-12'>
         <h1 className='text-3xl font-black text-slate-900 mb-2'>{data?.title}</h1>
@@ -49,17 +85,17 @@ const CreateModule = () => {
       </div>
 
       {/* Create Module Button */}
-      <Dialog open={openModule} onOpenChange={setOpenModule}>
+      <Dialog open={openModule} onOpenChange={(open) => { setOpenModule(open); if (!open) { setEditingModule(null); reset() } }}>
         <DialogTrigger className='inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200'>
           <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
             <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 6v6m0 0v6m0-6h6m-6 0H6' />
           </svg>
-          Create New Module
+          {editingModule ? 'Edit Module' : 'Create New Module'}
         </DialogTrigger>
         
         <DialogContent className='max-w-md'>
           <DialogHeader>
-            <DialogTitle className='text-2xl font-bold'>New Module</DialogTitle>
+            <DialogTitle className='text-2xl font-bold'>{editingModule ? 'Edit Module' : 'New Module'}</DialogTitle>
             <form onSubmit={handleSubmit(moduleFormHandler)} className='space-y-6 mt-6'>
               <div>
                 <label className='block text-sm font-semibold text-slate-700 mb-2'>Module Title</label>
@@ -70,6 +106,49 @@ const CreateModule = () => {
                   {...register('title', { required: true })}
                 />
               </div>
+
+              <div>
+                <label className='block text-sm font-semibold text-slate-700 mb-2'>Module Description</label>
+                <textarea
+                  rows={3}
+                  placeholder='Short overview for this module'
+                  className='w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 focus:outline-none transition-all'
+                  {...register('description')}
+                />
+              </div>
+
+              <div className='grid grid-cols-2 gap-4'>
+                <div>
+                  <label className='block text-sm font-semibold text-slate-700 mb-2'>Order</label>
+                  <input
+                    type="number"
+                    placeholder='1'
+                    className='w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 focus:outline-none transition-all'
+                    {...register('order')}
+                  />
+                </div>
+                <div>
+                  <label className='block text-sm font-semibold text-slate-700 mb-2'>Duration</label>
+                  <input
+                    type="text"
+                    placeholder='15 min'
+                    className='w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 focus:outline-none transition-all'
+                    {...register('duration')}
+                  />
+                </div>
+              </div>
+
+              <div className='flex items-center gap-3'>
+                <input
+                  type="checkbox"
+                  id="isPreviewFree"
+                  className='h-4 w-4 rounded border-slate-300'
+                  {...register('isPreviewFree')}
+                />
+                <label htmlFor="isPreviewFree" className='text-sm text-slate-700'>
+                  Mark as preview/free module
+                </label>
+              </div>
               
               <div>
                 <label className='block text-sm font-semibold text-slate-700 mb-2'>Video File</label>
@@ -77,7 +156,7 @@ const CreateModule = () => {
                   type="file" 
                   accept='video/*' 
                   className='w-full px-4 py-3 border-2 border-slate-200 rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition-all cursor-pointer' 
-                  {...register('video', { required: true })}
+                  {...register('video', { required: !editingModule })}
                 />
               </div>
 
@@ -85,7 +164,7 @@ const CreateModule = () => {
                 <label className='block text-sm font-semibold text-slate-700 mb-2'>Resource Links (one per line)</label>
                 <textarea
                   rows={4}
-                  placeholder='https://example.com/notes.pdf&#10;https://docs.example.com/ui-guide'
+                  placeholder='https://example.com/notes.pdf\nhttps://docs.example.com/ui-guide'
                   className='w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 focus:outline-none transition-all'
                   {...register('resourceLinks')}
                 />
@@ -104,16 +183,16 @@ const CreateModule = () => {
               
               <button 
                 type='submit' 
-                disabled={isPending}
+                disabled={isPending || isUpdating}
                 className='w-full flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-500 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200'
               >
-                {isPending ? (
+                {(isPending || isUpdating) ? (
                   <>
                     <Spinner />
-                    Creating...
+                    Saving...
                   </>
                 ) : (
-                  'Create Module'
+                  editingModule ? 'Update Module' : 'Create Module'
                 )}
               </button>
             </form>
@@ -123,22 +202,29 @@ const CreateModule = () => {
 
       {/* Modules List */}
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12'>
-        {data?.modules?.map((item, index) => (
-          <div key={item._id || index} className='group bg-white border border-slate-200 rounded-2xl p-8 hover:shadow-xl hover:-translate-y-1 transition-all duration-200 cursor-pointer hover:border-slate-300'>
-            <div className='flex items-center gap-3 mb-4'>
-              <div className='w-12 h-12 bg-emerald-100 rounded-2xl flex items-center justify-center flex-shrink-0'>
-                <svg className='w-6 h-6 text-emerald-600' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
-                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z' />
-                </svg>
-              </div>
+        {data?.modules?.slice().sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).map((item, index) => (
+          <div key={item._id || index} className='group bg-white border border-slate-200 rounded-2xl p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-200 cursor-pointer hover:border-slate-300'>
+            <div className='flex items-center justify-between mb-4'>
               <div>
-                <h3 className='font-bold text-xl text-slate-900 group-hover:text-slate-700'>{item.title}</h3>
-                <p className='text-sm text-slate-500'>Module {index + 1}</p>
+                <h3 className='font-bold text-lg text-slate-900 group-hover:text-slate-700'>{item.title}</h3>
+                <p className='text-sm text-slate-500'>Module {item.order ?? index + 1}</p>
+                {item.duration ? (
+                  <p className='text-xs text-slate-400 mt-1'>Duration: {item.duration}</p>
+                ) : null}
+              </div>
+              <div className='flex items-center gap-2'>
+                <button onClick={() => openEdit(item)} className='p-2 rounded-lg border border-slate-200'><Edit3 className='w-4 h-4' /></button>
+                <button onClick={() => handleDelete(item._id)} className='p-2 rounded-lg border border-red-200 text-red-600'><Trash2 className='w-4 h-4' /></button>
               </div>
             </div>
-            <div className='w-full bg-slate-200 rounded-full h-2'>
-              <div className='bg-emerald-500 h-2 rounded-full w-3/4'></div>
-            </div>
+            {item.description ? (
+              <p className='text-sm text-slate-600 mb-3 line-clamp-2'>{item.description}</p>
+            ) : null}
+            {item.isPreviewFree ? (
+              <span className='inline-flex items-center rounded-full bg-emerald-50 text-emerald-700 px-2 py-1 text-xs font-semibold border border-emerald-100'>
+                Preview free
+              </span>
+            ) : null}
           </div>
         ))}
       </div>

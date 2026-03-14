@@ -12,12 +12,36 @@ export const createCourseApi=async(payload)=>{
     return res.data
 }
 
+export const updateCourseApi = async(id, payload)=>{
+    const res = await axios.patch(`${import.meta.env.VITE_BASE_URL}/course/updateCourse/${id}`,
+        payload,
+        {
+            headers:{'Content-Type':'multipart/form-data'},
+            withCredentials:true
+        }
+    )
+    return res.data
+}
+
+export const deleteCourseApi = async(id)=>{
+    const res = await axios.delete(`${import.meta.env.VITE_BASE_URL}/course/deleteCourse/${id}`,
+        {
+            headers:{'Content-Type':'Application/json'},
+            withCredentials:true
+        }
+    )
+    return res.data
+}
 
 
-export const getCourseApi = async(search)=>{
+export const getCourseApi = async(searchOrFilters)=>{
+    const params = typeof searchOrFilters === "string"
+        ? (searchOrFilters ? { search: searchOrFilters } : {})
+        : (searchOrFilters || {})
+
     const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/course/getCourse`,
         {
-            params:search?{search}:{},
+            params,
             headers:{'Content-Type':'Application/json'},
             withCredentials:true
         }

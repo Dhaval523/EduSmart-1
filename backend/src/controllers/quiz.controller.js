@@ -18,7 +18,7 @@ export const checkQuiz = async(req,res)=>{
 
         return res.status(201).json({
             success:true,
-            hasQuiz: quiz,
+            hasQuiz: !!quiz,
             quiz: quiz|| null
 
         })
@@ -44,7 +44,9 @@ export const generateQuiz = async(req, res)=>{
 
         if(existingQuiz && existingQuiz.questions.length>0){
             return res.status(201).json({
-                message:"You already generated quiz for this module"
+                success:true,
+                message:"You already generated quiz for this module",
+                quizId: existingQuiz._id
             })
         }
 
@@ -117,7 +119,6 @@ export const generateQuiz = async(req, res)=>{
             newQuiz._id, 
             {$push:{questions:{$each:ids}}},
             {new:true}
-            
         )
 
         await Modules.findByIdAndUpdate(
@@ -126,8 +127,14 @@ export const generateQuiz = async(req, res)=>{
             {new:true}
         )
 
+        const quizDoc = await Quiz.findById(newQuiz._id).populate("questions")
+        const moduleDoc = await Modules.findById(moduleId)
+
         return res.status(201).json({
-            message:"Quiz generated"
+            success:true,
+            message:"Quiz generated",
+            quiz: quizDoc,
+            module: moduleDoc
         })
     } catch (error) {
         console.log(error, "error from generateQuiz")

@@ -7,9 +7,32 @@ import {Modules} from '../models/module.model.js'
 const genAI = new GoogleGenerativeAI(ENV.GEMINI_API_KEY)
 const model = genAI.getGenerativeModel({model:'gemini-2.5-flash'})
 
+const parseList = (value) => {
+    if (!value) return []
+    if (Array.isArray(value)) return value
+    return String(value)
+        .split(/\r?\n|,/g)
+        .map((v) => v.trim())
+        .filter(Boolean)
+}
+
 export const createCourse =async(req , res)=>{
     try {
-        const {title, description, amount} = req.body;
+        const {
+            title,
+            description,
+            amount,
+            category,
+            subcategory,
+            level,
+            duration,
+            instructor,
+            tags,
+            overview,
+            requirements,
+            learningOutcomes,
+            isPublished
+        } = req.body;
         const thumbnail = req.file
 
         if(!title || !description || !amount){
@@ -39,7 +62,17 @@ export const createCourse =async(req , res)=>{
             title,
             description,
             thumbnail:imageUrl,
-            amount
+            amount,
+            category: category || "",
+            subcategory: subcategory || "",
+            level: level || "",
+            duration: duration || "",
+            instructor: instructor || "",
+            tags: parseList(tags),
+            overview: overview || "",
+            requirements: parseList(requirements),
+            learningOutcomes: parseList(learningOutcomes),
+            isPublished: String(isPublished) === "true" || isPublished === true
         })
 
         await newCourse.save()
@@ -59,87 +92,162 @@ export const createCourse =async(req , res)=>{
     }
 }
 
+export const updateCourse = async(req, res)=>{
+    try {
+        const { id } = req.params
+        const {
+            title,
+            description,
+            amount,
+            category,
+            subcategory,
+            level,
+            duration,
+            instructor,
+            tags,
+            overview,
+            requirements,
+            learningOutcomes,
+            isPublished
+        } = req.body;
 
+        const update = {
+            ...(title !== undefined ? { title } : {}),
+            ...(description !== undefined ? { description } : {}),
+            ...(amount !== undefined ? { amount } : {}),
+            ...(category !== undefined ? { category } : {}),
+            ...(subcategory !== undefined ? { subcategory } : {}),
+            ...(level !== undefined ? { level } : {}),
+            ...(duration !== undefined ? { duration } : {}),
+            ...(instructor !== undefined ? { instructor } : {}),
+            ...(tags !== undefined ? { tags: parseList(tags) } : {}),
+            ...(overview !== undefined ? { overview } : {}),
+            ...(requirements !== undefined ? { requirements: parseList(requirements) } : {}),
+            ...(learningOutcomes !== undefined ? { learningOutcomes: parseList(learningOutcomes) } : {}),
+            ...(isPublished !== undefined ? { isPublished: String(isPublished) === "true" || isPublished === true } : {})
+        }
+
+        if (req.file) {
+            const base64 = `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`;
+            const uploadRes = await cloudinary.uploader.upload(base64,{
+                folder:"lmsYT"
+            })
+            update.thumbnail = uploadRes.secure_url
+        }
+
+        if (update.isPublished === true) {
+            const existing = await Course.findById(id).lean()
+            if (!existing) {
+                return res.status(404).json({ message:"Course not found" })
+            }
+            const moduleCount = existing.modules?.length || 0
+            if (moduleCount < 1) {
+                return res.status(400).json({ message:"Add at least 1 module before publishing this course." })
+            }
+        }
+
+        const course = await Course.findByIdAndUpdate(id, update, { new:true })
+        if(!course){
+            return res.status(404).json({ message:"Course not found" })
+        }
+        return res.status(200).json({ success:true, course })
+    } catch (error) {
+        const safeError = error?.message || JSON.stringify(error)
+        console.log(`error from update course. ${safeError}`)
+        return res.status(500).json({ success:false, message:"Internal server error" })
+    }
+}
+
+export const deleteCourse = async(req,res)=>{
+    try {
+        const { id } = req.params
+        const course = await Course.findById(id)
+        if(!course){
+            return res.status(404).json({ message:"Course not found" })
+        }
+        await Modules.deleteMany({ courseId: id })
+        await Course.findByIdAndDelete(id)
+        return res.status(200).json({ success:true, message:"Course deleted" })
+    } catch (error) {
+        const safeError = error?.message || JSON.stringify(error)
+        console.log(`error from delete course. ${safeError}`)
+        return res.status(500).json({ success:false, message:"Internal server error" })
+    }
+}
 
 export const getCourse = async(req, res)=>{
     try {
-        
-        const {search}  = req.query;
+        const {search, category, subcategory, level, tag, page = 1, limit = 10, sort = 'updated_desc', instructor, published, hasThumbnail, hasModules}  = req.query;
 
         const rawSearch = typeof search === "string" ? search.trim() : "";
-        if(!rawSearch){
-            const allCourses = await Course.find()
+        const filters = {}
+        if (category) filters.category = new RegExp(String(category), "i")
+        if (subcategory) filters.subcategory = new RegExp(String(subcategory), "i")
+        if (level) filters.level = new RegExp(String(level), "i")
+        if (instructor) filters.instructor = new RegExp(String(instructor), "i")
+        if (published !== undefined && published !== "") filters.isPublished = String(published) === "true"
+        if (tag) filters.tags = { $in: [String(tag)] }
+        if (hasThumbnail === "true") filters.thumbnail = { $ne: "" }
+        if (hasThumbnail === "false") filters.$or = [{ thumbnail: "" }, { thumbnail: { $exists:false } }]
+        if (hasModules === "true") filters.modules = { $exists:true, $not: { $size: 0 } }
+        if (hasModules === "false") filters.modules = { $size: 0 }
 
-            return res.status(201).json({
-                courses:allCourses
-            })
+        const sortMap = {
+            newest: { createdAt: -1 },
+            oldest: { createdAt: 1 },
+            title_asc: { title: 1 },
+            title_desc: { title: -1 },
+            price_asc: { amount: 1 },
+            price_desc: { amount: -1 },
+            modules_desc: { modules: -1 },
+            updated_desc: { updatedAt: -1 }
         }
+        const sortValue = sortMap[sort] || sortMap.updated_desc
 
-        const prompt =`You are an intelligent assistant for a learning management platform. A user is searching for courses. Analyze the query and return 1-3 short keywords (comma-separated, no sentences) that best match the query.
+        const mongoQuery = rawSearch
+            ? {
+                $and: [
+                    filters,
+                    {
+                        $or: [
+                            { title: { $regex: rawSearch, $options: "i" } },
+                            { description: { $regex: rawSearch, $options: "i" } },
+                            { overview: { $regex: rawSearch, $options: "i" } },
+                            { instructor: { $regex: rawSearch, $options: "i" } },
+                            { category: { $regex: rawSearch, $options: "i" } },
+                            { tags: { $in: [rawSearch] } }
+                        ]
+                    }
+                ]
+            }
+            : filters
 
-        Allowed categories / synonyms:
-        - Artificial intelligence, AI, Machine Learning
-        - MERN Stack, Web Development, Full Stack
-        - DevOps, Cloud, Docker, Kubernetes
-        - Mobile Development, Android, iOS, React Native
-        - Frontend, UI, UI/UX, Design, HTML, CSS, JavaScript, React
+        const pageNum = Math.max(parseInt(page, 10) || 1, 1)
+        const limitNum = Math.min(Math.max(parseInt(limit, 10) || 10, 1), 50)
+        const skip = (pageNum - 1) * limitNum
 
-        Rules:
-        - Reply with keywords only, comma-separated.
-        - Prefer category terms over long phrases.
-        - If the query is in Hindi or mixed, still return English keywords.
-
-        user query: ${rawSearch}
-        `
-
-        let aiText = ""
-        try {
-            const result = await model.generateContent(prompt);
-            aiText = result?.response?.candidates?.[0]?.content?.parts?.[0]?.text
-                ?.trim()
-                .replace(/[`"\n]/g, "") || "";
-        } catch (err) {
-            const safeError = err?.message || JSON.stringify(err)
-            console.log(`ai search error: ${safeError}`)
-        }
-
-        console.log("search ", rawSearch)
-        console.log("Ai text", aiText)
-
-        const aiTerms = aiText
-            ? aiText.split(",").map(t => t.trim()).filter(Boolean)
-            : [];
-
-        const termSet = new Set();
-        if (rawSearch) termSet.add(rawSearch);
-        aiTerms.forEach(t => termSet.add(t));
-
-        const terms = Array.from(termSet).slice(0, 6);
-
-        const mongoQuery = {
-            $or: terms.flatMap(term => ([
-                { title: { $regex: term, $options: "i" } },
-                { description: { $regex: term, $options: "i" } }
-            ]))
-        }
-
-        let courses = await Course.find(mongoQuery).lean()
-
-        console.log(`found ,${courses.length} , courses ${rawSearch}`)
-
+        const [totalCount, courses] = await Promise.all([
+            Course.countDocuments(mongoQuery),
+            Course.find(mongoQuery)
+                .sort(sortValue)
+                .skip(skip)
+                .limit(limitNum)
+                .lean()
+        ])
 
         return res.status(201).json({
             success:true,
             courses,
+            meta:{
+                total: totalCount,
+                page: pageNum,
+                limit: limitNum,
+                totalPages: Math.ceil(totalCount / limitNum)
+            },
             count:courses.length,
             searchTerm:rawSearch,
 
         })
-
-
-    
-
-
 
     } catch (error) {
         const safeError = error?.message || JSON.stringify(error)
@@ -157,7 +265,11 @@ export const getSingleCourse=async(req,res)=>{
     try {
         const courseId = req.params.id;
 
-        const course = await Course.findById(courseId).populate("modules")
+        const course = await Course.findById(courseId).populate({
+            path:"modules",
+            options:{ sort:{ order:1 }},
+            select:"title description duration order isPreviewFree resources video quiz"
+        })
 
 
         if(!course){
@@ -188,7 +300,11 @@ export const getPurchasedCourse = async(req,res)=>{
             })
         }
 
-        const purchasedOrder = await Course.findById(courseId).populate("modules")
+        const purchasedOrder = await Course.findById(courseId).populate({
+            path:"modules",
+            options:{ sort:{ order:1 }},
+            select:"title description duration order isPreviewFree resources video quiz"
+        })
 
 
         if(!purchasedOrder){

@@ -1,42 +1,64 @@
-﻿import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { ENV } from "../config/env.js";
 import { LearningPath } from "../models/LearningPath.js";
+import {
+  buildFallbackRoadmap,
+  normalizeRoadmapResponse,
+  parseRoadmapResponse
+} from "../utils/roadmapParser.js";
 
 const genAI = new GoogleGenerativeAI(ENV.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
-// Normalize Gemini output into a clean array of steps.
-const parseLearningSteps = (rawText) => {
-  if (!rawText || typeof rawText !== "string") return [];
+const pickLevel = (value) => {
+  const v = String(value || "").trim();
+  if (v === "Beginner" || v === "Intermediate" || v === "Advanced") return v;
+  return "Beginner";
+};
 
-  const cleaned = rawText.replace(/```/g, "").trim();
-  const lines = cleaned
-    .split("\n")
-    .map((line) => line.trim())
-    .filter(Boolean);
+const buildRoadmapPrompt = (input) => {
+  const topics = Array.isArray(input.preferredTopics) ? input.preferredTopics.filter(Boolean) : [];
+  const topicsLine = topics.length ? topics.join(", ") : "[]";
 
-  let steps = [];
+  return `Generate a structured learning roadmap in valid JSON only.
+Do not return markdown.
+Do not return explanation text.
+Do not wrap output in code fences.
+Do not include headings outside JSON.
+Keep descriptions concise and frontend-friendly.
+Preferred topics are optional:
+- if provided, prioritize them in the roadmap
+- if not provided, automatically choose the most relevant topics for the goal
+Return the following top-level keys exactly:
+title, goal, level, estimated_duration, learning_time_per_week, target_outcome, learning_style, prerequisites, summary, phases, resources, capstone_project, job_readiness.
+Each phase must include:
+id, title, duration, objective, topics, tools, projects, outcome.
+Also ensure:
+- phases should be ordered logically from fundamentals to advanced/application
+- phases should be actionable and job-oriented
+- recommended topics should match the user goal and level
+- keep arrays compact and useful
+- avoid repeating the same content in multiple sections
 
-  if (lines.length > 1) {
-    steps = lines.map((line) => {
-      const match = line.match(/^\s*(?:\d+[\).:-]|[-*])\s*(.+)$/);
-      return (match ? match[1] : line).trim();
-    });
-  } else {
-    const inline = cleaned
-      .replace(/\s*\d+[\).:-]\s*/g, "\n")
-      .split("\n")
-      .map((item) => item.trim())
-      .filter(Boolean);
-    steps = inline.length ? inline : cleaned.split(",").map((item) => item.trim());
-  }
-
-  return steps.filter(Boolean).slice(0, 12);
+User input:
+Goal / target role: ${input.goal}
+Level: ${input.level}
+Preferred topics (optional): ${topicsLine}
+Learning time per week (optional): ${input.learningTimePerWeek || ""}
+Target outcome (optional): ${input.targetOutcome || ""}
+Learning style (optional): ${input.learningStyle || ""}`;
 };
 
 export const generateLearningPath = async (req, res) => {
   try {
-    const { goal, skillLevel, preferredTopics } = req.body;
+    const {
+      goal,
+      skillLevel,
+      preferredTopics,
+      learningTimePerWeek,
+      targetOutcome,
+      learningStyle
+    } = req.body;
 
     if (!goal || !skillLevel) {
       return res.status(400).json({
@@ -45,34 +67,59 @@ export const generateLearningPath = async (req, res) => {
       });
     }
 
-    const topics = Array.isArray(preferredTopics) ? preferredTopics : [];
+    const input = {
+      goal: String(goal).trim(),
+      level: pickLevel(skillLevel),
+      preferredTopics: Array.isArray(preferredTopics) ? preferredTopics : [],
+      learningTimePerWeek: String(learningTimePerWeek || "").trim(),
+      targetOutcome: String(targetOutcome || "").trim(),
+      learningStyle: String(learningStyle || "").trim()
+    };
 
-    const prompt = `Generate a structured learning roadmap for a student.
-
-Goal: ${goal}
-Skill Level: ${skillLevel}
-Preferred Topics: ${topics.join(", ")}
-
-Return the response as a numbered list of learning steps.`;
-
+    const prompt = buildRoadmapPrompt(input);
     const result = await model.generateContent(prompt);
-    const aiText = result?.response?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
-    const generatedPath = parseLearningSteps(aiText);
+    const aiText =
+      result?.response?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
+
+    const parsed = parseRoadmapResponse(aiText);
+    const roadmap = parsed.ok
+      ? normalizeRoadmapResponse(parsed.data, input)
+      : buildFallbackRoadmap(input, parsed.error);
+
+    const phasesProgress =
+      Array.isArray(roadmap?.phases) && roadmap.phases.length
+        ? roadmap.phases.map((p) => ({
+            phaseId: p.id,
+            status: "not_started",
+            currentCourse: null
+          }))
+        : [];
 
     const newLearningPath = new LearningPath({
       userId: req.user?._id,
-      goal,
-      skillLevel,
-      preferredTopics: topics,
-      generatedPath
+      goal: input.goal,
+      skillLevel: input.level,
+      preferredTopics: input.preferredTopics,
+      learningTimePerWeek: input.learningTimePerWeek,
+      targetOutcome: input.targetOutcome,
+      learningStyle: input.learningStyle,
+      // legacy field: keep a simple list for older clients
+      generatedPath: roadmap?.phases?.map((p) => p?.title).filter(Boolean).slice(0, 12),
+      roadmap,
+      phasesProgress,
+      currentPhaseId: roadmap?.phases?.[0]?.id || null
     });
 
     await newLearningPath.save();
 
     return res.status(200).json({
       success: true,
-      learningPath: generatedPath,
-      learningPathId: newLearningPath._id
+      roadmap,
+      learningPathId: newLearningPath._id,
+      phasesProgress: newLearningPath.phasesProgress,
+      currentPhaseId: newLearningPath.currentPhaseId,
+      // legacy response for older clients
+      learningPath: newLearningPath.generatedPath
     });
   } catch (error) {
     const safeError = error?.message || JSON.stringify(error);

@@ -22,3 +22,13 @@ export const dailyDataApi = async(startDate, endDate)=>{
 
     return res.data
 }
+
+export const getAdminDashboardApi = async()=>{
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/analytic/admin-dashboard`,
+        {
+            headers:'Application/json',
+            withCredentials:true
+        }
+    )
+    return res.data
+}

@@ -1,60 +1,109 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import LearningPathCard from "@/components/LearningPathCard";
-import { generateLearningPathApi, getLearningPathsApi } from "@/services/ai.api";
+import {
+  generateLearningPathApi,
+  getLearningPathsApi,
+  recommendCoursesForPhaseApi,
+  markPhaseCompleteApi,
+  startPhaseCourseApi
+} from "@/services/ai.api";
+import { normalizeRoadmap } from "@/utils/roadmap";
+import { RoadmapTopBar } from "@/components/ai-learning-path/RoadmapTopBar";
+import { GenerateRoadmapDrawer } from "@/components/ai-learning-path/GenerateRoadmapDrawer";
+import { PreviousPathsDrawer } from "@/components/ai-learning-path/PreviousPathsDrawer";
+import { RoadmapWorkspace } from "@/components/ai-learning-path/RoadmapWorkspace";
+import { RoadmapHeader } from "@/components/ai-learning-path/RoadmapHeader";
+import { PhaseNavigationList } from "@/components/ai-learning-path/PhaseNavigationList";
+import { PhaseDetailPanel } from "@/components/ai-learning-path/PhaseDetailPanel";
+import { RecommendedCoursesDrawer } from "@/components/ai-learning-path/RecommendedCoursesDrawer";
+import { EmptyState } from "@/components/ai-learning-path/states/EmptyState";
+import { LoadingState } from "@/components/ai-learning-path/states/LoadingState";
+import { ErrorState } from "@/components/ai-learning-path/states/ErrorState";
 
-const defaultTopics = [
-  "SQL",
-  "Python",
-  "Excel",
-  "Power BI",
-  "Tableau",
-  "Statistics",
-  "Data Visualization",
-  "Machine Learning",
-  "Data Cleaning",
-  "Business Analysis"
-];
+const initialForm = {
+  goal: "",
+  level: "Beginner",
+  preferredTopics: [],
+  learningTimePerWeek: "",
+  targetOutcome: "",
+  learningStyle: ""
+};
 
-const AiLearningPath = () => {
+const mapHistoryToRoadmap = (item) => {
+  if (item.roadmap) return normalizeRoadmap(item.roadmap);
+  const phases = (item.generatedPath || []).slice(0, 10).map((title, idx) => ({
+    id: idx + 1,
+    title: String(title || "").trim(),
+    duration: "",
+    objective: "",
+    topics: [],
+    tools: [],
+    projects: [],
+    outcome: ""
+  }));
+  if (!phases.length) return null;
+  return normalizeRoadmap({
+    title: `${item.goal || "Learning Path"} (Legacy)`,
+    goal: item.goal || "",
+    level: item.skillLevel || "",
+    estimated_duration: "",
+    learning_time_per_week: item.learningTimePerWeek || "",
+    target_outcome: item.targetOutcome || "",
+    learning_style: item.learningStyle || "",
+    prerequisites: [],
+    summary:
+      "This is a legacy roadmap generated before the structured roadmap upgrade. Generate again for full details.",
+    phases,
+    resources: [],
+    capstone_project: { title: "", description: "" },
+    job_readiness: []
+  });
+};
+
+const decorateHistory = (items = []) =>
+  items.map((item) => ({
+    ...item,
+    phaseCount: item.roadmap?.phases?.length || item.generatedPath?.length || 0
+  }));
+
+const AiLearningPathPage = () => {
   const navigate = useNavigate();
-  const [goal, setGoal] = useState("");
-  const [skillLevel, setSkillLevel] = useState("Beginner");
-  const [preferredTopics, setPreferredTopics] = useState([]);
-  const [customTopic, setCustomTopic] = useState("");
-  const [currentPath, setCurrentPath] = useState([]);
+
+  const [form, setForm] = useState(initialForm);
+  const [roadmap, setRoadmap] = useState(null);
   const [history, setHistory] = useState([]);
+  const [roadmapId, setRoadmapId] = useState(null);
+  const [phaseProgress, setPhaseProgress] = useState({});
+  const [currentPhaseId, setCurrentPhaseId] = useState(null);
+  const [selectedPhase, setSelectedPhase] = useState(null);
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [isHistoryLoading, setIsHistoryLoading] = useState(false);
+  const [activeDrawer, setActiveDrawer] = useState(null); // "generate" | "history" | null
 
-  const topicOptions = useMemo(
-    () => Array.from(new Set([...defaultTopics, ...preferredTopics])).sort(),
-    [preferredTopics]
-  );
+  const [recommendations, setRecommendations] = useState([]);
+  const [bestMatchCourseId, setBestMatchCourseId] = useState(null);
+  const [recommendationError, setRecommendationError] = useState("");
+  const [isRecommendationsOpen, setIsRecommendationsOpen] = useState(false);
+  const [isRecommendationsLoading, setIsRecommendationsLoading] = useState(false);
+  const [updatingPhaseId, setUpdatingPhaseId] = useState(null);
 
-  const toggleTopic = (topic) => {
-    setPreferredTopics((prev) =>
-      prev.includes(topic) ? prev.filter((t) => t !== topic) : [...prev, topic]
-    );
-  };
-
-  const addCustomTopic = () => {
-    const trimmed = customTopic.trim();
-    if (!trimmed) return;
-    if (!preferredTopics.includes(trimmed)) {
-      setPreferredTopics((prev) => [...prev, trimmed]);
-    }
-    setCustomTopic("");
-  };
+  const canGenerate = useMemo(() => {
+    return form.goal.trim().length > 0 && !!form.level;
+  }, [form.goal, form.level]);
 
   const fetchHistory = async () => {
+    setIsHistoryLoading(true);
     try {
       const res = await getLearningPathsApi();
       if (res?.success) {
-        setHistory(res.paths || []);
+        setHistory(decorateHistory(res.paths || []));
       }
-    } catch (err) {
-      console.error("Failed to load learning path history", err);
+    } catch (e) {
+      console.error("Failed to fetch roadmap history", e);
+    } finally {
+      setIsHistoryLoading(false);
     }
   };
 
@@ -62,9 +111,34 @@ const AiLearningPath = () => {
     fetchHistory();
   }, []);
 
+  useEffect(() => {
+    if (!roadmap?.phases?.length) {
+      setSelectedPhase(null);
+      return;
+    }
+    setSelectedPhase((prev) => {
+      const match = prev ? roadmap.phases.find((p) => p.id === prev.id) : null;
+      return match || roadmap.phases[0];
+    });
+  }, [roadmap]);
+
+  const syncProgressFromServer = (phasesProgress, currentPhaseIdValue) => {
+    const map = {};
+    (phasesProgress || []).forEach((p) => {
+      map[p.phaseId] = p.status || "not_started";
+    });
+    setPhaseProgress(map);
+    setCurrentPhaseId(currentPhaseIdValue || null);
+  };
+
   const handleGenerate = async () => {
-    if (!goal.trim()) {
-      setError("Please enter your learning goal.");
+    const goal = form.goal.trim();
+    if (!goal) {
+      setError("Please enter your learning goal / target role.");
+      return;
+    }
+    if (!form.level) {
+      setError("Please select your current skill level.");
       return;
     }
 
@@ -72,180 +146,264 @@ const AiLearningPath = () => {
     setIsLoading(true);
     try {
       const payload = {
-        goal: goal.trim(),
-        skillLevel,
-        preferredTopics
+        goal,
+        skillLevel: form.level,
+        preferredTopics: form.preferredTopics ?? [],
+        learningTimePerWeek: (form.learningTimePerWeek || "").trim(),
+        targetOutcome: (form.targetOutcome || "").trim(),
+        learningStyle: (form.learningStyle || "").trim()
       };
+
       const res = await generateLearningPathApi(payload);
-      if (res?.success) {
-        setCurrentPath(res.learningPath || []);
-        await fetchHistory();
-      } else {
-        setError(res?.message || "Unable to generate learning path.");
+      if (!res?.success) {
+        setError(res?.message || "Unable to generate roadmap. Please try again.");
+        setRoadmap(null);
+        return;
       }
-    } catch (err) {
-      console.error("Generate learning path failed", err);
-      setError("Unable to generate learning path. Please try again.");
+
+      const normalized = res?.roadmap ? normalizeRoadmap(res.roadmap) : null;
+      if (normalized) {
+        setRoadmap(normalized);
+        setRoadmapId(res.learningPathId || null);
+        syncProgressFromServer(res.phasesProgress || [], res.currentPhaseId);
+        setActiveDrawer(null);
+      } else {
+        setError("The AI returned an unexpected format. Please try again.");
+        setRoadmap(null);
+      }
+      await fetchHistory();
+    } catch (e) {
+      console.error("Generate roadmap failed", e);
+      setError("Unable to generate roadmap right now. Please try again.");
+      setRoadmap(null);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleStartLearning = (seed) => {
-    const query = encodeURIComponent(seed || goal || "courses");
-    navigate(`/?q=${query}`);
+  const handleTryExample = () => {
+    setForm({
+      ...form,
+      goal: "Become a Data Analyst",
+      level: "Beginner",
+      preferredTopics: ["SQL", "Python"],
+      learningTimePerWeek: "8-10 hours",
+      targetOutcome: "Job-ready",
+      learningStyle: "Project-based"
+    });
+    setActiveDrawer("generate");
+  };
+
+  const handleSelectHistory = (item) => {
+    const r = mapHistoryToRoadmap(item);
+    setRoadmap(r);
+    setRoadmapId(item._id);
+    const map = {};
+    (item.phasesProgress || []).forEach((p) => {
+      map[p.phaseId] = p.status || "not_started";
+    });
+    setPhaseProgress(map);
+    setCurrentPhaseId(item.currentPhaseId || null);
+
+    setForm((prev) => ({
+      ...prev,
+      goal: item.goal || prev.goal,
+      level: item.skillLevel || prev.level,
+      preferredTopics: item.preferredTopics ?? prev.preferredTopics,
+      learningTimePerWeek: item.learningTimePerWeek ?? prev.learningTimePerWeek,
+      targetOutcome: item.targetOutcome ?? prev.targetOutcome,
+      learningStyle: item.learningStyle ?? prev.learningStyle
+    }));
+    setActiveDrawer(null);
+  };
+
+  const fetchRecommendations = async (phase) => {
+    if (!roadmap || !roadmapId) return null;
+    setRecommendations([]);
+    setRecommendationError("");
+    setBestMatchCourseId(null);
+    setIsRecommendationsLoading(true);
+
+    try {
+      const payload = {
+        roadmapId,
+        phaseId: phase.id,
+        goal: roadmap.goal,
+        level: roadmap.level,
+        topics: phase.topics || [],
+        tools: phase.tools || []
+      };
+      const res = await recommendCoursesForPhaseApi(payload);
+      if (!res?.success) {
+        setRecommendationError(res?.message || "Unable to fetch recommendations.");
+        return null;
+      }
+      setRecommendations(res.recommendations || []);
+      setBestMatchCourseId(res.bestMatchCourseId || null);
+      return res;
+    } catch (e) {
+      console.error("recommendCoursesForPhase failed", e);
+      setRecommendationError("Unable to fetch course recommendations right now.");
+      return null;
+    } finally {
+      setIsRecommendationsLoading(false);
+    }
+  };
+
+  const handleStartLearningPhase = async (phase) => {
+    const res = await fetchRecommendations(phase);
+    if (!res) {
+      setIsRecommendationsOpen(true);
+      return;
+    }
+
+    if (res.bestMatchCourseId) {
+      setUpdatingPhaseId(phase.id);
+      try {
+        const startRes = await startPhaseCourseApi(roadmapId, phase.id, res.bestMatchCourseId);
+        if (startRes?.success) {
+          syncProgressFromServer(startRes.phasesProgress || [], startRes.currentPhaseId);
+        }
+        navigate(`/courses/${res.bestMatchCourseId}`);
+      } catch (e) {
+        console.error("startPhaseCourse failed", e);
+        setRecommendationError("Unable to start the best match course right now.");
+        setIsRecommendationsOpen(true);
+      } finally {
+        setUpdatingPhaseId(null);
+      }
+    } else {
+      setIsRecommendationsOpen(true);
+    }
+  };
+
+  const handleViewCoursesPhase = async (phase) => {
+    await fetchRecommendations(phase);
+    setIsRecommendationsOpen(true);
+  };
+
+  const handleMarkPhaseComplete = async (phase) => {
+    if (!roadmapId || !phase) return;
+    setUpdatingPhaseId(phase.id);
+    try {
+      const res = await markPhaseCompleteApi(roadmapId, phase.id);
+      if (res?.success) {
+        syncProgressFromServer(res.phasesProgress || [], res.currentPhaseId);
+      }
+    } catch (e) {
+      console.error("markPhaseComplete failed", e);
+    } finally {
+      setUpdatingPhaseId(null);
+    }
+  };
+
+  const handleStartCourseFromRecommendations = async (course) => {
+    if (!roadmapId || !selectedPhase || !course) return;
+    setUpdatingPhaseId(selectedPhase.id);
+    try {
+      const res = await startPhaseCourseApi(roadmapId, selectedPhase.id, course.id);
+      if (res?.success) {
+        syncProgressFromServer(res.phasesProgress || [], res.currentPhaseId);
+        navigate(`/courses/${course.id}`);
+      }
+    } catch (e) {
+      console.error("startPhaseCourse failed", e);
+    } finally {
+      setUpdatingPhaseId(null);
+      setIsRecommendationsOpen(false);
+    }
+  };
+
+  const handleNavigateCourse = (course) => {
+    if (!course?.id) return;
+    setIsRecommendationsOpen(false);
+    navigate(`/courses/${course.id}`);
+  };
+
+  const toggleDrawer = (drawerName) => {
+    setActiveDrawer((prev) => (prev === drawerName ? null : drawerName));
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-white to-yellow-100">
-      <div className="max-w-6xl mx-auto px-6 py-12">
-        <div className="grid gap-8 lg:grid-cols-[1.1fr_0.9fr]">
-          <div className="bg-white/90 backdrop-blur border border-yellow-200 rounded-3xl p-8 shadow-lg">
-            <p className="text-xs uppercase tracking-[0.2em] text-yellow-700 font-semibold">
-              Smart Tutor Academy
-            </p>
-            <h1 className="text-3xl font-bold text-zinc-900 mt-2">
-              AI Learning Path Generator
-            </h1>
-            <p className="text-zinc-600 mt-2">
-              Tell us your goal and preferences, and we will build a personalized roadmap.
-            </p>
+    <div className="h-screen flex flex-col overflow-hidden bg-slate-50">
+      <RoadmapTopBar
+        onOpenGenerate={() => toggleDrawer("generate")}
+        onOpenHistory={() => toggleDrawer("history")}
+      />
 
-            <div className="mt-8 space-y-6">
-              <div>
-                <label className="block text-sm font-semibold text-zinc-700 mb-2">Learning Goal</label>
-                <input
-                  value={goal}
-                  onChange={(e) => setGoal(e.target.value)}
-                  type="text"
-                  placeholder="Become a Data Analyst"
-                  className="w-full px-4 py-3 rounded-xl border border-yellow-200 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+      <RoadmapWorkspace>
+        {!roadmap && !isLoading && !error ? (
+          <EmptyState onTryExample={handleTryExample} />
+        ) : null}
+
+        {isLoading ? <LoadingState /> : null}
+
+        {!isLoading && error ? (
+          <ErrorState message={error} onRetry={canGenerate ? handleGenerate : undefined} />
+        ) : null}
+
+        {!isLoading && !error && roadmap ? (
+          <div className="h-full flex flex-col gap-3">
+            <RoadmapHeader roadmap={roadmap} phaseProgress={phaseProgress} currentPhaseId={currentPhaseId} />
+
+            <div className="flex-1 min-h-0 grid gap-4 lg:grid-cols-[0.85fr_1.65fr]">
+              <div className="h-full rounded-2xl border border-slate-200 bg-slate-50 p-3 overflow-hidden">
+                <PhaseNavigationList
+                  phases={roadmap.phases || []}
+                  selectedId={selectedPhase?.id}
+                  phaseProgress={phaseProgress}
+                  onSelect={setSelectedPhase}
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-semibold text-zinc-700 mb-2">Skill Level</label>
-                <select
-                  value={skillLevel}
-                  onChange={(e) => setSkillLevel(e.target.value)}
-                  className="w-full px-4 py-3 rounded-xl border border-yellow-200 bg-white focus:outline-none focus:ring-2 focus:ring-yellow-300"
-                >
-                  <option>Beginner</option>
-                  <option>Intermediate</option>
-                  <option>Advanced</option>
-                </select>
+              <div className="h-full rounded-2xl border border-slate-200 bg-slate-50 p-3 overflow-hidden">
+                <PhaseDetailPanel
+                  phase={selectedPhase}
+                  status={selectedPhase ? phaseProgress?.[selectedPhase.id] || "not_started" : "not_started"}
+                  isUpdating={selectedPhase ? updatingPhaseId === selectedPhase.id : false}
+                  onStartLearning={() => selectedPhase && handleStartLearningPhase(selectedPhase)}
+                  onViewCourses={() => selectedPhase && handleViewCoursesPhase(selectedPhase)}
+                  onMarkComplete={() => selectedPhase && handleMarkPhaseComplete(selectedPhase)}
+                />
               </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-zinc-700 mb-2">Preferred Topics</label>
-                <div className="flex flex-wrap gap-3">
-                  {topicOptions.map((topic) => (
-                    <button
-                      key={topic}
-                      type="button"
-                      onClick={() => toggleTopic(topic)}
-                      className={`px-3 py-1.5 rounded-full text-sm font-medium border transition-colors ${
-                        preferredTopics.includes(topic)
-                          ? "bg-yellow-400 text-zinc-900 border-yellow-400"
-                          : "bg-yellow-50 text-zinc-700 border-yellow-200 hover:bg-yellow-100"
-                      }`}
-                    >
-                      {topic}
-                    </button>
-                  ))}
-                </div>
-                <div className="mt-3 flex gap-3">
-                  <input
-                    value={customTopic}
-                    onChange={(e) => setCustomTopic(e.target.value)}
-                    type="text"
-                    placeholder="Add a topic"
-                    className="flex-1 px-4 py-2 rounded-xl border border-yellow-200 focus:outline-none focus:ring-2 focus:ring-yellow-300"
-                  />
-                  <button
-                    type="button"
-                    onClick={addCustomTopic}
-                    className="px-4 py-2 bg-yellow-200 text-zinc-900 font-semibold rounded-xl hover:bg-yellow-300 transition-colors"
-                  >
-                    Add
-                  </button>
-                </div>
-              </div>
-
-              {error && <p className="text-sm text-red-600">{error}</p>}
-
-              <button
-                type="button"
-                onClick={handleGenerate}
-                disabled={isLoading}
-                className="w-full py-3 rounded-xl bg-yellow-400 text-zinc-900 font-semibold hover:bg-yellow-300 transition-colors disabled:opacity-70"
-              >
-                {isLoading ? "Generating..." : "Generate Learning Path"}
-              </button>
-
-              {isLoading && (
-                <div className="flex items-center gap-3 text-sm text-zinc-600">
-                  <span className="h-4 w-4 border-2 border-yellow-300 border-t-transparent rounded-full animate-spin" />
-                  Building your roadmap with Gemini AI...
-                </div>
-              )}
             </div>
           </div>
+        ) : null}
+      </RoadmapWorkspace>
 
-          <div className="space-y-6">
-            {currentPath.length > 0 && (
-              <LearningPathCard
-                title={goal || "Your Learning Path"}
-                steps={currentPath}
-                onStartLearning={() => handleStartLearning(currentPath[0])}
-              />
-            )}
+      <GenerateRoadmapDrawer
+        isOpen={activeDrawer === "generate"}
+        onClose={() => setActiveDrawer(null)}
+        value={form}
+        onChange={setForm}
+        onSubmit={handleGenerate}
+        isLoading={isLoading}
+        error={error}
+      />
 
-            <div className="bg-white border border-yellow-200 rounded-2xl p-6 shadow-sm">
-              <div className="flex items-center justify-between">
-                <h2 className="text-lg font-bold text-zinc-900">Previous Learning Paths</h2>
-                <button
-                  type="button"
-                  onClick={fetchHistory}
-                  className="text-sm font-semibold text-yellow-700 hover:text-yellow-600"
-                >
-                  Refresh
-                </button>
-              </div>
-              {history.length === 0 ? (
-                <p className="text-sm text-zinc-500 mt-4">No learning paths generated yet.</p>
-              ) : (
-                <div className="mt-4 space-y-4">
-                  {history.slice(0, 5).map((item) => (
-                    <div
-                      key={item._id}
-                      className="border border-yellow-100 rounded-xl p-4 bg-yellow-50/60"
-                    >
-                      <div className="flex items-center justify-between gap-2">
-                        <div>
-                          <p className="text-sm font-semibold text-zinc-800">{item.goal}</p>
-                          <p className="text-xs text-zinc-600 mt-1">
-                            {item.skillLevel} level • {item.preferredTopics?.length || 0} topics
-                          </p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => setCurrentPath(item.generatedPath || [])}
-                          className="text-xs font-semibold text-yellow-700 hover:text-yellow-600"
-                        >
-                          View
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
+      <PreviousPathsDrawer
+        isOpen={activeDrawer === "history"}
+        onClose={() => setActiveDrawer(null)}
+        items={history}
+        isLoading={isHistoryLoading}
+        selectedId={roadmapId}
+        onSelect={handleSelectHistory}
+        onRefresh={fetchHistory}
+      />
+
+      <RecommendedCoursesDrawer
+        isOpen={isRecommendationsOpen}
+        onClose={() => setIsRecommendationsOpen(false)}
+        phase={selectedPhase}
+        recommendations={recommendations}
+        bestMatchCourseId={bestMatchCourseId}
+        isLoading={isRecommendationsLoading}
+        error={recommendationError}
+        onStartCourse={handleStartCourseFromRecommendations}
+        onNavigateCourse={handleNavigateCourse}
+      />
     </div>
   );
 };
 
-export default AiLearningPath;
+export default AiLearningPathPage;

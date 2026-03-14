@@ -1,11 +1,11 @@
 import { getCourseProgressApi, markModuleCompleteApi } from "@/Api/progress.api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-export const useGetCourseProgress = (courseId) => {
+export const useGetCourseProgress = (courseId, enabled = true) => {
     return useQuery({
         queryFn: () => getCourseProgressApi(courseId),
         queryKey: ["courseProgress", courseId],
-        enabled: !!courseId
+        enabled: !!courseId && enabled
     });
 };
 

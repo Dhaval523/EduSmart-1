@@ -15,7 +15,7 @@ const Cancel = () => {
         </p>
         
         <div className='space-y-3'>
-          <Link to='/dashboard'>
+          <Link to='/admin'>
             <button className='w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-4 px-8 rounded-2xl transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5'>
               Go to Dashboard
             </button>

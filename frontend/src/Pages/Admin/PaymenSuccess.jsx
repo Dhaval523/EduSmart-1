@@ -19,7 +19,7 @@ const PaymenSuccess = () => {
   useEffect(() => {
     if (isSuccess) {
       const timer = setTimeout(() => {
-        navigate('/dashboard')
+        navigate('/YourCourse')
       }, 5000)
       return () => clearTimeout(timer)
     }
@@ -48,13 +48,13 @@ const PaymenSuccess = () => {
           <div className='bg-blue-50 border-2 border-blue-200 rounded-2xl p-6'>
             <div className='flex items-center justify-center gap-3 text-blue-700'>
               <ArrowRight className='w-6 h-6' />
-              <span className='font-semibold'>Redirecting to dashboard in 5s...</span>
+              <span className='font-semibold'>Redirecting to admin in 5s...</span>
             </div>
           </div>
         </div>
         
         <div className='flex gap-4 justify-center'>
-          <Link to='/dashboard'>
+          <Link to='/admin'>
             <button className='flex items-center gap-2 px-8 py-4 bg-slate-900 hover:bg-slate-800 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200'>
               Go to Dashboard
             </button>

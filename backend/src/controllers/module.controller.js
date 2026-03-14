@@ -3,7 +3,7 @@ import { Modules } from "../models/module.model.js";
 import {Comment} from '../models/comment.model.js'
 export const createModule = async(req,res)=>{
     try {
-        const {courseId,  title}= req.body;
+        const {courseId,  title, description, order, duration, isPreviewFree}= req.body;
         if(!courseId || !title){
             return res.status(401).json({
                 message:"Please provide all the details"
@@ -18,7 +18,83 @@ export const createModule = async(req,res)=>{
         }
 
         const videoUrl = videoFile.path
-        const publicId = videoFile.filename
+
+        const rawLinks = req.body.resourceLinks;
+        let linkList = []
+        if (Array.isArray(rawLinks)) {
+            linkList = rawLinks
+        } else if (typeof rawLinks === "string" && rawLinks.trim()) {
+            try {
+                const parsed = JSON.parse(rawLinks)
+                linkList = Array.isArray(parsed) ? parsed : [rawLinks]
+            } catch {
+                linkList = rawLinks.split(/\r?\n|,/g)
+            }
+        }
+
+        const linkResources = linkList
+            .map((link) => (typeof link === "string" ? link.trim() : ""))
+            .filter(Boolean)
+            .map((link) => ({
+                type:"link",
+                title:link,
+                url:link
+            }))
+
+        const fileResources = (req.files?.resources || []).map((file)=>(
+            {
+            type:"file",
+            title:file.originalname,
+            url:file.path,
+            mimeType:file.mimetype,
+            fileName:file.originalname,
+            publicId:file.filename
+        }))
+
+        const module = await Modules.create({
+            courseId,
+            title,
+            description: description || "",
+            order: Number.isFinite(Number(order)) ? Number(order) : 0,
+            duration: duration || "",
+            isPreviewFree: String(isPreviewFree) === "true" || isPreviewFree === true,
+            video:videoUrl,
+            resources:[...linkResources, ...fileResources]
+        })
+        module.save()
+
+        await Course.findByIdAndUpdate(courseId,{
+            $addToSet:{modules:module._id}
+        })
+
+
+        return res.status(201).json(module)
+    } catch (error) {
+        console.log(`error from create module, ${error}`)
+        return res.status(500).json({
+            message:"Internal server error"
+        })
+    }
+}
+
+export const updateModule = async(req,res)=>{
+    try {
+        const { id } = req.params
+        const { title, description, order, duration, isPreviewFree } = req.body
+
+        const orderValue = Number(order)
+        const update = {
+            ...(title !== undefined ? { title } : {}),
+            ...(description !== undefined ? { description } : {}),
+            ...(order !== undefined ? { order: Number.isFinite(orderValue) ? orderValue : 0 } : {}),
+            ...(duration !== undefined ? { duration } : {}),
+            ...(isPreviewFree !== undefined ? { isPreviewFree: String(isPreviewFree) === "true" || isPreviewFree === true } : {})
+        }
+
+        const videoFile = req.files?.video?.[0]
+        if (videoFile) {
+            update.video = videoFile.path
+        }
 
         const rawLinks = req.body.resourceLinks;
         let linkList = []
@@ -51,26 +127,35 @@ export const createModule = async(req,res)=>{
             publicId:file.filename
         }))
 
-        const module = await Modules.create({
-            courseId,
-            title,
-            video:videoUrl,
-            videoPublicUrl :publicId,
-            resources:[...linkResources, ...fileResources]
-        })
-        module.save()
+        if (linkResources.length || fileResources.length) {
+            update.resources = [...linkResources, ...fileResources]
+        }
 
-        await Course.findByIdAndUpdate(courseId,{
-            $push:{modules:module._id}
-        })
+        const module = await Modules.findByIdAndUpdate(id, update, { new:true })
+        if (!module) {
+            return res.status(404).json({ message:"Module not found" })
+        }
 
-
-        return res.status(201).json(module)
+        return res.status(200).json({ success:true, module })
     } catch (error) {
-        console.log(`error from create module, ${error}`)
-        return res.status(500).json({
-            message:"Internal server error"
-        })
+        console.log(`error from update module, ${error}`)
+        return res.status(500).json({ message:"Internal server error" })
+    }
+}
+
+export const deleteModule = async(req,res)=>{
+    try {
+        const { id } = req.params
+        const module = await Modules.findById(id)
+        if (!module) {
+            return res.status(404).json({ message:"Module not found" })
+        }
+        await Course.findByIdAndUpdate(module.courseId, { $pull: { modules: module._id } })
+        await Modules.findByIdAndDelete(id)
+        return res.status(200).json({ success:true, message:"Module deleted" })
+    } catch (error) {
+        console.log(`error from delete module, ${error}`)
+        return res.status(500).json({ message:"Internal server error" })
     }
 }
 

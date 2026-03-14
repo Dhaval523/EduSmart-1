@@ -24,7 +24,7 @@ const Navbar = () => {
     {
       label: 'Dashboard',
       icon: LayoutDashboard,
-      onClick: () => navigate('/dashboard')
+      onClick: () => navigate('/admin')
     },
     {
       label: 'Profile',

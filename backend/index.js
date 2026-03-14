@@ -11,6 +11,7 @@ import paymentRoute from './src/routes/payment.route.js'
 import analyticRoute from './src/routes/analytic.route.js'
 import progressRoute from './src/routes/progress.route.js'
 import aiRoute from './src/routes/ai.routes.js'
+import roadmapRoute from './src/routes/roadmap.route.js'
 import cors from 'cors'
 
 const app = express()
@@ -18,6 +19,7 @@ const app = express()
 const allowedOrigins = [
     ENV.CLIENT_URL,
     "http://localhost:5173",
+     "http://localhost:5174",
     "http://127.0.0.1:5173"
 ].filter(Boolean)
 
@@ -46,11 +48,13 @@ app.use('/api/payment', paymentRoute)
 app.use('/api/analytic', analyticRoute)
 app.use('/api/progress', progressRoute)
 app.use('/api', aiRoute)
+app.use('/api/roadmap', roadmapRoute)
 
 
 
 
-app.listen(ENV.PORT,()=>{
+app.listen(ENV.PORT, async ()=>{
+    await connectDB()
     console.log("server started", ENV.PORT)
-    connectDB()
+
 })

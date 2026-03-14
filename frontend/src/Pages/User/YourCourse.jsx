@@ -1,5 +1,5 @@
 import { useGetAllPurchaseCourse } from '@/hooks/course.hook'
-import { BookOpen, Clock, Play, ChevronRight } from 'lucide-react'
+import { BookOpen, Clock, Play, ChevronRight, BarChart2, Tag } from 'lucide-react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -8,7 +8,7 @@ const YourCourse = () => {
   const navigate = useNavigate()
 
   const navigateSinglePurchaseCourse = (id) => {
-    navigate(id)
+    navigate(`/courses/${id}/learn`)
   }
 
   if (isLoading) {
@@ -54,7 +54,7 @@ const YourCourse = () => {
               Start learning today by exploring our course catalog
             </p>
             <button 
-              onClick={() => navigate('/courses')}
+              onClick={() => navigate('/')}
               className="px-8 py-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5"
             >
               Browse Courses
@@ -81,7 +81,7 @@ const YourCourse = () => {
                   <div className="relative h-48 bg-slate-100 overflow-hidden">
                     <img
                       className="h-full w-full object-cover group-hover:scale-105 transition-transform duration-300"
-                      src={item.thumbnail || '/placeholder-course.jpg'}
+                      src={item.thumbnail || 'https://via.placeholder.com/400x300?text=Course'}
                       alt={item.title}
                       onError={(e) => {
                         e.target.src = 'https://via.placeholder.com/400x300?text=Course'
@@ -104,17 +104,23 @@ const YourCourse = () => {
                     </h3>
 
                     {/* Meta Info */}
-                    <div className="flex items-center gap-4 text-xs text-slate-500 mb-4">
-                      {item.lessons && (
-                        <div className="flex items-center gap-1">
-                          <BookOpen className="w-3.5 h-3.5" />
-                          <span>{item.lessons} lessons</span>
-                        </div>
-                      )}
+                    <div className="flex flex-wrap gap-3 text-xs text-slate-500 mb-4">
                       {item.duration && (
                         <div className="flex items-center gap-1">
                           <Clock className="w-3.5 h-3.5" />
                           <span>{item.duration}</span>
+                        </div>
+                      )}
+                      {item.level && (
+                        <div className="flex items-center gap-1">
+                          <BarChart2 className="w-3.5 h-3.5" />
+                          <span>{item.level}</span>
+                        </div>
+                      )}
+                      {item.category && (
+                        <div className="flex items-center gap-1">
+                          <Tag className="w-3.5 h-3.5" />
+                          <span>{item.category}</span>
                         </div>
                       )}
                     </div>
