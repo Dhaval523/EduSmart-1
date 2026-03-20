@@ -84,12 +84,17 @@ export const Login = async(req,res)=>{
             })
         }
 
-        if(user.email == ENV.ADMIN){
-            user.admin = true,
-            await user.save()
-        }
+
+
+        // if(user.email == ENV.ADMIN){
+        //     user.admin = true,
+        //     await user.save()
+        // }
 
         const token = await jwt.sign({userId:user._id},ENV.JWT_SECRET )
+
+        console.log("admin")
+
 
         res.cookie("token",token,{
             maxAge:1*24*60*60*1000,
@@ -108,7 +113,6 @@ export const Login = async(req,res)=>{
         return res.status(201).json({
             message:`Welcome ${user.fullName}`
         })
-
 
         
     } catch (error) {
