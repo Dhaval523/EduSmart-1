@@ -1,7 +1,7 @@
 ﻿import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAdminDashboard } from '@/hooks/analytic.hook'
-import { BookOpen, Layers, Users, DollarSign, CheckCircle2, PlusCircle, ShoppingBag, BarChart3 } from 'lucide-react'
+import { BookOpen, Layers, Users, DollarSign, CheckCircle2, PlusCircle, ShoppingBag } from 'lucide-react'
 
 const StatCard = ({ title, value, icon: Icon }) => (
   <div className="card flex items-center gap-4">
@@ -76,12 +76,6 @@ const DashboardAnalytics = () => {
           className="btn-secondary inline-flex items-center gap-2"
         >
           <ShoppingBag className="w-4 h-4" /> Manage Courses
-        </button>
-        <button
-          onClick={() => navigate('/admin/analytics')}
-          className="btn-secondary inline-flex items-center gap-2"
-        >
-          <BarChart3 className="w-4 h-4" /> View Analytics
         </button>
       </div>
 

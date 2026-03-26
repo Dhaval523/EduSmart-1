@@ -10,7 +10,6 @@ import YourCourse from '@/Pages/User/YourCourse'
 import CourseLearningPage from '@/Pages/User/CourseLearningPage'
 import Dashboard from '@/Pages/Admin/Dashboard'
 import DashboardAnalytics from '@/Pages/Admin/DashboardAnalytics'
-import Analytics from '@/Pages/Admin/Analytics'
 import DasbhoardProducts from '@/Pages/Admin/DasbhoardProducts'
 import CourseWorkspace from '@/Pages/Admin/CourseWorkspace'
 import Orders from '@/Pages/Admin/Orders'
@@ -20,6 +19,7 @@ import AiLearningPath from '@/Pages/User/AiLearningPath'
 import Profile from '@/Pages/User/Profile'
 import Cancel from '@/Pages/Admin/Cancel'
 import PaymenSuccess from '@/Pages/Admin/PaymenSuccess'
+import Reports from '@/Pages/Admin/Reports/Reports'
 
 const MainRoutes = () => {
   const LegacyCourseRedirect = () => {
@@ -45,11 +45,13 @@ const MainRoutes = () => {
       <Route element={<AdminRoutes />}>
         <Route path='/admin' element={<Dashboard/>}>
           <Route index element={<DashboardAnalytics/>}/>
-          <Route path='analytics' element={<Analytics/>}/>
           <Route path='courses' element={<DasbhoardProducts/>}/>
           <Route path='courses/:id' element={<CourseWorkspace/>}/>
           <Route path='orders' element={<Orders/>}/>
           <Route path='users' element={<Users/>}/>
+        </Route>
+        <Route path='/reports' element={<Dashboard/>}>
+          <Route index element={<Reports/>} />
         </Route>
       </Route>
     </Route>

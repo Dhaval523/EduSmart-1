@@ -3,9 +3,9 @@ import { NavLink, useLocation } from 'react-router-dom'
 import { 
   LayoutDashboard, 
   ShoppingBag, 
-  BarChart3,
   Users,
-  ReceiptText
+  ReceiptText,
+  FileBarChart2
 } from 'lucide-react'
 
 const DashboardSideBar = () => {
@@ -15,9 +15,9 @@ const DashboardSideBar = () => {
   const navItems = [
     { to: '/admin', label: 'Overview', icon: LayoutDashboard, exact: true },
     { to: '/admin/courses', label: 'Courses', icon: ShoppingBag, exact: false },
-    { to: '/admin/analytics', label: 'Analytics', icon: BarChart3, exact: true },
     { to: '/admin/orders', label: 'Orders', icon: ReceiptText, exact: true },
-    { to: '/admin/users', label: 'Users', icon: Users, exact: true }
+    { to: '/admin/users', label: 'Users', icon: Users, exact: true },
+    { to: '/reports', label: 'Reports', icon: FileBarChart2, exact: true }
   ]
 
   return (
@@ -34,7 +34,7 @@ const DashboardSideBar = () => {
         </div>
       </div>
 
-      <nav className='p-4 space-y-1'>
+      <nav className='p-4 space-y-1 overflow-y-auto h-[calc(100vh-96px)]'>
         {navItems.map((item, index) => {
           const isActive = item.label === 'Courses' ? isCoursesActive : undefined
           return (
