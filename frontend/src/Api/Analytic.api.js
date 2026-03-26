@@ -1,4 +1,4 @@
-import axios from "axios"
+﻿import axios from "axios"
 
 export const getDataApi = async()=>{
     const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/analytic/getAnalytic`,
@@ -32,3 +32,5 @@ export const getAdminDashboardApi = async()=>{
     )
     return res.data
 }
+
+

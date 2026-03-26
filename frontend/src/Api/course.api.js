@@ -1,4 +1,4 @@
-import axios from "axios"
+﻿import axios from "axios"
 
 export const createCourseApi=async(payload)=>{
     const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/course/createCourse`,
@@ -86,3 +86,5 @@ export const getAllPurchaseCourseApi = async()=>{
 
     return res.data
 }
+
+

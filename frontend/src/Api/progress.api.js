@@ -1,4 +1,4 @@
-import axios from "axios";
+﻿import axios from "axios";
 
 export const markModuleCompleteApi = async (payload) => {
     const res = await axios.post(
@@ -25,3 +25,5 @@ export const getCourseProgressApi = async (courseId) => {
 
     return res.data;
 };
+
+

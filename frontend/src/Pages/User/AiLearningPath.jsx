@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+﻿import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   generateLearningPathApi,
@@ -325,13 +325,16 @@ const AiLearningPathPage = () => {
   };
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden bg-slate-50">
-      <RoadmapTopBar
-        onOpenGenerate={() => toggleDrawer("generate")}
-        onOpenHistory={() => toggleDrawer("history")}
-      />
+    <div className="page-bg flex flex-col">
+      <div className="page-shell">
+        <RoadmapTopBar
+          onOpenGenerate={() => toggleDrawer("generate")}
+          onOpenHistory={() => toggleDrawer("history")}
+        />
+      </div>
 
-      <RoadmapWorkspace>
+      <div className="page-shell flex-1 py-6">
+        <RoadmapWorkspace>
         {!roadmap && !isLoading && !error ? (
           <EmptyState onTryExample={handleTryExample} />
         ) : null}
@@ -343,11 +346,11 @@ const AiLearningPathPage = () => {
         ) : null}
 
         {!isLoading && !error && roadmap ? (
-          <div className="h-full flex flex-col gap-3">
+          <div className="h-full flex flex-col gap-4">
             <RoadmapHeader roadmap={roadmap} phaseProgress={phaseProgress} currentPhaseId={currentPhaseId} />
 
-            <div className="flex-1 min-h-0 grid gap-4 lg:grid-cols-[0.85fr_1.65fr]">
-              <div className="h-full rounded-2xl border border-slate-200 bg-slate-50 p-3 overflow-hidden">
+            <div className="flex-1 min-h-0 grid gap-6 grid-cols-1 lg:grid-cols-[0.85fr_1.65fr]">
+              <div className="h-full card overflow-hidden">
                 <PhaseNavigationList
                   phases={roadmap.phases || []}
                   selectedId={selectedPhase?.id}
@@ -356,7 +359,7 @@ const AiLearningPathPage = () => {
                 />
               </div>
 
-              <div className="h-full rounded-2xl border border-slate-200 bg-slate-50 p-3 overflow-hidden">
+              <div className="h-full card overflow-hidden">
                 <PhaseDetailPanel
                   phase={selectedPhase}
                   status={selectedPhase ? phaseProgress?.[selectedPhase.id] || "not_started" : "not_started"}
@@ -369,7 +372,8 @@ const AiLearningPathPage = () => {
             </div>
           </div>
         ) : null}
-      </RoadmapWorkspace>
+        </RoadmapWorkspace>
+      </div>
 
       <GenerateRoadmapDrawer
         isOpen={activeDrawer === "generate"}
@@ -407,3 +411,5 @@ const AiLearningPathPage = () => {
 };
 
 export default AiLearningPathPage;
+
+

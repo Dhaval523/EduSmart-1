@@ -1,4 +1,4 @@
-import { dailyDataApi, getAdminDashboardApi, getDataApi } from '@/Api/Analytic.api'
+﻿import { dailyDataApi, getAdminDashboardApi, getDataApi } from '@/Api/Analytic.api'
 import { useQuery }  from  '@tanstack/react-query'
 
 export const useGetDataHook=()=>{
@@ -21,3 +21,5 @@ export const useAdminDashboard=()=>{
         queryKey:['adminDashboard']
     })
 }
+
+

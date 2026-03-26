@@ -1,4 +1,4 @@
-import { createModuleApi, deleteModuleApi, getCommentApi, getModuleApi, updateModuleApi } from '@/Api/module.api'
+﻿import { createModuleApi, deleteModuleApi, getCommentApi, getModuleApi, updateModuleApi } from '@/Api/module.api'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 export const useCreateModule=()=>{
@@ -56,3 +56,5 @@ export const useGetComment = (id)=>{
         enabled:!!id
     })
 }
+
+

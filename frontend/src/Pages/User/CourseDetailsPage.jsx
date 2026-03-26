@@ -1,18 +1,15 @@
-import React, { useMemo } from "react";
+﻿import React, { useMemo } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { Spinner } from "@/components/ui/spinner";
 import { useGetAllPurchaseCourse, useGetSingleCourseHook } from "@/hooks/course.hook";
+import { useGetCourseProgress } from "@/hooks/progress.hook";
 import { usePayment } from "@/hooks/payment.hook";
 import { Clock, BarChart2, Tag, User, BookOpen, CheckCircle2, BadgeCheck, Lock, PlayCircle } from "lucide-react";
 
-const Chip = ({ children }) => (
-  <span className="inline-flex items-center rounded-full border border-slate-200 bg-white px-2.5 py-1 text-xs font-semibold text-slate-700">
-    {children}
-  </span>
-);
+const Chip = ({ children }) => <span className="chip">{children}</span>;
 
 const SectionTitle = ({ children }) => (
-  <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
+  <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-[#6B7280]">
     {children}
   </h3>
 );
@@ -39,6 +36,16 @@ const CourseDetailsPage = () => {
     const purchased = purchaseData?.purchasedCourse || [];
     return purchased?.some?.((c) => String(c?._id) === String(courseId));
   }, [course?.isPurchased, purchaseData, courseId]);
+
+  const { data: progressData } = useGetCourseProgress(courseId, isPurchased);
+  const hasStartedCourse = Boolean((progressData?.completedCount || 0) > 0);
+  const primaryActionLabel = isPurchased
+    ? hasStartedCourse
+      ? "Continue Learning"
+      : "Start Learning"
+    : isPending
+      ? "Processing..."
+      : "Buy Now";
 
   const overviewText = course?.overview || course?.description || "";
   const topics = course?.tags?.length ? course.tags : toArray(course?.description).slice(0, 4);
@@ -85,7 +92,7 @@ const CourseDetailsPage = () => {
 
   if (isLoading) {
     return (
-      <div className="h-screen flex items-center justify-center">
+      <div className="page-bg flex items-center justify-center">
         <Spinner />
       </div>
     );
@@ -93,8 +100,8 @@ const CourseDetailsPage = () => {
 
   if (!course) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 text-center text-sm text-slate-600">
+      <div className="page-bg flex items-center justify-center">
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 text-center text-sm text-[#6B7280]">
           Course not found.
         </div>
       </div>
@@ -102,20 +109,20 @@ const CourseDetailsPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      <div className="mx-auto max-w-6xl px-6 py-10">
+    <div className="page-bg">
+      <div className="page-shell py-10">
         <div className="grid gap-8 lg:grid-cols-[1.6fr_0.8fr]">
           <div className="space-y-8">
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="card">
               {showRoadmapLabel ? (
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-indigo-600">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6C5DD3]">
                   Recommended for your roadmap phase
                 </p>
               ) : null}
-              <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-900">
+              <h1 className="mt-2 text-3xl font-bold tracking-tight text-[#1F2937]">
                 {course.title}
               </h1>
-              <p className="mt-3 text-sm text-slate-600 leading-relaxed">
+              <p className="mt-3 text-sm text-[#6B7280] leading-relaxed">
                 {course.description || "Upgrade your skills with this professional course."}
               </p>
 
@@ -139,47 +146,47 @@ const CourseDetailsPage = () => {
               </div>
             </div>
 
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="card">
               <SectionTitle>What you will learn</SectionTitle>
-              <ul className="mt-4 space-y-2 text-sm text-slate-700">
+              <ul className="mt-4 space-y-2 text-sm text-[#1F2937]">
                 {(learningOutcomes?.length ? learningOutcomes : []).map((item) => (
                   <li key={item} className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-emerald-600 mt-0.5" />
+                    <CheckCircle2 className="h-4 w-4 text-[#6C5DD3] mt-0.5" />
                     <span>{item}</span>
                   </li>
                 ))}
                 {learningOutcomes?.length === 0 ? (
-                  <li className="text-slate-500">Clear learning outcomes will be shared inside the course.</li>
+                  <li className="text-[#6B7280]">Clear learning outcomes will be shared inside the course.</li>
                 ) : null}
               </ul>
             </div>
 
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="card">
               <SectionTitle>Modules preview</SectionTitle>
-              <ol className="mt-4 space-y-3 text-sm text-slate-700">
+              <ol className="mt-4 space-y-3 text-sm text-[#1F2937]">
                 {modulePreview.length ? (
                   modulePreview.map((mod, index) => (
-                    <li key={mod?._id || mod?.title || index} className="rounded-2xl border border-slate-200 bg-slate-50 p-3">
+                    <li key={mod?._id || mod?.title || index} className="rounded-2xl border border-gray-200 bg-white p-3">
                       <div className="flex items-start gap-3">
-                        <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-slate-900 text-xs font-semibold text-white">
+                        <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#6C5DD3] text-xs font-semibold text-white">
                           {index + 1}
                         </span>
                         <div>
-                          <p className="font-semibold text-slate-900">
+                          <p className="font-semibold text-[#1F2937]">
                             {mod?.title || mod?.name || `Module ${index + 1}`}
                           </p>
                           {mod?.description ? (
-                            <p className="mt-1 text-xs text-slate-600">{mod.description}</p>
+                            <p className="mt-1 text-xs text-[#6B7280]">{mod.description}</p>
                           ) : null}
-                          <div className="mt-2 flex flex-wrap gap-2 text-xs text-slate-500">
+                          <div className="mt-2 flex flex-wrap gap-2 text-xs text-[#6B7280]">
                             {mod?.duration ? <span>{mod.duration}</span> : null}
                             {mod?.isPreviewFree ? (
-                              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-emerald-700">
+                              <span className="inline-flex items-center gap-1 rounded-full bg-[#F7F5FF] px-2 py-0.5 text-[#6C5DD3]">
                                 <BadgeCheck className="h-3 w-3" /> Preview free
                               </span>
                             ) : null}
                             {!isPurchased && !mod?.isPreviewFree ? (
-                              <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-amber-700">
+                              <span className="inline-flex items-center gap-1 rounded-full bg-[#FFE3DA] px-2 py-0.5 text-[#F5B7A1]">
                                 <Lock className="h-3 w-3" /> Locked
                               </span>
                             ) : null}
@@ -188,7 +195,7 @@ const CourseDetailsPage = () => {
                             <button
                               type="button"
                               onClick={() => handleModuleAction(mod)}
-                              className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:border-slate-300 hover:text-slate-900 transition-colors"
+                              className="btn-secondary inline-flex items-center gap-2 text-xs px-3 py-1.5"
                             >
                               <PlayCircle className="h-3.5 w-3.5" />
                               {isPurchased ? "Open Module" : mod?.isPreviewFree ? "Watch Preview" : "Unlock Course"}
@@ -199,48 +206,48 @@ const CourseDetailsPage = () => {
                     </li>
                   ))
                 ) : (
-                  <li className="text-slate-500">Modules will appear once available.</li>
+                  <li className="text-[#6B7280]">Modules will appear once available.</li>
                 )}
               </ol>
               {modules.length > 4 ? (
-                <p className="mt-3 text-xs font-semibold text-indigo-600">View full curriculum</p>
+                <p className="mt-3 text-xs font-semibold text-[#6C5DD3]">View full curriculum</p>
               ) : null}
             </div>
 
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="card">
               <SectionTitle>Requirements</SectionTitle>
-              <div className="mt-4 text-sm text-slate-700">
+              <div className="mt-4 text-sm text-[#1F2937]">
                 {requirements.length ? (
                   <ul className="space-y-2">
                     {requirements.map((req) => (
                       <li key={req} className="flex items-start gap-2">
-                        <span className="mt-1 h-2 w-2 rounded-full bg-slate-400" />
+                        <span className="mt-1 h-2 w-2 rounded-full bg-gray-400" />
                         <span>{req}</span>
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-slate-500">No prerequisites required. Start from scratch.</p>
+                  <p className="text-[#6B7280]">No prerequisites required. Start from scratch.</p>
                 )}
               </div>
             </div>
 
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="card">
               <SectionTitle>Description</SectionTitle>
-              <p className="mt-4 text-sm text-slate-700 leading-relaxed">
+              <p className="mt-4 text-sm text-[#1F2937] leading-relaxed">
                 {overviewText || "Course overview will be available soon."}
               </p>
             </div>
 
-            <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="card">
               <SectionTitle>Instructor</SectionTitle>
-              <div className="mt-4 flex items-center gap-3 text-sm text-slate-700">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-slate-900 text-white">
+              <div className="mt-4 flex items-center gap-3 text-sm text-[#1F2937]">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#6C5DD3] text-white">
                   <User className="h-4 w-4" />
                 </span>
                 <div>
-                  <p className="font-semibold text-slate-900">{course.instructor || "EduSmart team"}</p>
-                  <p className="text-xs text-slate-500">Industry professional & course author</p>
+                  <p className="font-semibold text-[#1F2937]">{course.instructor || "EduSmart team"}</p>
+                  <p className="text-xs text-[#6B7280]">Industry professional & course author</p>
                 </div>
               </div>
             </div>
@@ -248,7 +255,7 @@ const CourseDetailsPage = () => {
 
           <div className="lg:pl-2">
             <div className="lg:sticky lg:top-[96px]">
-              <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-lg">
+              <div className="card">
                 {course.thumbnail ? (
                   <img
                     src={course.thumbnail}
@@ -256,24 +263,24 @@ const CourseDetailsPage = () => {
                     className="w-full h-48 object-cover rounded-2xl"
                   />
                 ) : (
-                  <div className="w-full h-48 rounded-2xl bg-slate-100 flex items-center justify-center text-sm text-slate-500">
+                  <div className="w-full h-48 rounded-2xl bg-gray-100 flex items-center justify-center text-sm text-[#6B7280]">
                     No thumbnail
                   </div>
                 )}
 
                 <div className="mt-4 space-y-3">
                   <div className="flex items-baseline gap-2">
-                    <p className="text-2xl font-black text-slate-900">₹{course.amount}</p>
+                    <p className="text-2xl font-bold text-[#1F2937]">INR {course.amount}</p>
                     {!isPurchased ? (
-                      <p className="text-xs text-slate-500">One-time purchase</p>
+                      <p className="text-xs text-[#6B7280]">One-time purchase</p>
                     ) : (
-                      <span className="inline-flex items-center rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-semibold text-emerald-700">
+                      <span className="inline-flex items-center rounded-full bg-[#F7F5FF] px-2.5 py-1 text-xs font-semibold text-[#6C5DD3]">
                         Purchased
                       </span>
                     )}
                   </div>
 
-                  <div className="grid gap-2 text-xs text-slate-600">
+                  <div className="grid gap-2 text-xs text-[#6B7280]">
                     <div className="flex items-center gap-2">
                       <BookOpen className="h-4 w-4" />
                       {modules.length ? `${modules.length} modules` : "Structured modules"}
@@ -288,23 +295,23 @@ const CourseDetailsPage = () => {
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs text-slate-600">
-                    {course.subcategory || course.category || "Learning track"} • {course.isPublished ? "Published" : "Draft"}
+                  <div className="rounded-2xl border border-gray-200 bg-[#F7F7FB] px-3 py-2 text-xs text-[#6B7280]">
+                    {course.subcategory || course.category || "Learning track"} - {course.isPublished ? "Published" : "Draft"}
                   </div>
 
                   <button
                     type="button"
                     disabled={isPending}
                     onClick={handlePrimaryAction}
-                    className="w-full rounded-2xl bg-slate-900 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800 transition-colors disabled:opacity-70"
+                    className="w-full btn-primary"
                   >
-                    {isPurchased ? "Continue Learning" : isPending ? "Processing..." : "Buy Now"}
+                    {primaryActionLabel}
                   </button>
                   {!isPurchased && firstPreviewModule ? (
                     <button
                       type="button"
                       onClick={() => navigate(`/courses/${courseId}/learn?module=${firstPreviewModule._id}`)}
-                      className="w-full rounded-2xl border border-slate-200 px-4 py-3 text-sm font-semibold text-slate-700 hover:border-slate-300 hover:text-slate-900 transition-colors"
+                      className="w-full btn-secondary"
                     >
                       Watch Free Preview
                     </button>
@@ -320,3 +327,9 @@ const CourseDetailsPage = () => {
 };
 
 export default CourseDetailsPage;
+
+
+
+
+
+

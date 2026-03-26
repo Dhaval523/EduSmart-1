@@ -29,8 +29,9 @@ export const createCheckOutSession= async(req ,res)=>{
         })
 
         if(alreadyPurchased){
-            return res.status(201).json({
-                message:"You already have this course "
+            return res.status(409).json({
+                success:false,
+                message:"You already have this course"
             })
         }
 
@@ -98,6 +99,13 @@ export const checkoutSuccess=async(req,res)=>{
             const courseId = session.metadata.courseId
             const userId = session.metadata.userId
 
+            const user = await User.findById(userId)
+            if(user?.purchasedCourse?.some((id) => String(id) === String(courseId))){
+                return res.status(409).json({
+                    message:"Course already purchased"
+                })
+            }
+
 
             const newOrder =  new Order({
                 user:userId,
@@ -110,7 +118,7 @@ export const checkoutSuccess=async(req,res)=>{
 
             await User.findByIdAndUpdate(
                 userId,
-                { $push: { purchasedCourse: courseId } }
+                { $addToSet: { purchasedCourse: courseId } }
             )
 
             return res.status(201).json({

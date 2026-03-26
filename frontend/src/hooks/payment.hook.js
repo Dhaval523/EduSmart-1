@@ -1,4 +1,4 @@
-import { checkOutSuccessApi, purchaseCourseApi } from '@/Api/purchase.api'
+﻿import { checkOutSuccessApi, purchaseCourseApi } from '@/Api/purchase.api'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
@@ -8,11 +8,14 @@ export const usePayment = ()=>{
         onSuccess:(data)=>{
             if(data.url){
                 window.location.href=data.url
+                return
             }
-            // toast.success(data.message)
+            if (data?.message) {
+                toast.info(data.message)
+            }
         },
         onError:(err)=>{
-            console.log(err)
+            toast.error(err?.response?.data?.message || "Unable to start payment")
         }
     })
 }
@@ -24,7 +27,8 @@ export const useCheckoutSuccess=()=>{
             toast.success(data.message)
         },
         onError:(err)=>{
-            console.log(err)
+            toast.error(err?.response?.data?.message || "Payment failed")
         }
     })
 }
+

@@ -1,4 +1,4 @@
-import { useGetDailyData } from '@/hooks/analytic.hook'
+﻿import { useGetDailyData } from '@/hooks/analytic.hook'
 import React, { useMemo } from 'react'
 import {
   CartesianGrid,
@@ -27,17 +27,18 @@ const Analytics = () => {
   const { data: dailyData, isLoading } = useGetDailyData(startDate, endDate)
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8 space-y-8">
+    <div className="page-bg py-8">
+      <div className="page-shell space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">Analytics</h1>
-        <p className="text-gray-500 mt-1">Revenue and enrollment trends</p>
+        <h1 className="text-3xl font-bold text-[#1F2937]">Analytics</h1>
+        <p className="text-[#6B7280] mt-1">Revenue and enrollment trends</p>
       </div>
 
-      <div className="bg-white rounded-2xl shadow-lg border border-gray-200 p-6">
+      <div className="card">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">Revenue Trend</h2>
-            <p className="text-sm text-gray-500">Last 7 days performance</p>
+            <h2 className="text-xl font-semibold text-[#1F2937]">Revenue Trend</h2>
+            <p className="text-sm text-[#6B7280]">Last 7 days performance</p>
           </div>
         </div>
 
@@ -52,15 +53,22 @@ const Analytics = () => {
                 <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" />
                 <XAxis dataKey="date" />
                 <YAxis />
-                <Tooltip formatter={(value) => [`₹ ${value}`, 'Revenue']} />
-                <Line type="monotone" dataKey="revenue" stroke="#2563eb" strokeWidth={3} dot={false} activeDot={{ r: 6 }} />
+                <Tooltip formatter={(value) => [`INR ${value}`, 'Revenue']} />
+                <Line type="monotone" dataKey="revenue" stroke="#6C5DD3" strokeWidth={3} dot={false} activeDot={{ r: 6 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
         )}
+      </div>
       </div>
     </div>
   )
 }
 
 export default Analytics
+
+
+
+
+
+

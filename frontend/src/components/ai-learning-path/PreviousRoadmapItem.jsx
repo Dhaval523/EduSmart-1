@@ -1,4 +1,4 @@
-import React from "react";
+ï»¿import React from "react";
 import { Clock } from "lucide-react";
 
 const formatDate = (value) => {
@@ -16,7 +16,7 @@ export const PreviousRoadmapItem = ({ item, isActive, onSelect }) => {
     dateLabel
   ]
     .filter(Boolean)
-    .join(" • ");
+    .join(" - ");
 
   return (
     <button
@@ -25,8 +25,8 @@ export const PreviousRoadmapItem = ({ item, isActive, onSelect }) => {
       className={[
         "w-full rounded-2xl border p-4 text-left transition-colors",
         isActive
-          ? "border-slate-900 bg-slate-900 text-white shadow-sm"
-          : "border-slate-200 bg-white hover:bg-slate-50"
+          ? "border-[#6C5DD3] bg-[#6C5DD3] text-white shadow-sm"
+          : "border-gray-200 bg-white hover:bg-[#F7F7FB]"
       ].join(" ")}
     >
       <div className="flex items-start justify-between gap-3">
@@ -34,12 +34,12 @@ export const PreviousRoadmapItem = ({ item, isActive, onSelect }) => {
           <p className="text-sm font-bold leading-snug">
             {item.goal || item.title || "Learning roadmap"}
           </p>
-          <p className="mt-1 text-xs text-slate-500">{meta || "Updated recently"}</p>
+          <p className="mt-1 text-xs text-[#6B7280]">{meta || "Updated recently"}</p>
         </div>
         <span
           className={[
             "inline-flex items-center gap-2 rounded-2xl px-3 py-1.5 text-xs font-semibold",
-            isActive ? "bg-white/15 text-white" : "bg-slate-100 text-slate-700"
+            isActive ? "bg-white/15 text-white" : "bg-gray-100 text-[#1F2937]"
           ].join(" ")}
         >
           <Clock className="h-4 w-4" />
@@ -49,3 +49,8 @@ export const PreviousRoadmapItem = ({ item, isActive, onSelect }) => {
     </button>
   );
 };
+
+
+
+
+

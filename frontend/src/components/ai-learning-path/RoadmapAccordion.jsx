@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Accordion } from "@/components/ui/accordion";
 import { RoadmapAccordionItem } from "./RoadmapAccordionItem";
 
@@ -15,7 +15,7 @@ export const RoadmapAccordion = ({
 
   if (!phases.length) {
     return (
-      <div className="rounded-3xl border border-dashed border-slate-200 bg-slate-50 p-6 text-sm text-slate-600">
+      <div className="rounded-3xl border border-dashed border-gray-200 bg-[#F7F7FB] p-6 text-sm text-[#6B7280]">
         No phases available to render. Try regenerating your roadmap.
       </div>
     );
@@ -41,3 +41,6 @@ export const RoadmapAccordion = ({
     </Accordion>
   );
 };
+
+
+

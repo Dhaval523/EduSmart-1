@@ -1,4 +1,4 @@
-import { create } from "zustand";
+﻿import { create } from "zustand";
 import { devtools } from "zustand/middleware";
 
 export const useModuleStores = create(
@@ -11,3 +11,4 @@ export const useModuleStores = create(
         {name:'ModuleStore'}
     )
 )
+

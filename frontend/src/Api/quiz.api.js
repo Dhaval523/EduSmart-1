@@ -1,4 +1,4 @@
-import axios from "axios"
+﻿import axios from "axios"
 
 export const getQuizApi = async(id)=>{
     const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/quiz/getQuiz/${id}`,
@@ -31,4 +31,6 @@ export const checkQuizApi = async(id)=>{
     )
     return res.data
 }
+
+
 

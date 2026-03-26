@@ -1,4 +1,4 @@
-import { checkQuizApi, createQuiz, getQuizApi } from '@/Api/quiz.api'
+﻿import { checkQuizApi, createQuiz, getQuizApi } from '@/Api/quiz.api'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 
@@ -39,3 +39,5 @@ export const useCheckQuiz =(id)=>{
         enabled:!!id
     })
 }
+
+

@@ -1,4 +1,4 @@
-import { Spinner } from '@/components/ui/spinner'
+﻿import { Spinner } from '@/components/ui/spinner'
 import { useRegisterHook } from '@/hooks/User.hook'
 import React from 'react'
 import { useForm } from 'react-hook-form'
@@ -14,99 +14,49 @@ const Register = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 via-white to-indigo-100 px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-gray-100 p-8">
-        
-        {/* Header */}
-        <div className="text-center mb-8">
-          <div className="w-14 h-14 mx-auto mb-3 rounded-xl bg-indigo-600 text-white flex items-center justify-center text-2xl font-bold">
-            ⚡
+    <div className='page-bg flex items-center justify-center py-12'>
+      <div className='w-full max-w-md card'>
+        <div className='text-center mb-8'>
+          <div className='w-14 h-14 mx-auto mb-3 rounded-2xl bg-[#6C5DD3] text-white flex items-center justify-center text-2xl font-bold'>
+            ?
           </div>
-          <h1 className="text-2xl font-bold text-gray-900">Create Account</h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Join us and start your journey
-          </p>
+          <h1 className='text-2xl font-bold text-[#1F2937]'>Create Account</h1>
+          <p className='text-sm text-[#6B7280] mt-1'>Join us and start your journey</p>
         </div>
 
-        {/* Form */}
-        <form
-          onSubmit={handleSubmit(registerFormHandler)}
-          className="space-y-5"
-        >
-          {/* Full Name */}
+        <form onSubmit={handleSubmit(registerFormHandler)} className='space-y-5'>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Full Name
-            </label>
-            <div className="relative">
-              <User
-                size={18}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-              />
-              <input
-                type="text"
-                placeholder="John Doe"
-                {...register('fullName')}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
-              />
+            <label className='block text-sm font-medium text-[#1F2937] mb-1'>Full Name</label>
+            <div className='relative'>
+              <User size={18} className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-400' />
+              <input type='text' placeholder='John Doe' {...register('fullName')} className='w-full pl-10 pr-4 py-3' />
             </div>
           </div>
 
-          {/* Email */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Email Address
-            </label>
-            <div className="relative">
-              <Mail
-                size={18}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-              />
-              <input
-                type="email"
-                placeholder="you@example.com"
-                {...register('email')}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
-              />
+            <label className='block text-sm font-medium text-[#1F2937] mb-1'>Email Address</label>
+            <div className='relative'>
+              <Mail size={18} className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-400' />
+              <input type='email' placeholder='you@example.com' {...register('email')} className='w-full pl-10 pr-4 py-3' />
             </div>
           </div>
 
-          {/* Password */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Password
-            </label>
-            <div className="relative">
-              <Lock
-                size={18}
-                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
-              />
-              <input
-                type="password"
-                placeholder="••••••••"
-                {...register('password')}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition"
-              />
+            <label className='block text-sm font-medium text-[#1F2937] mb-1'>Password</label>
+            <div className='relative'>
+              <Lock size={18} className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-400' />
+              <input type='password' placeholder='--------' {...register('password')} className='w-full pl-10 pr-4 py-3' />
             </div>
           </div>
 
-          {/* Submit */}
-          <button
-            type="submit"
-            disabled={isPending}
-            className="w-full py-3 rounded-xl bg-indigo-600 text-white font-semibold hover:bg-indigo-700 transition-all disabled:opacity-60 flex items-center justify-center"
-          >
+          <button type='submit' disabled={isPending} className='w-full btn-primary flex items-center justify-center'>
             {isPending ? <Spinner /> : 'Create Account'}
           </button>
         </form>
 
-        {/* Footer */}
-        <p className="text-sm text-center text-gray-600 mt-6">
+        <p className='text-sm text-center text-[#6B7280] mt-6'>
           Already have an account?{' '}
-          <Link
-            to="/login"
-            className="text-indigo-600 font-medium hover:underline"
-          >
+          <Link to='/login' className='text-[#6C5DD3] font-medium hover:underline'>
             Login
           </Link>
         </p>
@@ -116,3 +66,7 @@ const Register = () => {
 }
 
 export default Register
+
+
+
+

@@ -1,4 +1,4 @@
-import { getCourseProgressApi, markModuleCompleteApi } from "@/Api/progress.api";
+﻿import { getCourseProgressApi, markModuleCompleteApi } from "@/Api/progress.api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useGetCourseProgress = (courseId, enabled = true) => {
@@ -18,3 +18,5 @@ export const useMarkModuleComplete = (courseId) => {
         }
     });
 };
+
+

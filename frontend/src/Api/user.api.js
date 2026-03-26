@@ -1,4 +1,4 @@
-import axios from "axios"
+﻿import axios from "axios"
 
 export const registerApi = async(payload)=>{
     const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/register`,
@@ -50,3 +50,19 @@ export const logoutApi = async()=>{
     )
     return res.data
 }
+
+export const updateProfileApi = async (payload) => {
+    const res = await axios.post(
+        `${import.meta.env.VITE_BASE_URL}/updateProfile`,
+        payload,
+        {
+            headers: {
+                "Content-Type": "multipart/form-data"
+            },
+            withCredentials: true
+        }
+    )
+
+    return res.data
+}
+

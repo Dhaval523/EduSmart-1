@@ -1,8 +1,8 @@
-const safeString = (v, maxLen = 280) => {
+﻿const safeString = (v, maxLen = 280) => {
   if (v === null || v === undefined) return "";
   const s = String(v).replace(/\s+/g, " ").trim();
   if (!s) return "";
-  return s.length > maxLen ? `${s.slice(0, maxLen - 1).trim()}…` : s;
+  return s.length > maxLen ? `${s.slice(0, maxLen - 3).trim()}...` : s;
 };
 
 const safeArray = (v) => (Array.isArray(v) ? v : []);
@@ -92,4 +92,8 @@ export const normalizeRoadmap = (raw) => {
     job_readiness: safeStringArray(src.job_readiness, 10, 160)
   };
 };
+
+
+
+
 

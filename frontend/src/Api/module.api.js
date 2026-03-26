@@ -1,4 +1,4 @@
-import axios from "axios"
+﻿import axios from "axios"
 
 export const createModuleApi = async(payload)=>{
     const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/module/createModule`,
@@ -56,3 +56,5 @@ export const getCommentApi  = async(id)=>{
 
     return res.data
 }
+
+

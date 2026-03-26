@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+﻿import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useGetSingleCourseHook, useUpdateCourseHook } from '@/hooks/course.hook'
 import { useCreateModule, useDeleteModule, useUpdateModule } from '@/hooks/module.hook'
@@ -114,25 +114,26 @@ const CourseWorkspace = () => {
   const modules = [...(course.modules || [])].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
 
   return (
-    <div className="min-h-screen bg-gray-50 p-8 space-y-6">
-      <div>
-        <h1 className="text-3xl font-bold text-slate-900">Manage Course</h1>
-        <p className="text-slate-500">{course.title}</p>
-      </div>
+    <div className="page-bg py-8">
+      <div className="page-shell space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold text-[#1F2937]">Manage Course</h1>
+          <p className="text-[#6B7280]">{course.title}</p>
+        </div>
 
       <div className="flex flex-wrap gap-2">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-3 py-2 rounded-xl text-sm font-semibold border ${activeTab === tab.id ? 'bg-slate-900 text-white border-slate-900' : 'bg-white border-slate-200 text-slate-600'}`}
+            className={`px-3 py-2 rounded-xl text-sm font-semibold border ${activeTab === tab.id ? 'bg-[#6C5DD3] text-white border-[#6C5DD3]' : 'bg-white border-gray-200 text-[#6B7280]'}`}
           >
             {tab.label}
           </button>
         ))}
       </div>
 
-      <div className="bg-white rounded-2xl border border-slate-200 p-6">
+      <div className="bg-white rounded-2xl border border-gray-200 p-6">
         {activeTab === 'details' && (
           <div className="space-y-4">
             <input value={form.title} onChange={(e) => updateField('title', e.target.value)} placeholder="Title" className="w-full p-3 border rounded-lg" />
@@ -162,17 +163,19 @@ const CourseWorkspace = () => {
 
         {activeTab === 'modules' && (
           <div className="space-y-4">
-            <button onClick={() => openModuleEditor(null)} className="inline-flex items-center gap-2 rounded-xl bg-emerald-600 px-3 py-2 text-sm font-semibold text-white">
+            <button onClick={() => openModuleEditor(null)} className="inline-flex items-center gap-2 rounded-xl bg-[#6C5DD3] px-3 py-2 text-sm font-semibold text-white">
               <Plus className="w-4 h-4" /> Add Module
             </button>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {modules.map((mod) => (
-                <div key={mod._id} className="border border-slate-200 rounded-xl p-4">
+                <div key={mod._id} className="border border-gray-200 rounded-xl p-4">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="font-semibold text-slate-900">{mod.title}</p>
-                      <p className="text-xs text-slate-500">Order {mod.order ?? 0} • {mod.duration || '—'}</p>
+                      <p className="font-semibold text-[#1F2937]">{mod.title}</p>
+                      <p className="text-xs text-[#6B7280]">
+                        Order {mod.order ?? 0} - {mod.duration || "N/A"}
+                      </p>
                     </div>
                     <div className="flex items-center gap-2">
                       <button onClick={() => openModuleEditor(mod)} className="p-2 border rounded-lg"><Edit3 className="w-4 h-4" /></button>
@@ -180,7 +183,7 @@ const CourseWorkspace = () => {
                     </div>
                   </div>
                   {mod.isPreviewFree ? (
-                    <span className="mt-2 inline-flex items-center rounded-full bg-emerald-100 px-2 py-0.5 text-xs text-emerald-700">Preview free</span>
+                    <span className="mt-2 inline-flex items-center rounded-full bg-[#EDEBFF] px-2 py-0.5 text-xs text-[#6C5DD3]">Preview free</span>
                   ) : null}
                 </div>
               ))}
@@ -190,12 +193,12 @@ const CourseWorkspace = () => {
 
         {activeTab === 'publishing' && (
           <div className="space-y-3">
-            <p className="text-sm text-slate-600">Modules: {modules.length}</p>
-            <p className="text-sm text-slate-600">Status: {course.isPublished ? 'Published' : 'Draft'}</p>
+            <p className="text-sm text-[#6B7280]">Modules: {modules.length}</p>
+            <p className="text-sm text-[#6B7280]">Status: {course.isPublished ? 'Published' : 'Draft'}</p>
             <button
               onClick={() => updateCourse({ id, payload: (() => { const p = new FormData(); p.append('isPublished', !course.isPublished); return p })() })}
               disabled={!course.isPublished && modules.length < 1}
-              className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-3 py-2 text-sm font-semibold text-white disabled:opacity-60"
+              className="inline-flex items-center gap-2 rounded-xl bg-[#6C5DD3] px-3 py-2 text-sm font-semibold text-white disabled:opacity-60"
             >
               {course.isPublished ? 'Unpublish' : 'Publish'}
             </button>
@@ -209,16 +212,16 @@ const CourseWorkspace = () => {
       <button
         onClick={saveCourse}
         disabled={isPending}
-        className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white"
+        className="inline-flex items-center gap-2 rounded-xl bg-[#6C5DD3] px-4 py-2 text-sm font-semibold text-white"
       >
         {isPending ? <Spinner /> : 'Save Changes'}
       </button>
 
       {moduleFormOpen ? (
         <div className="fixed inset-0 z-40 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setModuleFormOpen(false)} />
-          <div className="relative z-50 bg-white rounded-2xl border border-slate-200 p-6 w-full max-w-lg">
-            <h3 className="text-lg font-bold text-slate-900">{editingModule ? 'Edit Module' : 'Add Module'}</h3>
+          <div className="absolute inset-0 bg-[#6C5DD3]/20" onClick={() => setModuleFormOpen(false)} />
+          <div className="relative z-50 bg-white rounded-2xl border border-gray-200 p-6 w-full max-w-lg">
+            <h3 className="text-lg font-bold text-[#1F2937]">{editingModule ? 'Edit Module' : 'Add Module'}</h3>
             <div className="mt-4 space-y-3">
               <input value={moduleForm.title} onChange={(e) => setModuleForm({ ...moduleForm, title: e.target.value })} placeholder="Title" className="w-full p-3 border rounded-lg" />
               <textarea value={moduleForm.description} onChange={(e) => setModuleForm({ ...moduleForm, description: e.target.value })} placeholder="Description" rows={3} className="w-full p-3 border rounded-lg" />
@@ -235,15 +238,26 @@ const CourseWorkspace = () => {
             </div>
             <div className="mt-4 flex justify-end gap-2">
               <button onClick={() => setModuleFormOpen(false)} className="px-3 py-2 border rounded-lg">Cancel</button>
-              <button onClick={handleModuleSubmit} className="px-3 py-2 bg-emerald-600 text-white rounded-lg">
+              <button onClick={handleModuleSubmit} className="px-3 py-2 bg-[#6C5DD3] text-white rounded-lg">
                 {(isCreatingModule || isUpdatingModule) ? <Spinner /> : 'Save Module'}
               </button>
             </div>
           </div>
         </div>
       ) : null}
+      </div>
     </div>
   )
 }
 
 export default CourseWorkspace
+
+
+
+
+
+
+
+
+
+

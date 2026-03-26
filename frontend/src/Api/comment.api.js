@@ -1,4 +1,4 @@
-import axios from "axios"
+﻿import axios from "axios"
 
 export const createComment=async({id, payload})=>{
     const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/comment/createComment/${id}`,
@@ -11,3 +11,4 @@ export const createComment=async({id, payload})=>{
 
     return res.data
 }
+

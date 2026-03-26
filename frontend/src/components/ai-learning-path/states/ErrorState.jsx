@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { AlertTriangle, RotateCcw } from "lucide-react";
 
 export const ErrorState = ({ message, onRetry }) => {
@@ -9,13 +9,13 @@ export const ErrorState = ({ message, onRetry }) => {
           <AlertTriangle className="h-5 w-5" />
         </span>
         <div className="flex-1">
-          <p className="text-sm font-bold text-slate-900">We couldn’t generate your roadmap</p>
-          <p className="mt-1 text-sm text-slate-700">{message}</p>
+          <p className="text-sm font-bold text-[#1F2937]">We couldnt generate your roadmap</p>
+          <p className="mt-1 text-sm text-[#1F2937]">{message}</p>
           {onRetry ? (
             <button
               type="button"
               onClick={onRetry}
-              className="mt-4 inline-flex items-center gap-2 rounded-2xl bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 transition-colors"
+              className="mt-4 inline-flex items-center gap-2 rounded-2xl bg-[#6C5DD3] px-4 py-2 text-sm font-semibold text-white hover:bg-[#5B4FC4] transition-colors"
             >
               Retry
               <RotateCcw className="h-4 w-4" />
@@ -26,4 +26,10 @@ export const ErrorState = ({ message, onRetry }) => {
     </div>
   );
 };
+
+
+
+
+
+
 

@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import { Trophy } from "lucide-react";
 
 export const CapstoneSection = ({ capstone }) => {
@@ -7,20 +7,25 @@ export const CapstoneSection = ({ capstone }) => {
   if (!title && !description) return null;
 
   return (
-    <div className="rounded-3xl border border-slate-200 bg-gradient-to-br from-white to-yellow-50 p-6 shadow-sm">
+    <div className="rounded-3xl border border-gray-200 bg-gradient-to-br from-white to-[#F7F5FF] p-6 shadow-sm">
       <div className="flex items-center gap-2">
-        <span className="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-yellow-400 text-slate-900">
+        <span className="inline-flex h-9 w-9 items-center justify-center rounded-2xl bg-[#F5B7A1] text-[#1F2937]">
           <Trophy className="h-4 w-4" />
         </span>
-        <h3 className="text-base font-extrabold text-slate-900">Capstone project</h3>
+        <h3 className="text-base font-extrabold text-[#1F2937]">Capstone project</h3>
       </div>
-      <div className="mt-4 rounded-2xl border border-yellow-200 bg-white/70 p-4">
-        {title ? <p className="text-sm font-extrabold text-slate-900">{title}</p> : null}
+      <div className="mt-4 rounded-2xl border border-gray-200 bg-white/70 p-4">
+        {title ? <p className="text-sm font-extrabold text-[#1F2937]">{title}</p> : null}
         {description ? (
-          <p className="mt-2 text-sm leading-relaxed text-slate-700">{description}</p>
+          <p className="mt-2 text-sm leading-relaxed text-[#1F2937]">{description}</p>
         ) : null}
       </div>
     </div>
   );
 };
+
+
+
+
+
 

@@ -1,4 +1,4 @@
-import React from 'react'
+﻿import React from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { 
   LayoutDashboard, 
@@ -21,10 +21,17 @@ const DashboardSideBar = () => {
   ]
 
   return (
-    <aside className='w-64 bg-white border-r border-slate-200 fixed inset-y-0 left-0 z-40'>
-      <div className='p-6 border-b border-slate-200'>
-        <h1 className='text-2xl font-black text-slate-900 tracking-tight'>EduSmart</h1>
-        <p className='text-xs text-slate-500 font-medium mt-1'>Admin Console</p>
+    <aside className='w-64 bg-white border-r border-gray-200 fixed inset-y-0 left-0 z-40'>
+      <div className='p-6 border-b border-gray-200'>
+        <div className='flex items-center gap-3'>
+          <div className='h-9 w-9 rounded-xl bg-[#6C5DD3] text-white flex items-center justify-center text-sm font-bold'>
+            ES
+          </div>
+          <div>
+            <h1 className='text-lg font-extrabold text-[#1F2937] tracking-tight'>EduSmart</h1>
+            <p className='text-xs text-[#6B7280] font-medium'>Admin Console</p>
+          </div>
+        </div>
       </div>
 
       <nav className='p-4 space-y-1'>
@@ -39,8 +46,8 @@ const DashboardSideBar = () => {
                 const activeState = isActive !== undefined ? isActive : navActive
                 return `group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer
                 ${activeState 
-                  ? 'bg-emerald-600 text-white shadow-lg hover:bg-emerald-700' 
-                  : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+                  ? 'bg-[#6C5DD3] text-white shadow-sm' 
+                  : 'text-[#1F2937] hover:bg-[#F7F7FB] hover:text-[#1F2937]'
                 }`
               }}
             >
@@ -55,3 +62,7 @@ const DashboardSideBar = () => {
 }
 
 export default DashboardSideBar
+
+
+
+

@@ -1,4 +1,4 @@
-import React from 'react'
+﻿import React from 'react'
 import { Button } from './components/ui/button'
 import MainRoutes from './Routes/MainRoutes'
 import Navbar from './components/Navbar'
@@ -19,3 +19,5 @@ const App = () => {
 }
 
 export default App
+
+

@@ -1,4 +1,4 @@
-import axios from "axios"
+﻿import axios from "axios"
 
 export const purchaseCourseApi = async(payload)=>{
     const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/payment/checkout`,
@@ -23,3 +23,4 @@ export const checkOutSuccessApi = async(sessionId)=>{
 
     return res.data
 }
+

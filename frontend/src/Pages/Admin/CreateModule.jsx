@@ -1,4 +1,4 @@
-import { useGetSingleCourseHook } from '@/hooks/course.hook'
+﻿import { useGetSingleCourseHook } from '@/hooks/course.hook'
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import {
@@ -75,18 +75,19 @@ const CreateModule = () => {
   }
 
   return (
-    <div className='p-8 max-w-5xl mx-auto'>
+    <div className="page-bg py-8">
+      <div className="page-shell max-w-5xl">
       {/* Course Header */}
       <div className='mb-12'>
-        <h1 className='text-3xl font-black text-slate-900 mb-2'>{data?.title}</h1>
-        <div className='flex items-center gap-2 text-sm text-slate-600'>
+        <h1 className='text-3xl font-black text-[#1F2937] mb-2'>{data?.title}</h1>
+        <div className='flex items-center gap-2 text-sm text-[#6B7280]'>
           <span>Total Modules: {data?.modules?.length || 0}</span>
         </div>
       </div>
 
       {/* Create Module Button */}
       <Dialog open={openModule} onOpenChange={(open) => { setOpenModule(open); if (!open) { setEditingModule(null); reset() } }}>
-        <DialogTrigger className='inline-flex items-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200'>
+        <DialogTrigger className='inline-flex items-center gap-2 px-6 py-3 bg-[#6C5DD3] hover:bg-[#5B4FC4] text-white font-semibold rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200'>
           <svg className='w-5 h-5' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
             <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M12 6v6m0 0v6m0-6h6m-6 0H6' />
           </svg>
@@ -98,41 +99,41 @@ const CreateModule = () => {
             <DialogTitle className='text-2xl font-bold'>{editingModule ? 'Edit Module' : 'New Module'}</DialogTitle>
             <form onSubmit={handleSubmit(moduleFormHandler)} className='space-y-6 mt-6'>
               <div>
-                <label className='block text-sm font-semibold text-slate-700 mb-2'>Module Title</label>
+                <label className='block text-sm font-semibold text-[#1F2937] mb-2'>Module Title</label>
                 <input 
                   type="text" 
                   placeholder='Enter module title'  
-                  className='w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 focus:outline-none transition-all' 
+                  className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#6C5DD3] focus:ring-4 focus:ring-[#A29BFE]/30 focus:outline-none transition-all' 
                   {...register('title', { required: true })}
                 />
               </div>
 
               <div>
-                <label className='block text-sm font-semibold text-slate-700 mb-2'>Module Description</label>
+                <label className='block text-sm font-semibold text-[#1F2937] mb-2'>Module Description</label>
                 <textarea
                   rows={3}
                   placeholder='Short overview for this module'
-                  className='w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 focus:outline-none transition-all'
+                  className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#6C5DD3] focus:ring-4 focus:ring-[#A29BFE]/30 focus:outline-none transition-all'
                   {...register('description')}
                 />
               </div>
 
               <div className='grid grid-cols-2 gap-4'>
                 <div>
-                  <label className='block text-sm font-semibold text-slate-700 mb-2'>Order</label>
+                  <label className='block text-sm font-semibold text-[#1F2937] mb-2'>Order</label>
                   <input
                     type="number"
                     placeholder='1'
-                    className='w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 focus:outline-none transition-all'
+                    className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#6C5DD3] focus:ring-4 focus:ring-[#A29BFE]/30 focus:outline-none transition-all'
                     {...register('order')}
                   />
                 </div>
                 <div>
-                  <label className='block text-sm font-semibold text-slate-700 mb-2'>Duration</label>
+                  <label className='block text-sm font-semibold text-[#1F2937] mb-2'>Duration</label>
                   <input
                     type="text"
                     placeholder='15 min'
-                    className='w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 focus:outline-none transition-all'
+                    className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#6C5DD3] focus:ring-4 focus:ring-[#A29BFE]/30 focus:outline-none transition-all'
                     {...register('duration')}
                   />
                 </div>
@@ -142,41 +143,41 @@ const CreateModule = () => {
                 <input
                   type="checkbox"
                   id="isPreviewFree"
-                  className='h-4 w-4 rounded border-slate-300'
+                  className='h-4 w-4 rounded border-gray-300'
                   {...register('isPreviewFree')}
                 />
-                <label htmlFor="isPreviewFree" className='text-sm text-slate-700'>
+                <label htmlFor="isPreviewFree" className='text-sm text-[#1F2937]'>
                   Mark as preview/free module
                 </label>
               </div>
               
               <div>
-                <label className='block text-sm font-semibold text-slate-700 mb-2'>Video File</label>
+                <label className='block text-sm font-semibold text-[#1F2937] mb-2'>Video File</label>
                 <input 
                   type="file" 
                   accept='video/*' 
-                  className='w-full px-4 py-3 border-2 border-slate-200 rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition-all cursor-pointer' 
+                  className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-[#F7F5FF] file:text-[#6C5DD3] hover:file:bg-[#EDEBFF] transition-all cursor-pointer' 
                   {...register('video', { required: !editingModule })}
                 />
               </div>
 
               <div>
-                <label className='block text-sm font-semibold text-slate-700 mb-2'>Resource Links (one per line)</label>
+                <label className='block text-sm font-semibold text-[#1F2937] mb-2'>Resource Links (one per line)</label>
                 <textarea
                   rows={4}
                   placeholder='https://example.com/notes.pdf\nhttps://docs.example.com/ui-guide'
-                  className='w-full px-4 py-3 border-2 border-slate-200 rounded-xl focus:border-emerald-500 focus:ring-4 focus:ring-emerald-100 focus:outline-none transition-all'
+                  className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-[#6C5DD3] focus:ring-4 focus:ring-[#A29BFE]/30 focus:outline-none transition-all'
                   {...register('resourceLinks')}
                 />
               </div>
 
               <div>
-                <label className='block text-sm font-semibold text-slate-700 mb-2'>Upload Resources (images, PDF, PPT)</label>
+                <label className='block text-sm font-semibold text-[#1F2937] mb-2'>Upload Resources (images, PDF, PPT)</label>
                 <input
                   type="file"
                   multiple
                   accept=".pdf,.ppt,.pptx,image/*"
-                  className='w-full px-4 py-3 border-2 border-slate-200 rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-emerald-50 file:text-emerald-700 hover:file:bg-emerald-100 transition-all cursor-pointer'
+                  className='w-full px-4 py-3 border-2 border-gray-200 rounded-xl file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-[#F7F5FF] file:text-[#6C5DD3] hover:file:bg-[#EDEBFF] transition-all cursor-pointer'
                   {...register('resources')}
                 />
               </div>
@@ -184,7 +185,7 @@ const CreateModule = () => {
               <button 
                 type='submit' 
                 disabled={isPending || isUpdating}
-                className='w-full flex items-center justify-center gap-2 px-6 py-3 bg-emerald-600 hover:bg-emerald-700 disabled:bg-emerald-500 text-white font-semibold rounded-2xl shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200'
+                className='w-full flex items-center justify-center gap-2 px-6 py-3 bg-[#6C5DD3] hover:bg-[#5B4FC4] disabled:bg-[#6C5DD3] text-white font-semibold rounded-2xl shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-200'
               >
                 {(isPending || isUpdating) ? (
                   <>
@@ -203,33 +204,40 @@ const CreateModule = () => {
       {/* Modules List */}
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-12'>
         {data?.modules?.slice().sort((a, b) => (a.order ?? 0) - (b.order ?? 0)).map((item, index) => (
-          <div key={item._id || index} className='group bg-white border border-slate-200 rounded-2xl p-6 hover:shadow-xl hover:-translate-y-1 transition-all duration-200 cursor-pointer hover:border-slate-300'>
+          <div key={item._id || index} className='group bg-white border border-gray-200 rounded-2xl p-6 hover:shadow-md hover:-translate-y-1 transition-all duration-200 cursor-pointer hover:border-gray-300'>
             <div className='flex items-center justify-between mb-4'>
               <div>
-                <h3 className='font-bold text-lg text-slate-900 group-hover:text-slate-700'>{item.title}</h3>
-                <p className='text-sm text-slate-500'>Module {item.order ?? index + 1}</p>
+                <h3 className='font-bold text-lg text-[#1F2937] group-hover:text-[#1F2937]'>{item.title}</h3>
+                <p className='text-sm text-[#6B7280]'>Module {item.order ?? index + 1}</p>
                 {item.duration ? (
-                  <p className='text-xs text-slate-400 mt-1'>Duration: {item.duration}</p>
+                  <p className='text-xs text-gray-400 mt-1'>Duration: {item.duration}</p>
                 ) : null}
               </div>
               <div className='flex items-center gap-2'>
-                <button onClick={() => openEdit(item)} className='p-2 rounded-lg border border-slate-200'><Edit3 className='w-4 h-4' /></button>
+                <button onClick={() => openEdit(item)} className='p-2 rounded-lg border border-gray-200'><Edit3 className='w-4 h-4' /></button>
                 <button onClick={() => handleDelete(item._id)} className='p-2 rounded-lg border border-red-200 text-red-600'><Trash2 className='w-4 h-4' /></button>
               </div>
             </div>
             {item.description ? (
-              <p className='text-sm text-slate-600 mb-3 line-clamp-2'>{item.description}</p>
+              <p className='text-sm text-[#6B7280] mb-3 line-clamp-2'>{item.description}</p>
             ) : null}
             {item.isPreviewFree ? (
-              <span className='inline-flex items-center rounded-full bg-emerald-50 text-emerald-700 px-2 py-1 text-xs font-semibold border border-emerald-100'>
+              <span className='inline-flex items-center rounded-full bg-[#F7F5FF] text-[#6C5DD3] px-2 py-1 text-xs font-semibold border border-gray-200'>
                 Preview free
               </span>
             ) : null}
           </div>
         ))}
       </div>
+      </div>
     </div>
   )
 }
 
 export default CreateModule
+
+
+
+
+
+
