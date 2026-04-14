@@ -7,6 +7,7 @@ import { useCreateQuiz, useGetQuiz } from '@/hooks/quiz.hook'
 import { useGetCourseProgress, useMarkModuleComplete } from '@/hooks/progress.hook'
 import { ModuleVideoPlayer } from '@/components/ModuleVideoPlayer'
 import { Spinner } from '@/components/ui/spinner'
+import AIChatbot from '@/components/AIChatbot'
 import {
   CheckCircle2,
   FileQuestion,
@@ -31,11 +32,11 @@ const getResourceIcon = (resource) => {
 
 const LockedModuleState = ({ onUnlock }) => (
   <div className='flex flex-col items-center justify-center text-center py-10'>
-    <div className='rounded-full border border-gray-200 bg-[#FFF2EE] p-4 text-[#F5B7A1]'>
+    <div className='rounded-full border border-gray-200 bg-[#fef3c7] p-4 text-[#f59e0b]'>
       <Lock className='h-8 w-8' />
     </div>
-    <h3 className='mt-4 text-xl font-semibold text-[#1F2937]'>Locked module</h3>
-    <p className='mt-2 text-sm text-[#6B7280] max-w-md'>
+    <h3 className='mt-4 text-xl font-semibold text-[#0f172a]'>Locked module</h3>
+    <p className='mt-2 text-sm text-[#51607b] max-w-md'>
       Purchase the course to unlock this module and access quizzes, resources, and progress tracking.
     </p>
     <button type='button' onClick={onUnlock} className='mt-6 btn-primary'>
@@ -45,8 +46,8 @@ const LockedModuleState = ({ onUnlock }) => (
 )
 
 const PreviewModeBanner = () => (
-  <div className='flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs text-[#1F2937]'>
-    <BadgeCheck className='h-4 w-4 text-[#1F2937]' />
+  <div className='flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs text-[#0f172a]'>
+    <BadgeCheck className='h-4 w-4 text-[#0f172a]' />
     Preview mode - purchase to unlock full course features.
   </div>
 )
@@ -161,7 +162,7 @@ const CourseLearningPage = () => {
 
   if (!course) {
     return (
-      <div className='page-bg flex items-center justify-center text-[#6B7280]'>
+      <div className='page-bg flex items-center justify-center text-[#51607b]'>
         Course not found.
       </div>
     )
@@ -174,8 +175,8 @@ const CourseLearningPage = () => {
           <div className='card'>
             <div className='flex items-center justify-between flex-wrap gap-4 mb-4'>
               <div>
-                <p className='text-xs uppercase tracking-[0.2em] text-[#6B7280]'>Now Playing</p>
-                <h2 className='heading text-[#1F2937]'>
+                <p className='text-xs uppercase tracking-[0.2em] text-[#51607b]'>Now Playing</p>
+                <h2 className='heading text-[#0f172a]'>
                   {selectedModule?.title || 'Select a module'}
                 </h2>
               </div>
@@ -190,10 +191,10 @@ const CourseLearningPage = () => {
                   <LockedModuleState onUnlock={() => navigate(`/courses/${courseId}`)} />
                 )
               ) : (
-                <div className='h-full flex items-center justify-center text-center text-[#6B7280]'>
+                <div className='h-full flex items-center justify-center text-center text-[#51607b]'>
                   <div>
-                    <p className='text-lg font-semibold text-[#1F2937]'>Select a module to watch</p>
-                    <p className='text-sm text-[#6B7280] mt-2'>Preview modules are available before purchase</p>
+                    <p className='text-lg font-semibold text-[#0f172a]'>Select a module to watch</p>
+                    <p className='text-sm text-[#51607b] mt-2'>Preview modules are available before purchase</p>
                   </div>
                 </div>
               )}
@@ -202,9 +203,9 @@ const CourseLearningPage = () => {
             {canAccessSelectedModule && selectedModule?.resources?.length ? (
               <div className='mb-6'>
                 <div className='flex items-center gap-2 mb-3'>
-                  <FileText className='w-5 h-5 text-[#1F2937]' />
-                  <h2 className='heading text-[#1F2937]'>Resources</h2>
-                  <span className='text-sm text-[#6B7280]'>({selectedModule.resources.length})</span>
+                  <FileText className='w-5 h-5 text-[#0f172a]' />
+                  <h2 className='heading text-[#0f172a]'>Resources</h2>
+                  <span className='text-sm text-[#51607b]'>({selectedModule.resources.length})</span>
                 </div>
                 <div className='space-y-2'>
                   {selectedModule.resources.map((res, idx) => (
@@ -213,7 +214,7 @@ const CourseLearningPage = () => {
                       href={res.url}
                       target='_blank'
                       rel='noreferrer'
-                      className='flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-gray-200 text-sm text-[#1F2937] transition hover:bg-[#F7F7FB]'
+                      className='flex items-center gap-2 px-3 py-2 rounded-xl bg-white border border-gray-200 text-sm text-[#0f172a] transition hover:bg-[#f5f7fb]'
                     >
                       {getResourceIcon(res)}
                       <span className='truncate'>{res.title || res.fileName || res.url}</span>
@@ -226,22 +227,22 @@ const CourseLearningPage = () => {
             {isPurchased ? (
               <div>
                 <div className='flex items-center gap-2 mb-3'>
-                  <MessageCircle className='w-5 h-5 text-[#1F2937]' />
-                  <h2 className='heading text-[#1F2937]'>Comments</h2>
-                  <span className='text-sm text-[#6B7280]'>({comments?.length || 0})</span>
+                  <MessageCircle className='w-5 h-5 text-[#0f172a]' />
+                  <h2 className='heading text-[#0f172a]'>Comments</h2>
+                  <span className='text-sm text-[#51607b]'>({comments?.length || 0})</span>
                 </div>
 
                 <div className='max-h-[360px] overflow-y-auto pr-2 space-y-4'>
                   {comments?.length ? (
                     comments.map((item, index) => (
                       <div key={item._id || index} className='bg-white rounded-xl p-4 border border-gray-200'>
-                        <p className='text-[#1F2937] text-sm leading-relaxed'>{item.comment}</p>
+                        <p className='text-[#0f172a] text-sm leading-relaxed'>{item.comment}</p>
                         <div className='flex items-center gap-2 mt-2'>
-                          <span className='text-xs text-[#6B7280]'>
+                          <span className='text-xs text-[#51607b]'>
                             {item.user?.name || 'Anonymous'}
                           </span>
                           <span className='text-xs text-gray-400'>.</span>
-                          <span className='text-xs text-[#6B7280]'>
+                          <span className='text-xs text-[#51607b]'>
                             {new Date(item.createdAt).toLocaleDateString()}
                           </span>
                         </div>
@@ -250,7 +251,7 @@ const CourseLearningPage = () => {
                   ) : (
                     <div className='flex flex-col items-center justify-center py-10 text-center'>
                       <MessageCircle className='w-12 h-12 text-gray-300 mb-3' />
-                      <p className='text-[#6B7280]'>No comments yet</p>
+                      <p className='text-[#51607b]'>No comments yet</p>
                       <p className='text-sm text-gray-400'>Be the first to comment!</p>
                     </div>
                   )}
@@ -276,7 +277,7 @@ const CourseLearningPage = () => {
                 </div>
               </div>
             ) : (
-              <div className='text-center text-sm text-[#6B7280]'>
+              <div className='text-center text-sm text-[#51607b]'>
                 Comments are available after purchase.
               </div>
             )}
@@ -285,13 +286,13 @@ const CourseLearningPage = () => {
           <div className='card'>
             <div className='flex items-center justify-between flex-wrap gap-4 mb-4'>
               <div>
-                <h2 className='heading text-[#1F2937]'>Course Content</h2>
+                <h2 className='heading text-[#0f172a]'>Course Content</h2>
                 <p className='desc'>
                   {isPurchased ? 'Track your progress module by module' : 'Preview available modules below'}
                 </p>
               </div>
               {isPurchased ? (
-                <div className='rounded-full border border-gray-200 bg-white px-4 py-2 text-sm text-[#1F2937]'>
+                <div className='rounded-full border border-gray-200 bg-white px-4 py-2 text-sm text-[#0f172a]'>
                   {percent}% Complete
                 </div>
               ) : null}
@@ -300,14 +301,14 @@ const CourseLearningPage = () => {
             {isPurchased ? (
               <div className='mb-4'>
                 <div className='flex items-center justify-between mb-2'>
-                  <span className='text-sm font-semibold text-[#1F2937]'>Progress</span>
-                  <span className='text-sm text-[#6B7280]'>
+                  <span className='text-sm font-semibold text-[#0f172a]'>Progress</span>
+                  <span className='text-sm text-[#51607b]'>
                     {completedCount}/{totalModules} ({percent}%)
                   </span>
                 </div>
                 <div className='h-2 w-full bg-gray-100 rounded-full overflow-hidden'>
                   <div
-                    className='h-full bg-gradient-to-r from-[#6C5DD3] to-[#A29BFE] transition-all'
+                    className='h-full bg-gradient-to-r from-[#0ea5a4] to-[#0f766e] transition-all'
                     style={{ width: `${percent}%` }}
                   />
                 </div>
@@ -325,35 +326,35 @@ const CourseLearningPage = () => {
                     onClick={() => handleModuleSelect(item)}
                     className={`w-full text-left rounded-2xl border transition-all px-5 py-4 ${
                       isSelected
-                        ? 'border-[#A29BFE] bg-[#F7F5FF]'
+                        ? 'border-[#0f766e] bg-[#f5fbfa]'
                         : 'border-gray-200 bg-white hover:border-gray-300'
                     }`}
                   >
                     <div className='flex items-center gap-3'>
-                      <div className='w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center text-sm font-bold text-[#1F2937]'>
+                      <div className='w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center text-sm font-bold text-[#0f172a]'>
                         {item.order ?? index + 1}
                       </div>
                       <div className='flex-1'>
                         <div className='flex flex-wrap items-center gap-2'>
-                          <span className='font-semibold text-[#1F2937]'>{item.title}</span>
+                          <span className='font-semibold text-[#0f172a]'>{item.title}</span>
                           {item.isPreviewFree && (
                             <span className='chip'>Preview free</span>
                           )}
                           {completedSet.has(item._id) && isPurchased && (
-                            <span className='inline-flex items-center gap-1 text-xs font-semibold text-[#1F2937] bg-gray-100 border border-gray-200 rounded-full px-2 py-1'>
+                            <span className='inline-flex items-center gap-1 text-xs font-semibold text-[#0f172a] bg-gray-100 border border-gray-200 rounded-full px-2 py-1'>
                               <CheckCircle2 className='w-3 h-3' />
                               Completed
                             </span>
                           )}
                           {isLocked && (
-                            <span className='inline-flex items-center gap-1 text-xs font-semibold text-[#F5B7A1] bg-[#FFF2EE] border border-gray-200 rounded-full px-2 py-1'>
+                            <span className='inline-flex items-center gap-1 text-xs font-semibold text-[#f59e0b] bg-[#fef3c7] border border-gray-200 rounded-full px-2 py-1'>
                               <Lock className='w-3 h-3' />
                               Locked
                             </span>
                           )}
                         </div>
                         {item.description ? (
-                          <p className='mt-1 text-xs text-[#6B7280] line-clamp-2'>
+                          <p className='mt-1 text-xs text-[#51607b] line-clamp-2'>
                             {item.description}
                           </p>
                         ) : null}
@@ -400,17 +401,17 @@ const CourseLearningPage = () => {
 
                     {isSelected && item.quiz && isPurchased ? (
                       <div className='mt-4 rounded-xl border border-gray-200 bg-white p-4'>
-                        <p className='text-xs font-semibold uppercase tracking-[0.18em] text-[#6B7280]'>Quiz</p>
+                        <p className='text-xs font-semibold uppercase tracking-[0.18em] text-[#51607b]'>Quiz</p>
                         {isQuizLoading ? (
-                          <p className='mt-2 text-sm text-[#6B7280]'>Loading questions...</p>
+                          <p className='mt-2 text-sm text-[#51607b]'>Loading questions...</p>
                         ) : (
                           <>
-                            <p className='mt-2 text-sm text-[#6B7280]'>
+                            <p className='mt-2 text-sm text-[#51607b]'>
                               {quizData?.quiz?.questions?.length || 0} questions
                             </p>
                             <div className='mt-3 space-y-3'>
                               {(quizData?.quiz?.questions || []).slice(0, 5).map((q, idx) => (
-                                <div key={q._id || idx} className='rounded-lg border border-gray-200 bg-white p-3 text-sm text-[#1F2937]'>
+                                <div key={q._id || idx} className='rounded-lg border border-gray-200 bg-white p-3 text-sm text-[#0f172a]'>
                                   <span className='text-xs text-gray-400'>Q{idx + 1}</span>
                                   <p className='mt-1'>{q.content}</p>
                                 </div>
@@ -426,7 +427,7 @@ const CourseLearningPage = () => {
                   </button>
                 )
               }) : (
-                <div className='rounded-2xl border border-gray-200 bg-white p-6 text-center text-sm text-[#6B7280]'>
+                <div className='rounded-2xl border border-gray-200 bg-white p-6 text-center text-sm text-[#51607b]'>
                   Modules will appear once available.
                 </div>
               )}
@@ -434,11 +435,19 @@ const CourseLearningPage = () => {
           </div>
         </div>
       </div>
+      <AIChatbot
+        courseTitle={course?.title}
+        sectionTitle={selectedModule?.sectionTitle || selectedModule?.title}
+        lessonTitle={selectedModule?.title}
+        courseId={courseId}
+        lessonId={selectedModule?._id}
+      />
     </div>
   )
 }
 
 export default CourseLearningPage
+
 
 
 

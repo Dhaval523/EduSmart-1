@@ -15,7 +15,7 @@ export const RoadmapAccordion = ({
 
   if (!phases.length) {
     return (
-      <div className="rounded-3xl border border-dashed border-gray-200 bg-[#F7F7FB] p-6 text-sm text-[#6B7280]">
+      <div className="rounded-3xl border border-dashed border-gray-200 bg-[#f5f7fb] p-6 text-sm text-[#51607b]">
         No phases available to render. Try regenerating your roadmap.
       </div>
     );
@@ -41,6 +41,7 @@ export const RoadmapAccordion = ({
     </Accordion>
   );
 };
+
 
 
 

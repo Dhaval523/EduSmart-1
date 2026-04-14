@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react"
+﻿import React, { useMemo, useState } from "react"
 
 const ReportTable = ({ columns, rows = [], emptyText = "No data found." }) => {
   const firstSortable = columns.find((col) => col.sortable)?.key || columns[0]?.key
@@ -33,7 +33,7 @@ const ReportTable = ({ columns, rows = [], emptyText = "No data found." }) => {
     <div className="card p-0 overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full table-auto text-sm">
-          <thead className="bg-[#F7F7FB] text-[#1F2937]">
+          <thead className="bg-[#f5f7fb] text-[#0f172a]">
             <tr className="border-b border-gray-200">
               {columns.map((column) => (
                 <th
@@ -42,11 +42,11 @@ const ReportTable = ({ columns, rows = [], emptyText = "No data found." }) => {
                 >
                   {column.sortable ? (
                     <button
-                      className="inline-flex items-center gap-1 hover:text-[#6C5DD3]"
+                      className="inline-flex items-center gap-1 hover:text-[#0ea5a4]"
                       onClick={() => toggleSort(column.key)}
                     >
                       {column.label}
-                      {sortBy === column.key ? (sortDir === "asc" ? "↑" : "↓") : ""}
+                      {sortBy === column.key ? (sortDir === "asc" ? "â†‘" : "â†“") : ""}
                     </button>
                   ) : (
                     column.label
@@ -58,7 +58,7 @@ const ReportTable = ({ columns, rows = [], emptyText = "No data found." }) => {
           <tbody>
             {sortedRows.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="px-6 py-10 text-center text-[#6B7280]">
+                <td colSpan={columns.length} className="px-6 py-10 text-center text-[#51607b]">
                   {emptyText}
                 </td>
               </tr>
@@ -66,7 +66,7 @@ const ReportTable = ({ columns, rows = [], emptyText = "No data found." }) => {
               sortedRows.map((row, rowIndex) => (
                 <tr key={row.id || rowIndex} className="border-b border-gray-100">
                   {columns.map((column) => (
-                    <td key={column.key} className="px-4 py-4 text-[#1F2937]">
+                    <td key={column.key} className="px-4 py-4 text-[#0f172a]">
                       {column.render ? column.render(row[column.key], row) : row[column.key]}
                     </td>
                   ))}
@@ -81,4 +81,5 @@ const ReportTable = ({ columns, rows = [], emptyText = "No data found." }) => {
 }
 
 export default ReportTable
+
 

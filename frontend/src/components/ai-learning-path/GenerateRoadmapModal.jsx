@@ -14,14 +14,14 @@ export const GenerateRoadmapModal = ({
 }) => {
   return (
     <Dialog open={isOpen} onOpenChange={(open) => (!open ? onClose?.() : null)}>
-      <DialogContent className="max-w-2xl max-h-[85vh] overflow-hidden bg-[#F7F7FB] p-0">
+      <DialogContent className="max-w-2xl max-h-[85vh] overflow-hidden bg-[#f5f7fb] p-0">
         <div className="flex flex-col max-h-[85vh]">
           <div className="border-b border-gray-200 bg-white px-6 py-4">
             <DialogHeader className="text-left">
-              <DialogTitle className="text-xl font-black text-[#1F2937]">
+              <DialogTitle className="text-xl font-black text-[#0f172a]">
                 Generate a New Roadmap
               </DialogTitle>
-              <DialogDescription className="text-sm text-[#6B7280]">
+              <DialogDescription className="text-sm text-[#51607b]">
                 Tell us your goal and optional preferences. We will craft a personalized learning plan.
               </DialogDescription>
             </DialogHeader>
@@ -43,7 +43,7 @@ export const GenerateRoadmapModal = ({
               type="button"
               onClick={onClose}
               disabled={isLoading}
-              className="rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-[#1F2937] hover:bg-[#F7F7FB] disabled:opacity-70"
+              className="rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-[#0f172a] hover:bg-[#f5f7fb] disabled:opacity-70"
             >
               Cancel
             </button>
@@ -51,7 +51,7 @@ export const GenerateRoadmapModal = ({
               type="button"
               onClick={onSubmit}
               disabled={isLoading}
-              className="inline-flex items-center gap-2 rounded-2xl bg-[#6C5DD3] px-4 py-2 text-sm font-semibold text-white hover:bg-[#5B4FC4] disabled:opacity-70"
+              className="inline-flex items-center gap-2 rounded-2xl bg-[#0ea5a4] px-4 py-2 text-sm font-semibold text-white hover:bg-[#0f766e] disabled:opacity-70"
             >
               <Wand2 className="h-4 w-4" />
               {isLoading ? "Generating..." : "Generate roadmap"}
@@ -62,6 +62,7 @@ export const GenerateRoadmapModal = ({
     </Dialog>
   );
 };
+
 
 
 

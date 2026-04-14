@@ -123,8 +123,8 @@ const DashboardProducts = () => {
     <div className="page-bg py-8">
       <div className="page-shell space-y-6">
         <div className="flex flex-col gap-2">
-        <h1 className="text-3xl font-bold text-[#1F2937]">Course Management</h1>
-        <p className="text-[#6B7280]">Search, filter, and manage your course catalog</p>
+        <h1 className="text-3xl font-bold text-[#0f172a]">Course Management</h1>
+        <p className="text-[#51607b]">Search, filter, and manage your course catalog</p>
       </div>
 
       <div className="bg-white rounded-2xl border border-gray-200 p-5 space-y-4">
@@ -213,7 +213,7 @@ const DashboardProducts = () => {
               setDrawerOpen(true)
               setActiveTab('details')
             }}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-[#6C5DD3] text-white rounded-xl font-semibold hover:bg-[#5B4FC4] transition"
+            className="inline-flex items-center gap-2 px-4 py-2 bg-[#0ea5a4] text-white rounded-xl font-semibold hover:bg-[#0f766e] transition"
           >
             <Plus className="w-4 h-4" /> Add Course
           </button>
@@ -223,7 +223,7 @@ const DashboardProducts = () => {
       <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full table-auto text-sm">
-            <thead className="bg-[#F7F7FB] text-[#1F2937]">
+            <thead className="bg-[#f5f7fb] text-[#0f172a]">
               <tr className="border-b border-gray-200">
                 <th className="text-left px-6 py-4 font-semibold">Course</th>
                 <th className="text-left px-4 py-4 font-semibold">Category</th>
@@ -249,13 +249,13 @@ const DashboardProducts = () => {
                 </tr>
               ) : (data?.courses || []).length === 0 ? (
                 <tr>
-                  <td className="px-6 py-10 text-center text-[#6B7280]" colSpan={10}>
+                  <td className="px-6 py-10 text-center text-[#51607b]" colSpan={10}>
                     No courses found.
                   </td>
                 </tr>
               ) : (
                 (data?.courses || []).map((course) => (
-                  <tr key={course._id} className="border-t border-gray-200 hover:bg-[#F7F7FB]/80 align-top">
+                  <tr key={course._id} className="border-t border-gray-200 hover:bg-[#f5f7fb]/80 align-top">
                     <td className="px-6 py-6">
                       <div className="flex items-start gap-4 min-w-0">
                         <img
@@ -264,10 +264,10 @@ const DashboardProducts = () => {
                           className="h-16 w-24 rounded-xl object-cover border border-gray-200 shrink-0"
                         />
                         <div className="min-w-0 flex-1">
-                          <p className="font-semibold text-[#1F2937] text-lg leading-6 truncate">
+                          <p className="font-semibold text-[#0f172a] text-lg leading-6 truncate">
                             {course.title}
                           </p>
-                          <p className="mt-1 text-sm text-[#6B7280] line-clamp-2 leading-5">
+                          <p className="mt-1 text-sm text-[#51607b] line-clamp-2 leading-5">
                             {course.description || 'No description available'}
                           </p>
                         </div>
@@ -276,38 +276,38 @@ const DashboardProducts = () => {
 
                     <td className="px-4 py-6">
                       <div className="min-w-0">
-                        <p className="font-medium text-[#1F2937] truncate">
+                        <p className="font-medium text-[#0f172a] truncate">
                           {course.category || 'N/A'}
                         </p>
-                        <p className="mt-1 text-xs text-[#6B7280] truncate">
+                        <p className="mt-1 text-xs text-[#51607b] truncate">
                           {course.subcategory || 'General'}
                         </p>
                       </div>
                     </td>
 
-                    <td className="px-4 py-6 whitespace-nowrap text-[#1F2937]">
+                    <td className="px-4 py-6 whitespace-nowrap text-[#0f172a]">
                       {course.level || 'N/A'}
                     </td>
 
                     <td className="px-4 py-6">
                       <div className="max-w-full">
-                        <p className="text-[#1F2937] leading-6 break-words">
+                        <p className="text-[#0f172a] leading-6 break-words">
                           {course.instructor || 'N/A'}
                         </p>
                       </div>
                     </td>
 
-                    <td className="px-4 py-6 whitespace-nowrap text-[#1F2937]">
+                    <td className="px-4 py-6 whitespace-nowrap text-[#0f172a]">
                       {course.duration || 'N/A'}
                     </td>
 
                     <td className="px-4 py-6 whitespace-nowrap">
-                      <span className="font-semibold text-[#1F2937]">
+                      <span className="font-semibold text-[#0f172a]">
                         INR {Number(course.amount || 0).toLocaleString('en-IN')}
                       </span>
                     </td>
 
-                    <td className="px-4 py-6 whitespace-nowrap text-[#1F2937]">
+                    <td className="px-4 py-6 whitespace-nowrap text-[#0f172a]">
                       {course.modules?.length || 0}
                     </td>
 
@@ -315,15 +315,15 @@ const DashboardProducts = () => {
                       <span
                         className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-semibold ${
                           course.isPublished
-                            ? 'bg-[#EDEBFF] text-[#6C5DD3]'
-                            : 'bg-[#FFE3DA] text-[#F5B7A1]'
+                            ? 'bg-[#e7f5f4] text-[#0ea5a4]'
+                            : 'bg-[#fde68a] text-[#f59e0b]'
                         }`}
                       >
                         {course.isPublished ? 'Published' : 'Draft'}
                       </span>
                     </td>
 
-                    <td className="px-4 py-6 whitespace-nowrap text-sm text-[#6B7280]">
+                    <td className="px-4 py-6 whitespace-nowrap text-sm text-[#51607b]">
                       {new Date(course.updatedAt).toLocaleDateString()}
                     </td>
 
@@ -374,7 +374,7 @@ const DashboardProducts = () => {
         </div>
 
         <div className="flex items-center justify-between px-4 py-4 border-t border-gray-200">
-          <div className="text-xs text-[#6B7280]">
+          <div className="text-xs text-[#51607b]">
             Page {data?.meta?.page || 1} of {totalPages}  {data?.meta?.total || 0} courses
           </div>
 
@@ -410,14 +410,14 @@ const DashboardProducts = () => {
 
       {drawerOpen ? (
         <div className="fixed inset-0 z-40 flex justify-end">
-          <div className="absolute inset-0 bg-[#6C5DD3]/20" onClick={() => setDrawerOpen(false)} />
+          <div className="absolute inset-0 bg-[#0ea5a4]/20" onClick={() => setDrawerOpen(false)} />
           <div className="relative z-50 h-full w-full max-w-lg bg-white shadow-md border-l border-gray-200 flex flex-col">
             <div className="px-6 py-5 border-b border-gray-200 flex items-start justify-between">
               <div>
-                <h2 className="text-xl font-bold text-[#1F2937]">Create Course</h2>
-                <p className="text-xs text-[#6B7280]">Capture the essentials to start building content.</p>
+                <h2 className="text-xl font-bold text-[#0f172a]">Create Course</h2>
+                <p className="text-xs text-[#51607b]">Capture the essentials to start building content.</p>
               </div>
-              <button onClick={() => setDrawerOpen(false)} className="text-[#6B7280]">x</button>
+              <button onClick={() => setDrawerOpen(false)} className="text-[#51607b]">x</button>
             </div>
 
             <div className="px-6 py-3 border-b border-gray-200 flex flex-wrap gap-2">
@@ -427,8 +427,8 @@ const DashboardProducts = () => {
                   onClick={() => setActiveTab(tab.id)}
                   className={`px-3 py-2 rounded-xl text-xs font-semibold border ${
                     activeTab === tab.id
-                      ? 'bg-[#6C5DD3] text-white border-[#6C5DD3]'
-                      : 'bg-white border-gray-200 text-[#6B7280]'
+                      ? 'bg-[#0ea5a4] text-white border-[#0ea5a4]'
+                      : 'bg-white border-gray-200 text-[#51607b]'
                   }`}
                 >
                   {tab.label}
@@ -440,7 +440,7 @@ const DashboardProducts = () => {
               {activeTab === 'details' && (
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm font-semibold text-[#1F2937]">Course Title</label>
+                    <label className="text-sm font-semibold text-[#0f172a]">Course Title</label>
                     <input
                       value={form.title}
                       onChange={(e) => onChange('title', e.target.value)}
@@ -449,7 +449,7 @@ const DashboardProducts = () => {
                   </div>
 
                   <div>
-                    <label className="text-sm font-semibold text-[#1F2937]">Short Description</label>
+                    <label className="text-sm font-semibold text-[#0f172a]">Short Description</label>
                     <textarea
                       value={form.description}
                       onChange={(e) => onChange('description', e.target.value)}
@@ -459,9 +459,9 @@ const DashboardProducts = () => {
                   </div>
 
                   <div>
-                    <label className="text-sm font-semibold text-[#1F2937]">Thumbnail / Cover Image</label>
+                    <label className="text-sm font-semibold text-[#0f172a]">Thumbnail / Cover Image</label>
                     <div className="mt-2 border border-dashed border-gray-200 rounded-xl p-4 flex items-center gap-4">
-                      <div className="h-20 w-28 rounded-lg bg-gray-100 overflow-hidden flex items-center justify-center text-xs text-[#6B7280]">
+                      <div className="h-20 w-28 rounded-lg bg-gray-100 overflow-hidden flex items-center justify-center text-xs text-[#51607b]">
                         {thumbnailPreview ? (
                           <img src={thumbnailPreview} alt="Thumbnail" className="h-full w-full object-cover" />
                         ) : (
@@ -469,7 +469,7 @@ const DashboardProducts = () => {
                         )}
                       </div>
                       <div className="flex-1">
-                        <p className="text-xs text-[#6B7280]">Recommended landscape image for course cards and course pages.</p>
+                        <p className="text-xs text-[#51607b]">Recommended landscape image for course cards and course pages.</p>
                         <input
                           type="file"
                           onChange={(e) => handleThumbnail(e.target.files?.[0])}
@@ -484,7 +484,7 @@ const DashboardProducts = () => {
               {activeTab === 'classification' && (
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm font-semibold text-[#1F2937]">Category</label>
+                    <label className="text-sm font-semibold text-[#0f172a]">Category</label>
                     <select
                       value={form.category}
                       onChange={(e) => {
@@ -501,7 +501,7 @@ const DashboardProducts = () => {
                   </div>
 
                   <div>
-                    <label className="text-sm font-semibold text-[#1F2937]">Subcategory</label>
+                    <label className="text-sm font-semibold text-[#0f172a]">Subcategory</label>
                     <select
                       value={form.subcategory}
                       onChange={(e) => onChange('subcategory', e.target.value)}
@@ -516,7 +516,7 @@ const DashboardProducts = () => {
                   </div>
 
                   <div>
-                    <label className="text-sm font-semibold text-[#1F2937]">Level</label>
+                    <label className="text-sm font-semibold text-[#0f172a]">Level</label>
                     <select
                       value={form.level}
                       onChange={(e) => onChange('level', e.target.value)}
@@ -530,7 +530,7 @@ const DashboardProducts = () => {
                   </div>
 
                   <div>
-                    <label className="text-sm font-semibold text-[#1F2937]">Duration</label>
+                    <label className="text-sm font-semibold text-[#0f172a]">Duration</label>
                     <input
                       value={form.duration}
                       onChange={(e) => onChange('duration', e.target.value)}
@@ -540,7 +540,7 @@ const DashboardProducts = () => {
                   </div>
 
                   <div>
-                    <label className="text-sm font-semibold text-[#1F2937]">Instructor</label>
+                    <label className="text-sm font-semibold text-[#0f172a]">Instructor</label>
                     <input
                       value={form.instructor}
                       onChange={(e) => onChange('instructor', e.target.value)}
@@ -549,7 +549,7 @@ const DashboardProducts = () => {
                   </div>
 
                   <div>
-                    <label className="text-sm font-semibold text-[#1F2937]">Tags</label>
+                    <label className="text-sm font-semibold text-[#0f172a]">Tags</label>
                     <input
                       value={form.tags}
                       onChange={(e) => onChange('tags', e.target.value)}
@@ -559,7 +559,7 @@ const DashboardProducts = () => {
                   </div>
 
                   <div>
-                    <label className="text-sm font-semibold text-[#1F2937]">Price</label>
+                    <label className="text-sm font-semibold text-[#0f172a]">Price</label>
                     <input
                       type="number"
                       step="0.01"
@@ -574,7 +574,7 @@ const DashboardProducts = () => {
               {activeTab === 'learning' && (
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm font-semibold text-[#1F2937]">Overview</label>
+                    <label className="text-sm font-semibold text-[#0f172a]">Overview</label>
                     <textarea
                       value={form.overview}
                       onChange={(e) => onChange('overview', e.target.value)}
@@ -584,8 +584,8 @@ const DashboardProducts = () => {
                   </div>
 
                   <div>
-                    <label className="text-sm font-semibold text-[#1F2937]">Requirements</label>
-                    <p className="text-xs text-[#6B7280]">Enter one requirement per line.</p>
+                    <label className="text-sm font-semibold text-[#0f172a]">Requirements</label>
+                    <p className="text-xs text-[#51607b]">Enter one requirement per line.</p>
                     <textarea
                       value={form.requirements}
                       onChange={(e) => onChange('requirements', e.target.value)}
@@ -595,8 +595,8 @@ const DashboardProducts = () => {
                   </div>
 
                   <div>
-                    <label className="text-sm font-semibold text-[#1F2937]">Learning Outcomes</label>
-                    <p className="text-xs text-[#6B7280]">Enter one learning outcome per line.</p>
+                    <label className="text-sm font-semibold text-[#0f172a]">Learning Outcomes</label>
+                    <p className="text-xs text-[#51607b]">Enter one learning outcome per line.</p>
                     <textarea
                       value={form.learningOutcomes}
                       onChange={(e) => onChange('learningOutcomes', e.target.value)}
@@ -612,7 +612,7 @@ const DashboardProducts = () => {
               <button
                 disabled={isPending}
                 onClick={submitHandler}
-                className="w-full py-3 bg-[#6C5DD3] text-white rounded-lg font-semibold"
+                className="w-full py-3 bg-[#0ea5a4] text-white rounded-lg font-semibold"
               >
                 {isPending ? <Spinner /> : 'Create Course'}
               </button>
@@ -626,6 +626,7 @@ const DashboardProducts = () => {
 }
 
 export default DashboardProducts
+
 
 
 

@@ -1,4 +1,4 @@
-import { getUser, loginApi, logoutApi, registerApi, updateProfileApi } from "@/Api/user.api"
+import { getAdminUsersApi, getUser, loginApi, logoutApi, registerApi, updateProfileApi } from "@/Api/user.api"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "react-router-dom"
 import { toast } from "sonner"
@@ -10,7 +10,7 @@ export const useRegisterHook = ()=>{
         onSuccess:(data)=>{
             console.log(data)
             toast.success(data.message)
-            navigate("/")
+            navigate("/home")
         },
 
         onError:(err)=>{
@@ -25,7 +25,7 @@ export const useLoginHook = ()=>{
         mutationFn:loginApi,
         onSuccess:(data)=>{
             toast.success(data?.message)
-            navigate('/')
+            navigate('/home')
         },
 
         onError:(err)=>{
@@ -70,5 +70,12 @@ export const useUpdateProfile = () => {
         onError: (err) => {
             toast.error(err?.response?.data?.message || "Failed to update profile")
         }
+    })
+}
+
+export const useAdminUsers = (params) => {
+    return useQuery({
+        queryFn: () => getAdminUsersApi(params),
+        queryKey: ['adminUsers', params]
     })
 }

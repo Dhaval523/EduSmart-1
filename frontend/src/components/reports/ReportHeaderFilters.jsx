@@ -1,4 +1,4 @@
-import { Download } from "lucide-react"
+﻿import { Download } from "lucide-react"
 import React from "react"
 
 const ReportHeaderFilters = ({
@@ -13,14 +13,14 @@ const ReportHeaderFilters = ({
   return (
     <div className="card space-y-4">
       <div className="flex flex-col gap-1">
-        <h1 className="text-2xl md:text-3xl font-black text-[#1F2937]">{title}</h1>
-        {subtitle ? <p className="text-sm text-[#6B7280]">{subtitle}</p> : null}
+        <h1 className="text-2xl md:text-3xl font-black text-[#0f172a]">{title}</h1>
+        {subtitle ? <p className="text-sm text-[#51607b]">{subtitle}</p> : null}
       </div>
 
       <div className="flex flex-col md:flex-row md:items-end gap-3 md:justify-between">
         {hideDateFilter ? <div /> : (
           <div className="flex flex-col sm:flex-row gap-3">
-            <label className="text-xs font-semibold text-[#6B7280] uppercase tracking-[0.12em]">
+            <label className="text-xs font-semibold text-[#51607b] uppercase tracking-[0.12em]">
               Start Date
               <input
                 type="date"
@@ -29,7 +29,7 @@ const ReportHeaderFilters = ({
                 className="mt-1 block w-full sm:w-44 px-3 py-2 text-sm"
               />
             </label>
-            <label className="text-xs font-semibold text-[#6B7280] uppercase tracking-[0.12em]">
+            <label className="text-xs font-semibold text-[#51607b] uppercase tracking-[0.12em]">
               End Date
               <input
                 type="date"
@@ -53,4 +53,5 @@ const ReportHeaderFilters = ({
 }
 
 export default ReportHeaderFilters
+
 

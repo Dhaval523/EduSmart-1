@@ -1,6 +1,7 @@
 ﻿import Login from '@/Pages/Auth/Login'
 import Register from '@/Pages/Auth/Register'
 import Home from '@/Pages/User/Home'
+import Landing from '@/Pages/Landing'
 import React from 'react'
 import { Navigate, Route, Routes, useParams } from 'react-router-dom'
 import { ProtectedRoutes } from './ProtectedRoute'
@@ -29,8 +30,9 @@ const MainRoutes = () => {
 
   return (
    <Routes>
+    <Route path='/' element={<Landing/>}/>
     <Route element={<ProtectedRoutes />}>
-      <Route path='/' element={<Home/>}/>
+      <Route path='/home' element={<Home/>}/>
       <Route path='/cancel' element={<Cancel/>}/>
       <Route path='/purchase' element={<PaymenSuccess/>}/>
       <Route path='/courses/:courseId' element={<CourseDetailsPage/>}/>

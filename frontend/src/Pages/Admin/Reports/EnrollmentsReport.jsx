@@ -1,4 +1,4 @@
-import ReportHeaderFilters from "@/components/reports/ReportHeaderFilters"
+﻿import ReportHeaderFilters from "@/components/reports/ReportHeaderFilters"
 import ReportKpiCard from "@/components/reports/ReportKpiCard"
 import { ReportCardSkeleton, ReportEmpty } from "@/components/reports/ReportState"
 import ReportTable from "@/components/reports/ReportTable"
@@ -59,7 +59,7 @@ const EnrollmentsReport = () => {
           ) : (
             <>
               <div className="card">
-                <h2 className="text-lg font-bold text-[#1F2937]">Enrollments Over Time</h2>
+                <h2 className="text-lg font-bold text-[#0f172a]">Enrollments Over Time</h2>
                 <div className="h-80 mt-4">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={trendRows}>
@@ -67,13 +67,13 @@ const EnrollmentsReport = () => {
                       <XAxis dataKey="date" />
                       <YAxis />
                       <Tooltip />
-                      <Line dataKey="count" type="monotone" stroke="#6C5DD3" strokeWidth={3} dot={false} />
+                      <Line dataKey="count" type="monotone" stroke="#0ea5a4" strokeWidth={3} dot={false} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
               </div>
               <div className="card">
-                <h2 className="text-lg font-bold text-[#1F2937]">Enrollments by Course</h2>
+                <h2 className="text-lg font-bold text-[#0f172a]">Enrollments by Course</h2>
                 <div className="h-80 mt-4">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={courseRows.slice(0, 10)}>
@@ -81,7 +81,7 @@ const EnrollmentsReport = () => {
                       <XAxis dataKey="courseName" hide />
                       <YAxis />
                       <Tooltip />
-                      <Bar dataKey="count" fill="#A29BFE" radius={[8, 8, 0, 0]} />
+                      <Bar dataKey="count" fill="#0f766e" radius={[8, 8, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -97,4 +97,5 @@ const EnrollmentsReport = () => {
 }
 
 export default EnrollmentsReport
+
 

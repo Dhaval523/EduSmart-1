@@ -25,8 +25,8 @@ export const PreviousRoadmapItem = ({ item, isActive, onSelect }) => {
       className={[
         "w-full rounded-2xl border p-4 text-left transition-colors",
         isActive
-          ? "border-[#6C5DD3] bg-[#6C5DD3] text-white shadow-sm"
-          : "border-gray-200 bg-white hover:bg-[#F7F7FB]"
+          ? "border-[#0ea5a4] bg-[#0ea5a4] text-white shadow-sm"
+          : "border-gray-200 bg-white hover:bg-[#f5f7fb]"
       ].join(" ")}
     >
       <div className="flex items-start justify-between gap-3">
@@ -34,12 +34,12 @@ export const PreviousRoadmapItem = ({ item, isActive, onSelect }) => {
           <p className="text-sm font-bold leading-snug">
             {item.goal || item.title || "Learning roadmap"}
           </p>
-          <p className="mt-1 text-xs text-[#6B7280]">{meta || "Updated recently"}</p>
+          <p className="mt-1 text-xs text-[#51607b]">{meta || "Updated recently"}</p>
         </div>
         <span
           className={[
             "inline-flex items-center gap-2 rounded-2xl px-3 py-1.5 text-xs font-semibold",
-            isActive ? "bg-white/15 text-white" : "bg-gray-100 text-[#1F2937]"
+            isActive ? "bg-white/15 text-white" : "bg-gray-100 text-[#0f172a]"
           ].join(" ")}
         >
           <Clock className="h-4 w-4" />
@@ -49,6 +49,7 @@ export const PreviousRoadmapItem = ({ item, isActive, onSelect }) => {
     </button>
   );
 };
+
 
 
 

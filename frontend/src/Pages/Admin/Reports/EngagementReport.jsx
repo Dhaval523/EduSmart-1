@@ -1,4 +1,4 @@
-import ReportHeaderFilters from "@/components/reports/ReportHeaderFilters"
+﻿import ReportHeaderFilters from "@/components/reports/ReportHeaderFilters"
 import ReportKpiCard from "@/components/reports/ReportKpiCard"
 import { ReportCardSkeleton } from "@/components/reports/ReportState"
 import ReportTable from "@/components/reports/ReportTable"
@@ -64,7 +64,7 @@ const EngagementReport = () => {
           ) : (
             <>
               <div className="card">
-                <h2 className="text-lg font-bold text-[#1F2937]">Daily Active Users</h2>
+                <h2 className="text-lg font-bold text-[#0f172a]">Daily Active Users</h2>
                 <div className="h-80 mt-4">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={dauRows}>
@@ -72,13 +72,13 @@ const EngagementReport = () => {
                       <XAxis dataKey="date" />
                       <YAxis />
                       <Tooltip />
-                      <Line dataKey="count" type="monotone" stroke="#6C5DD3" strokeWidth={3} dot={false} />
+                      <Line dataKey="count" type="monotone" stroke="#0ea5a4" strokeWidth={3} dot={false} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
               </div>
               <div className="card">
-                <h2 className="text-lg font-bold text-[#1F2937]">Lessons Completed</h2>
+                <h2 className="text-lg font-bold text-[#0f172a]">Lessons Completed</h2>
                 <div className="h-80 mt-4">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={lessonRows}>
@@ -86,7 +86,7 @@ const EngagementReport = () => {
                       <XAxis dataKey="date" />
                       <YAxis />
                       <Tooltip />
-                      <Bar dataKey="count" fill="#A29BFE" radius={[8, 8, 0, 0]} />
+                      <Bar dataKey="count" fill="#0f766e" radius={[8, 8, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -102,4 +102,5 @@ const EngagementReport = () => {
 }
 
 export default EngagementReport
+
 

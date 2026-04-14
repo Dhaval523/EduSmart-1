@@ -15,19 +15,19 @@ export const GenerateRoadmapDrawer = ({
 
   return (
     <div className="fixed inset-0 z-40 flex">
-      <div className="absolute inset-0 bg-[#6C5DD3]/40" onClick={onClose} />
-      <div className="relative z-50 h-full w-full max-w-lg bg-[#F7F7FB] shadow-md border-r border-gray-200 flex flex-col">
+      <div className="absolute inset-0 bg-[#0ea5a4]/40" onClick={onClose} />
+      <div className="relative z-50 h-full w-full max-w-lg bg-[#f5f7fb] shadow-md border-r border-gray-200 flex flex-col">
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 bg-white">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6C5DD3]">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#0ea5a4]">
               Generate Roadmap
             </p>
-            <p className="text-sm font-bold text-[#1F2937]">Create a new learning path</p>
+            <p className="text-sm font-bold text-[#0f172a]">Create a new learning path</p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-full p-1.5 hover:bg-gray-100 text-[#6B7280]"
+            className="rounded-full p-1.5 hover:bg-gray-100 text-[#51607b]"
           >
             <X className="h-4 w-4" />
           </button>
@@ -50,7 +50,7 @@ export const GenerateRoadmapDrawer = ({
             type="button"
             onClick={onClose}
             disabled={isLoading}
-            className="rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-[#1F2937] hover:bg-[#F7F7FB] disabled:opacity-70"
+            className="rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm font-semibold text-[#0f172a] hover:bg-[#f5f7fb] disabled:opacity-70"
           >
             Cancel
           </button>
@@ -58,7 +58,7 @@ export const GenerateRoadmapDrawer = ({
             type="button"
             onClick={onSubmit}
             disabled={isLoading}
-            className="rounded-2xl bg-[#6C5DD3] px-4 py-2 text-sm font-semibold text-white hover:bg-[#5B4FC4] disabled:opacity-70"
+            className="rounded-2xl bg-[#0ea5a4] px-4 py-2 text-sm font-semibold text-white hover:bg-[#0f766e] disabled:opacity-70"
           >
             {isLoading ? "Generating..." : "Generate roadmap"}
           </button>
@@ -67,6 +67,7 @@ export const GenerateRoadmapDrawer = ({
     </div>
   );
 };
+
 
 
 

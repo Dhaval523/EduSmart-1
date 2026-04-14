@@ -9,12 +9,12 @@ const statusLabel = (status) => {
 
 const statusClasses = (status) => {
   if (status === "completed") {
-    return "bg-[#F7F5FF] text-[#6C5DD3] border-gray-200";
+    return "bg-[#f5fbfa] text-[#0ea5a4] border-gray-200";
   }
   if (status === "in_progress") {
-    return "bg-[#F7F5FF] text-[#6C5DD3] border-gray-200";
+    return "bg-[#f5fbfa] text-[#0ea5a4] border-gray-200";
   }
-  return "bg-[#F7F7FB] text-[#6B7280] border-gray-200";
+  return "bg-[#f5f7fb] text-[#51607b] border-gray-200";
 };
 
 export const PhaseActionBar = ({
@@ -31,7 +31,7 @@ export const PhaseActionBar = ({
           type="button"
           disabled={isUpdating}
           onClick={onStartLearning}
-          className="inline-flex items-center gap-2 rounded-2xl bg-[#6C5DD3] px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-[#5B4FC4] transition-colors disabled:opacity-70"
+          className="inline-flex items-center gap-2 rounded-2xl bg-[#0ea5a4] px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-[#0f766e] transition-colors disabled:opacity-70"
         >
           <PlayCircle className="h-4 w-4" />
           Start learning
@@ -40,7 +40,7 @@ export const PhaseActionBar = ({
           type="button"
           disabled={isUpdating}
           onClick={onViewCourses}
-          className="inline-flex items-center gap-2 rounded-2xl bg-[#6C5DD3] px-4 py-2 text-xs font-semibold text-white hover:bg-[#5B4FC4] transition-colors disabled:opacity-70"
+          className="inline-flex items-center gap-2 rounded-2xl bg-[#0ea5a4] px-4 py-2 text-xs font-semibold text-white hover:bg-[#0f766e] transition-colors disabled:opacity-70"
         >
           <BookOpenCheck className="h-4 w-4" />
           View courses
@@ -49,7 +49,7 @@ export const PhaseActionBar = ({
           type="button"
           disabled={isUpdating || status === "completed"}
           onClick={onMarkComplete}
-          className="inline-flex items-center gap-2 rounded-2xl border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-[#1F2937] hover:bg-[#F7F7FB] transition-colors disabled:opacity-60"
+          className="inline-flex items-center gap-2 rounded-2xl border border-gray-200 bg-white px-4 py-2 text-xs font-semibold text-[#0f172a] hover:bg-[#f5f7fb] transition-colors disabled:opacity-60"
         >
           <CheckCircle2 className="h-4 w-4" />
           Mark complete
@@ -68,6 +68,7 @@ export const PhaseActionBar = ({
     </div>
   );
 };
+
 
 
 

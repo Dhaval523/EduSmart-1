@@ -9,7 +9,7 @@ export const LoadingState = () => {
             <div className="h-4 w-44 rounded-full bg-gray-200" />
             <div className="h-7 w-72 rounded-2xl bg-gray-200" />
           </div>
-          <div className="h-9 w-28 rounded-2xl bg-[#F5B7A1]" />
+          <div className="h-9 w-28 rounded-2xl bg-[#f59e0b]" />
         </div>
 
         <div className="space-y-3">
@@ -22,7 +22,7 @@ export const LoadingState = () => {
           {[...Array(3)].map((_, idx) => (
             <div key={idx} className="relative rounded-2xl border border-gray-200 p-4">
               <div className="mb-3 flex items-center gap-3">
-                <div className="h-8 w-8 rounded-2xl bg-[#F5B7A1]" />
+                <div className="h-8 w-8 rounded-2xl bg-[#f59e0b]" />
                 <div className="h-4 w-56 rounded-full bg-gray-200" />
               </div>
               <div className="h-4 w-10/12 rounded-full bg-gray-200" />
@@ -34,6 +34,7 @@ export const LoadingState = () => {
     </div>
   );
 };
+
 
 
 

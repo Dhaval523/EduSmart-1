@@ -1,4 +1,4 @@
-import ReportHeaderFilters from "@/components/reports/ReportHeaderFilters"
+﻿import ReportHeaderFilters from "@/components/reports/ReportHeaderFilters"
 import ReportKpiCard from "@/components/reports/ReportKpiCard"
 import { ReportCardSkeleton } from "@/components/reports/ReportState"
 import ReportTable from "@/components/reports/ReportTable"
@@ -57,7 +57,7 @@ const UsersReport = () => {
           <ReportCardSkeleton />
         ) : (
           <div className="card">
-            <h2 className="text-lg font-bold text-[#1F2937]">New Users Growth</h2>
+            <h2 className="text-lg font-bold text-[#0f172a]">New Users Growth</h2>
             <div className="h-80 mt-4">
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={rows}>
@@ -65,7 +65,7 @@ const UsersReport = () => {
                   <XAxis dataKey="date" />
                   <YAxis />
                   <Tooltip />
-                  <Line dataKey="count" type="monotone" stroke="#6C5DD3" strokeWidth={3} dot={false} />
+                  <Line dataKey="count" type="monotone" stroke="#0ea5a4" strokeWidth={3} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
@@ -79,4 +79,5 @@ const UsersReport = () => {
 }
 
 export default UsersReport
+
 

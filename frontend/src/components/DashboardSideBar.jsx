@@ -1,6 +1,7 @@
 ﻿import React from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { 
+  Home,
   LayoutDashboard, 
   ShoppingBag, 
   Users,
@@ -13,6 +14,7 @@ const DashboardSideBar = () => {
   const isCoursesActive = location.pathname.startsWith('/admin/courses')
 
   const navItems = [
+    { to: '/home', label: 'Home', icon: Home, exact: true },
     { to: '/admin', label: 'Overview', icon: LayoutDashboard, exact: true },
     { to: '/admin/courses', label: 'Courses', icon: ShoppingBag, exact: false },
     { to: '/admin/orders', label: 'Orders', icon: ReceiptText, exact: true },
@@ -24,12 +26,12 @@ const DashboardSideBar = () => {
     <aside className='w-64 bg-white border-r border-gray-200 fixed inset-y-0 left-0 z-40'>
       <div className='p-6 border-b border-gray-200'>
         <div className='flex items-center gap-3'>
-          <div className='h-9 w-9 rounded-xl bg-[#6C5DD3] text-white flex items-center justify-center text-sm font-bold'>
+          <div className='h-9 w-9 rounded-xl bg-[#0ea5a4] text-white flex items-center justify-center text-sm font-bold'>
             ES
           </div>
           <div>
-            <h1 className='text-lg font-extrabold text-[#1F2937] tracking-tight'>EduSmart</h1>
-            <p className='text-xs text-[#6B7280] font-medium'>Admin Console</p>
+            <h1 className='text-lg font-extrabold text-[#0f172a] tracking-tight'>EduSmart</h1>
+            <p className='text-xs text-[#51607b] font-medium'>Admin Console</p>
           </div>
         </div>
       </div>
@@ -46,8 +48,8 @@ const DashboardSideBar = () => {
                 const activeState = isActive !== undefined ? isActive : navActive
                 return `group flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer
                 ${activeState 
-                  ? 'bg-[#6C5DD3] text-white shadow-sm' 
-                  : 'text-[#1F2937] hover:bg-[#F7F7FB] hover:text-[#1F2937]'
+                  ? 'bg-[#0ea5a4] text-white shadow-sm' 
+                  : 'text-[#0f172a] hover:bg-[#f5f7fb] hover:text-[#0f172a]'
                 }`
               }}
             >
@@ -62,6 +64,7 @@ const DashboardSideBar = () => {
 }
 
 export default DashboardSideBar
+
 
 
 

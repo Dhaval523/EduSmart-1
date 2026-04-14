@@ -1,4 +1,4 @@
-import { useGetAllPurchaseCourse } from '@/hooks/course.hook'
+﻿import { useGetAllPurchaseCourse } from '@/hooks/course.hook'
 import { getCourseProgressApi } from '@/Api/progress.api'
 import { BookOpen, Clock, Play, ChevronRight, BarChart2, Tag } from 'lucide-react'
 import React, { useMemo } from 'react'
@@ -56,25 +56,25 @@ const YourCourse = () => {
       <div className='page-bg py-8'>
       <div className='page-shell'>
         <div className='mb-8'>
-          <h1 className='text-3xl font-bold text-[#1F2937] tracking-tight mb-2'>Your Courses</h1>
+          <h1 className='text-3xl font-bold text-[#0f172a] tracking-tight mb-2'>Your Courses</h1>
           <p className='desc'>Continue learning from where you left off</p>
         </div>
 
         {!purchasedCourses.length ? (
           <div className='card text-center'>
             <BookOpen className='w-20 h-20 text-gray-300 mx-auto mb-6' />
-            <h2 className='text-2xl font-bold text-[#1F2937] mb-3'>No courses yet</h2>
-            <p className='text-[#6B7280] mb-8 max-w-md mx-auto'>
+            <h2 className='text-2xl font-bold text-[#0f172a] mb-3'>No courses yet</h2>
+            <p className='text-[#51607b] mb-8 max-w-md mx-auto'>
               Start learning today by exploring our course catalog
             </p>
-            <button onClick={() => navigate('/')} className='btn-primary px-8 py-4'>
+            <button onClick={() => navigate('/home')} className='btn-primary px-8 py-4'>
               Browse Courses
             </button>
           </div>
         ) : (
           <>
             <div className='mb-6 flex items-center justify-between'>
-              <p className='text-sm font-semibold text-[#6B7280]'>
+              <p className='text-sm font-semibold text-[#51607b]'>
                 {purchasedCourses.length} {purchasedCourses.length === 1 ? 'Course' : 'Courses'}
               </p>
             </div>
@@ -99,21 +99,21 @@ const YourCourse = () => {
                         e.target.src = 'https://via.placeholder.com/400x300?text=Course'
                       }}
                     />
-                    <div className='absolute inset-0 bg-transparent group-hover:bg-[#6C5DD3]/15 transition-all duration-300 flex items-center justify-center'>
+                    <div className='absolute inset-0 bg-transparent group-hover:bg-[#0ea5a4]/15 transition-all duration-300 flex items-center justify-center'>
                       <div className='opacity-0 group-hover:opacity-100 transition-opacity duration-300'>
                         <div className='w-14 h-14 bg-white rounded-full flex items-center justify-center shadow-md'>
-                          <Play className='w-6 h-6 text-[#6C5DD3] ml-1' fill='currentColor' />
+                          <Play className='w-6 h-6 text-[#0ea5a4] ml-1' fill='currentColor' />
                         </div>
                       </div>
                     </div>
                   </div>
 
                   <div className='mt-4'>
-                    <h3 className='font-bold text-lg text-[#1F2937] mb-3 line-clamp-2 leading-snug group-hover:text-[#6C5DD3] transition-colors'>
+                    <h3 className='font-bold text-lg text-[#0f172a] mb-3 line-clamp-2 leading-snug group-hover:text-[#0ea5a4] transition-colors'>
                       {item.title}
                     </h3>
 
-                    <div className='flex flex-wrap gap-3 text-xs text-[#6B7280] mb-4'>
+                    <div className='flex flex-wrap gap-3 text-xs text-[#51607b] mb-4'>
                       {item.duration && (
                         <div className='flex items-center gap-1'>
                           <Clock className='w-3.5 h-3.5' />

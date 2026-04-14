@@ -64,4 +64,17 @@ export const startPhaseCourseApi = async (roadmapId, phaseId, courseId) => {
   return res.data;
 };
 
+export const chatWithAiApi = async (payload) => {
+  const res = await axios.post(
+    `${import.meta.env.VITE_BASE_URL}/ai/chat`,
+    payload,
+    {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true
+    }
+  );
+
+  return res.data;
+};
+
 

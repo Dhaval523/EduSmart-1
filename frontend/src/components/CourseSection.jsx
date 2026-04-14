@@ -46,38 +46,38 @@ const CourseSection = ({ ActiveSearch }) => {
                 className='w-full h-48 object-cover rounded-xl group-hover:scale-105 transition-transform duration-300'
               />
               <div className='absolute top-3 right-3 bg-white px-3 py-1 rounded-full shadow-sm border border-gray-200'>
-                <Star className='w-4 h-4 text-[#F5B7A1] fill-current inline mr-1' />
-                <span className='text-sm font-bold text-[#1F2937]'>{item.rating || '4.8'}</span>
+                <Star className='w-4 h-4 text-[#f59e0b] fill-current inline mr-1' />
+                <span className='text-sm font-bold text-[#0f172a]'>{item.rating || '4.8'}</span>
               </div>
             </div>
 
             <div>
-              <h3 className='font-bold text-lg text-[#1F2937] leading-tight mb-2 line-clamp-2 group-hover:text-[#6C5DD3]'>
+              <h3 className='font-bold text-lg text-[#0f172a] leading-tight mb-2 line-clamp-2 group-hover:text-[#0ea5a4]'>
                 {item.title}
               </h3>
-              <p className='text-sm text-[#6B7280] mb-4 line-clamp-2'>
+              <p className='text-sm text-[#51607b] mb-4 line-clamp-2'>
                 {item.description || item.overview || 'Learn essential skills in this course.'}
               </p>
 
               <div className='space-y-2 mb-4'>
                 {item.instructor ? (
-                  <div className='flex items-center gap-2 text-xs text-[#6B7280]'>
+                  <div className='flex items-center gap-2 text-xs text-[#51607b]'>
                     <User className='w-4 h-4' />
                     <span>{item.instructor}</span>
                   </div>
                 ) : null}
-                <div className='flex items-center gap-2 text-xs text-[#6B7280]'>
+                <div className='flex items-center gap-2 text-xs text-[#51607b]'>
                   <BarChart2 className='w-4 h-4' />
                   <span>{item.level || 'All levels'}</span>
                 </div>
                 {item.duration ? (
-                  <div className='flex items-center gap-2 text-xs text-[#6B7280]'>
+                  <div className='flex items-center gap-2 text-xs text-[#51607b]'>
                     <Clock className='w-4 h-4' />
                     <span>{item.duration}</span>
                   </div>
                 ) : null}
                 {item.category ? (
-                  <div className='flex items-center gap-2 text-xs text-[#6B7280]'>
+                  <div className='flex items-center gap-2 text-xs text-[#51607b]'>
                     <Tag className='w-4 h-4' />
                     <span>{item.category}</span>
                   </div>
@@ -87,7 +87,7 @@ const CourseSection = ({ ActiveSearch }) => {
               {item.tags?.length ? (
                 <div className='flex flex-wrap gap-1 mb-4'>
                   {item.tags.slice(0, 3).map((tag) => (
-                    <span key={tag} className='text-[11px] px-2 py-0.5 rounded-full bg-gray-100 text-[#6B7280]'>
+                    <span key={tag} className='text-[11px] px-2 py-0.5 rounded-full bg-gray-100 text-[#51607b]'>
                       {tag}
                     </span>
                   ))}
@@ -95,7 +95,7 @@ const CourseSection = ({ ActiveSearch }) => {
               ) : null}
 
               <div className='flex items-center justify-between pt-4 border-t border-gray-200'>
-                <span className='text-sm font-semibold text-[#1F2937]'>INR {item.amount}</span>
+                <span className='text-sm font-semibold text-[#0f172a]'>INR {item.amount}</span>
                 <button className='btn-primary text-sm'>View Course</button>
               </div>
             </div>
@@ -106,8 +106,8 @@ const CourseSection = ({ ActiveSearch }) => {
       {data?.courses?.length === 0 && !isLoading && (
         <div className='text-center py-20'>
           <BookOpen className='w-20 h-20 text-gray-400 mx-auto mb-6' />
-          <h2 className='text-2xl font-bold text-[#1F2937] mb-2'>No courses found</h2>
-          <p className='text-[#6B7280] max-w-md mx-auto'>
+          <h2 className='text-2xl font-bold text-[#0f172a] mb-2'>No courses found</h2>
+          <p className='text-[#51607b] max-w-md mx-auto'>
             Try adjusting your search or explore our popular courses below
           </p>
         </div>
@@ -117,6 +117,7 @@ const CourseSection = ({ ActiveSearch }) => {
 }
 
 export default CourseSection
+
 
 
 

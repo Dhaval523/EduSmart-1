@@ -13,6 +13,7 @@ import progressRoute from './src/routes/progress.route.js'
 import aiRoute from './src/routes/ai.routes.js'
 import roadmapRoute from './src/routes/roadmap.route.js'
 import reportRoute from './src/routes/report.route.js'
+import orderRoute from './src/routes/order.route.js'
 import cors from 'cors'
 
 const app = express()
@@ -49,6 +50,7 @@ app.use('/api/payment', paymentRoute)
 app.use('/api/analytic', analyticRoute)
 app.use('/api/progress', progressRoute)
 app.use('/api/reports', reportRoute)
+app.use('/api/orders', orderRoute)
 app.use('/api', aiRoute)
 app.use('/api/roadmap', roadmapRoute)
 

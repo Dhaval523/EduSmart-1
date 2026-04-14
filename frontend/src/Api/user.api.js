@@ -66,3 +66,13 @@ export const updateProfileApi = async (payload) => {
     return res.data
 }
 
+export const getAdminUsersApi = async (params = {}) => {
+    const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/admin-users`, {
+        params,
+        headers: 'Application/json',
+        withCredentials: true
+    })
+
+    return res.data
+}
+

@@ -5,14 +5,14 @@ const LearningPathCard = ({ title, steps, onStartLearning }) => {
     <div className="bg-white border border-gray-200 rounded-2xl p-6 shadow-sm">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-xs uppercase tracking-widest text-[#F5B7A1] font-semibold">AI Learning Path</p>
-          <h3 className="text-xl font-bold text-[#1F2937] mt-1">{title}</h3>
+          <p className="text-xs uppercase tracking-widest text-[#f59e0b] font-semibold">AI Learning Path</p>
+          <h3 className="text-xl font-bold text-[#0f172a] mt-1">{title}</h3>
         </div>
         {onStartLearning && (
           <button
             type="button"
             onClick={onStartLearning}
-            className="px-4 py-2 text-sm font-semibold bg-[#F5B7A1] text-[#1F2937] rounded-lg hover:bg-[#F2A88E] transition-colors"
+            className="px-4 py-2 text-sm font-semibold bg-[#f59e0b] text-[#0f172a] rounded-lg hover:bg-[#fbbf24] transition-colors"
           >
             Start Learning
           </button>
@@ -20,16 +20,16 @@ const LearningPathCard = ({ title, steps, onStartLearning }) => {
       </div>
 
       <div className="mt-6 relative">
-        <div className="absolute left-3 top-0 bottom-0 w-px bg-[#F5B7A1]" />
+        <div className="absolute left-3 top-0 bottom-0 w-px bg-[#f59e0b]" />
         <div className="space-y-5">
           {steps.map((step, index) => (
             <div key={`${step}-${index}`} className="relative pl-10">
-              <span className="absolute left-0 top-1 h-6 w-6 rounded-full bg-[#F5B7A1] text-[#1F2937] text-xs font-bold flex items-center justify-center">
+              <span className="absolute left-0 top-1 h-6 w-6 rounded-full bg-[#f59e0b] text-[#0f172a] text-xs font-bold flex items-center justify-center">
                 {index + 1}
               </span>
-              <div className="bg-[#FFF2EE] border border-[#F5B7A1] rounded-xl px-4 py-3">
-                <p className="text-sm font-semibold text-[#1F2937]">Step {index + 1}</p>
-                <p className="text-base text-[#6B7280] mt-1">{step}</p>
+              <div className="bg-[#fef3c7] border border-[#f59e0b] rounded-xl px-4 py-3">
+                <p className="text-sm font-semibold text-[#0f172a]">Step {index + 1}</p>
+                <p className="text-base text-[#51607b] mt-1">{step}</p>
               </div>
             </div>
           ))}
@@ -40,6 +40,7 @@ const LearningPathCard = ({ title, steps, onStartLearning }) => {
 };
 
 export default LearningPathCard;
+
 
 
 

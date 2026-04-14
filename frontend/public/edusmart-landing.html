@@ -1,0 +1,662 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EduSmart | Professional Learning Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --ink: #0f172a;
+      --ink-soft: #1f2a44;
+      --muted: #51607b;
+      --accent: #0ea5a4;
+      --accent-2: #f59e0b;
+      --surface: #ffffff;
+      --surface-2: #f5f7fb;
+      --line: rgba(15, 23, 42, 0.12);
+      --shadow: 0 24px 60px rgba(15, 23, 42, 0.14);
+      --shadow-soft: 0 12px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: "Manrope", system-ui, sans-serif;
+      color: var(--ink);
+      background: radial-gradient(1200px 800px at 10% -20%, rgba(14, 165, 164, 0.18), transparent 60%),
+        radial-gradient(900px 600px at 90% 10%, rgba(245, 158, 11, 0.14), transparent 60%),
+        linear-gradient(180deg, #fdf7f1, #f5f7fb 35%, #eef2f8 100%);
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    .page { position: relative; min-height: 100vh; }
+
+    .glow {
+      position: absolute;
+      border-radius: 999px;
+      filter: blur(40px);
+      opacity: 0.55;
+      pointer-events: none;
+      animation: float 10s ease-in-out infinite;
+    }
+    .glow.one { width: 260px; height: 260px; left: 4%; top: 120px; background: rgba(14, 165, 164, 0.4); }
+    .glow.two { width: 300px; height: 300px; right: 6%; top: 240px; background: rgba(245, 158, 11, 0.35); animation-delay: -3s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-22px); }
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(16px);
+      background: rgba(253, 247, 241, 0.8);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 18px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    .logo {
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: 24px;
+      letter-spacing: 0.3px;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      color: var(--ink-soft);
+      font-size: 14px;
+    }
+    .nav-cta {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 20px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--surface);
+      color: var(--ink);
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+    }
+    .btn.primary {
+      background: linear-gradient(135deg, #0ea5a4, #0f766e);
+      color: #ffffff;
+      border: none;
+      box-shadow: 0 18px 40px rgba(14, 165, 164, 0.3);
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn.ghost { background: transparent; }
+
+    .hero {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 80px 20px 30px;
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 40px;
+      align-items: center;
+    }
+    .hero h1 {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(36px, 5vw, 60px);
+      line-height: 1.02;
+      margin: 0 0 16px;
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.7;
+      margin: 0 0 22px;
+    }
+    .hero-actions { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+
+    .stats {
+      margin-top: 26px;
+      display: flex;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+    .stat {
+      padding: 14px 18px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: var(--shadow-soft);
+      min-width: 140px;
+    }
+    .stat h4 { margin: 0; font-size: 18px; }
+    .stat span { color: var(--muted); font-size: 12px; }
+
+    .hero-visual {
+      background: linear-gradient(150deg, #ffffff, #f4f8f7);
+      border-radius: 26px;
+      border: 1px solid var(--line);
+      padding: 26px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-visual .badge {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      background: rgba(14, 165, 164, 0.12);
+      border: 1px solid rgba(14, 165, 164, 0.2);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 12px;
+      color: #0f766e;
+      font-weight: 600;
+    }
+    .hero-visual img { width: 100%; height: auto; display: block; border-radius: 16px; }
+    .hero-cards {
+      position: absolute;
+      left: 20px;
+      bottom: 20px;
+      display: grid;
+      gap: 10px;
+    }
+    .mini-card {
+      background: rgba(255,255,255,0.9);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: var(--shadow-soft);
+      font-size: 13px;
+      color: var(--ink-soft);
+    }
+    .pulse {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 0 6px rgba(14, 165, 164, 0.15);
+      animation: pulse 2.6s ease infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); opacity: 1; }
+      70% { transform: scale(1.6); opacity: 0.4; }
+      100% { transform: scale(1.8); opacity: 0; }
+    }
+
+    .brand-row {
+      max-width: 1220px;
+      margin: 0 auto 30px;
+      padding: 10px 20px 10px;
+      display: flex;
+      gap: 28px;
+      align-items: center;
+      flex-wrap: wrap;
+      color: rgba(15, 23, 42, 0.55);
+      font-size: 14px;
+    }
+
+    section {
+      max-width: 1220px;
+      margin: 0 auto;
+      padding: 54px 20px;
+    }
+    .section-title {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(24px, 4vw, 38px);
+      margin: 0 0 10px;
+    }
+    .section-sub {
+      color: var(--muted);
+      margin: 0 0 24px;
+      font-size: 14px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+    .feature-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: var(--shadow-soft);
+      min-height: 170px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .feature-card:hover { transform: translateY(-6px); box-shadow: var(--shadow); }
+    .feature-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: rgba(14, 165, 164, 0.12);
+      display: grid;
+      place-items: center;
+      font-weight: 700;
+      color: #0f766e;
+      margin-bottom: 14px;
+      font-family: "Space Grotesk", sans-serif;
+    }
+    .pill-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .pill {
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.05);
+      color: var(--ink-soft);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .programs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .program-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 22px;
+      box-shadow: var(--shadow-soft);
+    }
+    .program-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .program-level {
+      font-size: 12px;
+      color: #0f766e;
+      background: rgba(14, 165, 164, 0.1);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+    .program-list { margin: 12px 0 0; padding: 0; list-style: none; color: var(--muted); font-size: 14px; }
+    .program-list li { margin-bottom: 10px; }
+    .program-list li::before { content: "•"; color: var(--accent); margin-right: 8px; }
+
+    .outcomes {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 24px;
+      align-items: center;
+    }
+    .outcome-panel {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 24px;
+      box-shadow: var(--shadow-soft);
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    .metric {
+      background: var(--surface-2);
+      border-radius: 16px;
+      padding: 16px;
+      border: 1px solid rgba(15, 23, 42, 0.06);
+    }
+
+    .pricing {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .price-card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      padding: 24px;
+      box-shadow: var(--shadow-soft);
+      position: relative;
+      overflow: hidden;
+    }
+    .price-card.featured {
+      border: 2px solid rgba(14, 165, 164, 0.5);
+      transform: translateY(-8px);
+    }
+    .price-tag { font-size: 32px; font-weight: 700; margin: 8px 0; font-family: "Space Grotesk", sans-serif; }
+    .price-foot { color: var(--muted); font-size: 13px; }
+
+    footer {
+      background: #0f172a;
+      color: #cbd5f5;
+      border-top: 1px solid rgba(203, 213, 245, 0.1);
+      padding: 50px 20px 60px;
+    }
+    .footer-grid {
+      max-width: 1220px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 20px;
+      color: #cbd5f5;
+      font-size: 14px;
+    }
+    .footer-grid h4 { color: #ffffff; margin: 0 0 10px; font-size: 16px; }
+
+    .fade-up {
+      opacity: 0;
+      transform: translateY(18px);
+      animation: rise 0.8s ease forwards;
+    }
+    .fade-up.delay-1 { animation-delay: 0.1s; }
+    .fade-up.delay-2 { animation-delay: 0.2s; }
+    .fade-up.delay-3 { animation-delay: 0.3s; }
+    @keyframes rise {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 1100px) {
+      .hero { grid-template-columns: 1fr; }
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .programs { grid-template-columns: repeat(2, 1fr); }
+      .pricing { grid-template-columns: repeat(2, 1fr); }
+      .outcomes { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .nav { flex-direction: column; }
+      .nav-links { flex-wrap: wrap; justify-content: center; }
+      .nav-cta { width: 100%; justify-content: center; flex-wrap: wrap; }
+      .grid-4 { grid-template-columns: 1fr; }
+      .programs { grid-template-columns: 1fr; }
+      .pricing { grid-template-columns: 1fr; }
+      .hero-actions { width: 100%; }
+      .stats { flex-direction: column; }
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="glow one"></div>
+    <div class="glow two"></div>
+
+    <header>
+      <nav class="nav">
+        <div class="logo">EduSmart</div>
+        <div class="nav-links">
+          <a href="#home">Home</a>
+          <a href="#platform">Platform</a>
+          <a href="#programs">Programs</a>
+          <a href="#outcomes">Outcomes</a>
+          <a href="#pricing">Pricing</a>
+        </div>
+        <div class="nav-cta">
+          <a class="btn ghost" href="/login" target="_top" rel="noopener">Login</a>
+          <a class="btn" href="/register" target="_top" rel="noopener">Sign Up</a>
+          <a class="btn primary" href="#pricing">Get Started</a>
+        </div>
+      </nav>
+    </header>
+
+    <section class="hero" id="home">
+      <div class="fade-up">
+        <div class="pill-row" style="margin-bottom: 16px;">
+          <span class="pill">Cohort-based learning</span>
+          <span class="pill">Mentor feedback</span>
+          <span class="pill">Job-ready portfolios</span>
+        </div>
+        <h1>Professional learning journeys built for measurable career outcomes.</h1>
+        <p>EduSmart blends AI-guided study plans with live expert sessions, assessment rubrics, and a learning workspace that mirrors how real teams operate.</p>
+        <div class="hero-actions">
+          <button class="btn primary">Start a Path</button>
+          <button class="btn ghost">Talk to an Advisor</button>
+        </div>
+        <div class="stats">
+          <div class="stat">
+            <h4>92%</h4>
+            <span>Completion Rate</span>
+          </div>
+          <div class="stat">
+            <h4>140+</h4>
+            <span>Mentor Instructors</span>
+          </div>
+          <div class="stat">
+            <h4>38K+</h4>
+            <span>Career Transitions</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual fade-up delay-1">
+        <div class="badge">Live Learning Studio</div>
+        <img src="/edusmart-hero-3d.png" alt="EduSmart learning workspace preview" />
+        <div class="hero-cards">
+          <div class="mini-card"><span class="pulse"></span> Cohort kickoff: Monday, 9:00 AM</div>
+          <div class="mini-card">AI Coach: 4 priority skills mapped</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="brand-row">
+      <span>acmeworks</span>
+      <span>northwind</span>
+      <span>lumina</span>
+      <span>atlas</span>
+      <span>summit</span>
+      <span>bluepeak</span>
+    </div>
+
+    <section id="platform">
+      <h2 class="section-title">A platform built for professional teams.</h2>
+      <p class="section-sub">Every pathway includes skill diagnostics, expert feedback, and production-ready capstones.</p>
+      <div class="grid-4">
+        <div class="feature-card fade-up">
+          <div class="feature-icon">AI</div>
+          <h3>Adaptive learning paths</h3>
+          <p class="section-sub">AI curates weekly sprints, identifies gaps, and adjusts content based on performance.</p>
+        </div>
+        <div class="feature-card fade-up delay-1">
+          <div class="feature-icon">LC</div>
+          <h3>Live cohort collaboration</h3>
+          <p class="section-sub">Join live studios, peer reviews, and expert walkthroughs that mirror real team rituals.</p>
+        </div>
+        <div class="feature-card fade-up delay-2">
+          <div class="feature-icon">RB</div>
+          <h3>Rubric-based feedback</h3>
+          <p class="section-sub">Track every assignment with clear standards and measurable improvements.</p>
+        </div>
+        <div class="feature-card fade-up delay-3">
+          <div class="feature-icon">CS</div>
+          <h3>Career services</h3>
+          <p class="section-sub">Portfolio polish, interview prep, and hiring manager sessions baked in.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="programs">
+      <h2 class="section-title">Cohort programs designed around real roles.</h2>
+      <p class="section-sub">Choose a pathway and graduate with a portfolio that recruiters can review instantly.</p>
+      <div class="programs">
+        <div class="program-card fade-up">
+          <div class="program-head">
+            <div>
+              <h3>Product Design</h3>
+              <div class="section-sub">12 weeks · 3 capstones</div>
+            </div>
+            <span class="program-level">Career Switch</span>
+          </div>
+          <ul class="program-list">
+            <li>UX research plan and stakeholder interviews</li>
+            <li>Design systems with Figma and tokens</li>
+            <li>Portfolio-ready mobile product</li>
+          </ul>
+        </div>
+        <div class="program-card fade-up delay-1">
+          <div class="program-head">
+            <div>
+              <h3>Data &amp; AI</h3>
+              <div class="section-sub">14 weeks · 4 labs</div>
+            </div>
+            <span class="program-level">Upskill</span>
+          </div>
+          <ul class="program-list">
+            <li>Python pipelines, SQL, and notebooks</li>
+            <li>Model evaluation and prompt workflows</li>
+            <li>Executive-ready insights deck</li>
+          </ul>
+        </div>
+        <div class="program-card fade-up delay-2">
+          <div class="program-head">
+            <div>
+              <h3>Product Management</h3>
+              <div class="section-sub">10 weeks · 2 launches</div>
+            </div>
+            <span class="program-level">Leadership</span>
+          </div>
+          <ul class="program-list">
+            <li>Roadmap, bets, and prioritization</li>
+            <li>Metrics strategy and GTM planning</li>
+            <li>Launch review with mentors</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="outcomes">
+      <h2 class="section-title">Outcome tracking that hiring managers trust.</h2>
+      <p class="section-sub">Evidence-based progress reports, peer reviews, and hiring-readiness checkpoints.</p>
+      <div class="outcomes">
+        <div class="outcome-panel fade-up">
+          <h3>Weekly performance snapshots</h3>
+          <p class="section-sub">Share a live dashboard with managers or recruiters to show skills, deliverables, and feedback history.</p>
+          <div class="pill-row">
+            <span class="pill">Skill mastery</span>
+            <span class="pill">Capstone rubric</span>
+            <span class="pill">Mentor notes</span>
+          </div>
+        </div>
+        <div class="metrics fade-up delay-1">
+          <div class="metric">
+            <h3>4.8/5</h3>
+            <div class="section-sub">Average mentor rating</div>
+          </div>
+          <div class="metric">
+            <h3>3x</h3>
+            <div class="section-sub">Faster project completion</div>
+          </div>
+          <div class="metric">
+            <h3>76%</h3>
+            <div class="section-sub">Learners promoted within 6 months</div>
+          </div>
+          <div class="metric">
+            <h3>1:6</h3>
+            <div class="section-sub">Mentor to learner ratio</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="pricing">
+      <h2 class="section-title">Simple plans for individuals and teams.</h2>
+      <p class="section-sub">Pick a plan based on how much mentorship and reporting you need.</p>
+      <div class="pricing">
+        <div class="price-card fade-up">
+          <h3>Starter</h3>
+          <div class="price-tag">$89</div>
+          <div class="price-foot">Per month · Self-guided</div>
+          <ul class="program-list">
+            <li>AI learning path</li>
+            <li>Weekly quizzes</li>
+            <li>Community access</li>
+          </ul>
+          <button class="btn ghost" style="margin-top: 14px;">Choose Starter</button>
+        </div>
+        <div class="price-card featured fade-up delay-1">
+          <h3>Professional</h3>
+          <div class="price-tag">$249</div>
+          <div class="price-foot">Per month · Mentor-led</div>
+          <ul class="program-list">
+            <li>Everything in Starter</li>
+            <li>Live mentor sessions</li>
+            <li>Rubric feedback</li>
+          </ul>
+          <button class="btn primary" style="margin-top: 14px;">Choose Pro</button>
+        </div>
+        <div class="price-card fade-up delay-2">
+          <h3>Teams</h3>
+          <div class="price-tag">$1,200</div>
+          <div class="price-foot">Per month · 10 seats</div>
+          <ul class="program-list">
+            <li>Dedicated success manager</li>
+            <li>Custom reporting</li>
+            <li>Private cohort</li>
+          </ul>
+          <button class="btn ghost" style="margin-top: 14px;">Talk to Sales</button>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="outcome-panel" style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;">
+        <div>
+          <h2 class="section-title" style="margin-bottom:6px;">Ready to plan your next career move?</h2>
+          <p class="section-sub" style="margin-bottom:0;">Start a cohort in minutes or book a call with our advisors.</p>
+        </div>
+        <div class="hero-actions">
+          <button class="btn primary">Start Now</button>
+          <button class="btn ghost">Schedule Demo</button>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <div class="footer-grid">
+        <div>
+          <div class="logo">EduSmart</div>
+          <p class="section-sub" style="color:#cbd5f5;">Modern learning paths, expert mentors, and measurable outcomes for professionals.</p>
+        </div>
+        <div>
+          <h4>Platform</h4>
+          <div>Learning paths</div>
+          <div>Mentor studios</div>
+          <div>Skill diagnostics</div>
+        </div>
+        <div>
+          <h4>Company</h4>
+          <div>About</div>
+          <div>Careers</div>
+          <div>Contact</div>
+        </div>
+        <div>
+          <h4>Legal</h4>
+          <div>Terms</div>
+          <div>Privacy</div>
+          <div>Support</div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>

@@ -14,7 +14,7 @@ export const RoadmapProgressCard = ({ roadmap, phaseProgress, currentPhaseId }) 
     phases[0];
 
   return (
-    <div className="rounded-3xl border border-gray-200 bg-[#6C5DD3] text-white p-5 shadow-sm flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    <div className="rounded-3xl border border-gray-200 bg-[#0ea5a4] text-white p-5 shadow-sm flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div>
         <p className="text-xs font-semibold uppercase tracking-[0.18em] text-white/70">
           Roadmap progress
@@ -40,9 +40,9 @@ export const RoadmapProgressCard = ({ roadmap, phaseProgress, currentPhaseId }) 
           <span>Overall progress</span>
           <span>{percent}%</span>
         </div>
-        <div className="h-2 w-full rounded-full bg-[#E5E7EB] overflow-hidden">
+        <div className="h-2 w-full rounded-full bg-[#e2e8f0] overflow-hidden">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-[#6C5DD3] via-[#A29BFE] to-[#F5B7A1] transition-all"
+            className="h-full rounded-full bg-gradient-to-r from-[#0ea5a4] via-[#0f766e] to-[#f59e0b] transition-all"
             style={{ width: `${percent}%` }}
           />
         </div>
@@ -50,6 +50,7 @@ export const RoadmapProgressCard = ({ roadmap, phaseProgress, currentPhaseId }) 
     </div>
   );
 };
+
 
 
 

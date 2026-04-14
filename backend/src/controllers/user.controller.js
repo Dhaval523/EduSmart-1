@@ -1,4 +1,5 @@
 import { User } from "../models/user.model.js";
+import { Order } from "../models/order.model.js";
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { ENV } from "../config/env.js";
@@ -212,5 +213,164 @@ export const updateProfile = async (req, res) => {
             success: false,
             message: error.message
         });
+    }
+}
+
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")
+
+export const getAdminUsers = async (req, res) => {
+    try {
+        const {
+            page = 1,
+            limit = 10,
+            search = "",
+            role = "all",
+            sort = "newest",
+            startDate,
+            endDate
+        } = req.query
+
+        const pageNumber = Math.max(parseInt(page, 10) || 1, 1)
+        const limitNumber = Math.min(Math.max(parseInt(limit, 10) || 10, 1), 1000)
+
+        const match = {}
+
+        if (role === "admin") {
+            match.admin = true
+        } else if (role === "student") {
+            match.admin = false
+        }
+
+        if (startDate || endDate) {
+            match.createdAt = {}
+            if (startDate) {
+                match.createdAt.$gte = new Date(startDate)
+            }
+            if (endDate) {
+                const end = new Date(endDate)
+                end.setHours(23, 59, 59, 999)
+                match.createdAt.$lte = end
+            }
+        }
+
+        const searchValue = search?.trim()
+        const searchRegex = searchValue ? new RegExp(escapeRegex(searchValue), "i") : null
+
+        const basePipeline = [{ $match: match }]
+
+        if (searchRegex) {
+            basePipeline.push({
+                $match: {
+                    $or: [
+                        { fullName: { $regex: searchRegex } },
+                        { email: { $regex: searchRegex } }
+                    ]
+                }
+            })
+        }
+
+        const sortOptions = {
+            newest: { createdAt: -1 },
+            oldest: { createdAt: 1 },
+            name_asc: { fullName: 1 },
+            name_desc: { fullName: -1 },
+            orders_desc: { orderCount: -1 },
+            spent_desc: { totalSpent: -1 }
+        }
+
+        const dataPipeline = [
+            ...basePipeline,
+            {
+                $lookup: {
+                    from: "orders",
+                    let: { userId: "$_id" },
+                    pipeline: [
+                        { $match: { $expr: { $eq: ["$user", "$$userId"] } } },
+                        {
+                            $group: {
+                                _id: null,
+                                orderCount: { $sum: 1 },
+                                totalSpent: { $sum: "$totalAmount" }
+                            }
+                        }
+                    ],
+                    as: "orderStats"
+                }
+            },
+            {
+                $addFields: {
+                    orderCount: { $ifNull: [{ $arrayElemAt: ["$orderStats.orderCount", 0] }, 0] },
+                    totalSpent: { $ifNull: [{ $arrayElemAt: ["$orderStats.totalSpent", 0] }, 0] },
+                    purchasedCount: { $size: { $ifNull: ["$purchasedCourse", []] } }
+                }
+            },
+            { $sort: sortOptions[sort] || sortOptions.newest },
+            { $skip: (pageNumber - 1) * limitNumber },
+            { $limit: limitNumber },
+            {
+                $project: {
+                    fullName: 1,
+                    email: 1,
+                    admin: 1,
+                    createdAt: 1,
+                    profilePhoto: 1,
+                    orderCount: 1,
+                    totalSpent: 1,
+                    purchasedCount: 1
+                }
+            }
+        ]
+
+        const countFilter = { ...match }
+        if (searchRegex) {
+            countFilter.$or = [
+                { fullName: { $regex: searchRegex } },
+                { email: { $regex: searchRegex } }
+            ]
+        }
+
+        const [
+            users,
+            total,
+            totalUsers,
+            adminUsers,
+            orderSummary
+        ] = await Promise.all([
+            User.aggregate(dataPipeline),
+            User.countDocuments(countFilter),
+            User.countDocuments(),
+            User.countDocuments({ admin: true }),
+            Order.aggregate([
+                { $group: { _id: null, totalOrders: { $sum: 1 }, totalRevenue: { $sum: "$totalAmount" } } }
+            ])
+        ])
+
+        const totalPages = Math.max(Math.ceil(total / limitNumber), 1)
+        const totalOrders = orderSummary?.[0]?.totalOrders || 0
+        const totalRevenue = orderSummary?.[0]?.totalRevenue || 0
+
+        return res.status(200).json({
+            success: true,
+            users,
+            meta: {
+                page: pageNumber,
+                limit: limitNumber,
+                total,
+                totalPages
+            },
+            summary: {
+                totalUsers,
+                adminUsers,
+                studentUsers: Math.max(totalUsers - adminUsers, 0),
+                totalOrders,
+                totalRevenue
+            }
+        })
+    } catch (error) {
+        console.error("getAdminUsers error:", error)
+        return res.status(500).json({
+            success: false,
+            message: "Failed to fetch users"
+        })
     }
 }

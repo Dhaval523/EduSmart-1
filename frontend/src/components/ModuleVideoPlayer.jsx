@@ -39,7 +39,7 @@ export const ModuleVideoPlayer = ({ url, onEnded }) => {
         <div className="text-center text-gray-400">
           <PlayCircle className="w-20 h-20 mx-auto mb-4 opacity-60" />
           <p className="text-lg font-semibold">Video unavailable</p>
-          <p className="text-sm text-[#6B7280] mt-2">Invalid YouTube link</p>
+          <p className="text-sm text-[#51607b] mt-2">Invalid YouTube link</p>
         </div>
       );
     }
@@ -69,10 +69,11 @@ export const ModuleVideoPlayer = ({ url, onEnded }) => {
     <div className="text-center text-gray-400">
       <PlayCircle className="w-20 h-20 mx-auto mb-4 opacity-60" />
       <p className="text-lg font-semibold">Video unavailable</p>
-      <p className="text-sm text-[#6B7280] mt-2">Unsupported or missing video link</p>
+      <p className="text-sm text-[#51607b] mt-2">Unsupported or missing video link</p>
     </div>
   );
 };
+
 
 
 

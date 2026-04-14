@@ -116,10 +116,10 @@ const Home = () => {
         <div className='page-shell py-12 lg:py-16'>
           <div className='grid gap-8 lg:grid-cols-2'>
             <div>
-              <p className='text-xs font-semibold tracking-[0.25em] uppercase text-[#6C5DD3]'>
+              <p className='text-xs font-semibold tracking-[0.25em] uppercase text-[#0ea5a4]'>
                 EduSmart Learning Hub
               </p>
-              <h1 className='mt-3 text-3xl lg:text-4xl font-bold text-[#1F2937]'>
+              <h1 className='mt-3 text-3xl lg:text-4xl font-bold text-[#0f172a]'>
                 Your personal learning hub
               </h1>
               <p className='mt-4 max-w-xl desc'>
@@ -141,36 +141,36 @@ const Home = () => {
             <div className='grid gap-4'>
               <div className='card'>
                 <div className='flex items-center gap-3'>
-                  <span className='inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#F7F5FF] text-[#6C5DD3]'>
+                  <span className='inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#f5fbfa] text-[#0ea5a4]'>
                     <Sparkles className='h-5 w-5' />
                   </span>
                   <div>
-                    <p className='font-semibold text-[#1F2937]'>AI-guided learning</p>
-                    <p className='text-xs text-[#6B7280]'>Build a roadmap tailored to your goals.</p>
+                    <p className='font-semibold text-[#0f172a]'>AI-guided learning</p>
+                    <p className='text-xs text-[#51607b]'>Build a roadmap tailored to your goals.</p>
                   </div>
                 </div>
               </div>
 
               <div className='card'>
                 <div className='flex items-center gap-3'>
-                  <span className='inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#6C5DD3] text-white'>
+                  <span className='inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#0ea5a4] text-white'>
                     <PenLine className='h-5 w-5' />
                   </span>
                   <div>
-                    <p className='font-semibold text-[#1F2937]'>Quiz and practice</p>
-                    <p className='text-xs text-[#6B7280]'>Test what you learn after every module.</p>
+                    <p className='font-semibold text-[#0f172a]'>Quiz and practice</p>
+                    <p className='text-xs text-[#51607b]'>Test what you learn after every module.</p>
                   </div>
                 </div>
               </div>
 
               <div className='card'>
                 <div className='flex items-center gap-3'>
-                  <span className='inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#FFF2EE] text-[#F5B7A1]'>
+                  <span className='inline-flex h-10 w-10 items-center justify-center rounded-xl bg-[#fef3c7] text-[#f59e0b]'>
                     <Compass className='h-5 w-5' />
                   </span>
                   <div>
-                    <p className='font-semibold text-[#1F2937]'>Discover skills</p>
-                    <p className='text-xs text-[#6B7280]'>Explore curated courses and popular topics.</p>
+                    <p className='font-semibold text-[#0f172a]'>Discover skills</p>
+                    <p className='text-xs text-[#51607b]'>Explore curated courses and popular topics.</p>
                   </div>
                 </div>
               </div>
@@ -182,7 +182,7 @@ const Home = () => {
       <section className='page-shell py-12'>
         <div className='flex items-center justify-between flex-wrap gap-4'>
           <div>
-            <h2 className='heading text-[#1F2937]'>Continue learning</h2>
+            <h2 className='heading text-[#0f172a]'>Continue learning</h2>
             <p className='desc'>Pick up exactly where you left off.</p>
           </div>
           <button type='button' onClick={handleGoToYourCourses} className='btn-secondary inline-flex items-center gap-2'>
@@ -213,19 +213,19 @@ const Home = () => {
                       className='h-20 w-24 rounded-xl object-cover'
                     />
                     <div className='flex-1'>
-                      <h3 className='font-semibold text-[#1F2937] line-clamp-2'>{course.title}</h3>
-                      <p className='mt-1 text-xs text-[#6B7280] line-clamp-2'>
+                      <h3 className='font-semibold text-[#0f172a] line-clamp-2'>{course.title}</h3>
+                      <p className='mt-1 text-xs text-[#51607b] line-clamp-2'>
                         {course.description || course.overview || 'Continue your journey.'}
                       </p>
                     </div>
                   </div>
                   <div className='mt-4'>
-                    <div className='flex items-center justify-between text-xs text-[#6B7280]'>
+                    <div className='flex items-center justify-between text-xs text-[#51607b]'>
                       <span>{percent}% complete</span>
                       <span>{completedCount}/{totalModules}</span>
                     </div>
                     <div className='mt-2 h-2 w-full rounded-full bg-gray-100'>
-                      <div className='h-2 rounded-full bg-gradient-to-r from-[#6C5DD3] to-[#A29BFE]' style={{ width: `${percent}%` }} />
+                      <div className='h-2 rounded-full bg-gradient-to-r from-[#0ea5a4] to-[#0f766e]' style={{ width: `${percent}%` }} />
                     </div>
                   </div>
                   <button type='button' onClick={() => navigate(`/courses/${course._id}/learn`)} className='mt-4 w-full btn-primary inline-flex items-center justify-center gap-2'>
@@ -238,8 +238,8 @@ const Home = () => {
           ) : (
             <div className='col-span-full rounded-2xl border border-dashed border-gray-200 bg-white p-8 text-center'>
               <BookOpen className='mx-auto h-10 w-10 text-gray-400' />
-              <h3 className='mt-3 text-lg font-semibold text-[#1F2937]'>No courses yet</h3>
-              <p className='mt-2 text-sm text-[#6B7280]'>
+              <h3 className='mt-3 text-lg font-semibold text-[#0f172a]'>No courses yet</h3>
+              <p className='mt-2 text-sm text-[#51607b]'>
                 Start with a roadmap or explore courses to begin your learning journey.
               </p>
               <div className='mt-4 flex flex-wrap justify-center gap-3'>
@@ -259,7 +259,7 @@ const Home = () => {
         <div className='page-shell py-12'>
           <div className='flex items-center justify-between flex-wrap gap-4'>
             <div>
-              <h2 className='heading text-[#1F2937]'>AI learning paths</h2>
+              <h2 className='heading text-[#0f172a]'>AI learning paths</h2>
               <p className='desc'>Personalized roadmaps built for your career goals.</p>
             </div>
             <button type='button' onClick={handleGoToAiPath} className='btn-primary inline-flex items-center gap-2'>
@@ -269,16 +269,16 @@ const Home = () => {
           </div>
 
           <div className='mt-6 grid gap-6 lg:grid-cols-[1.4fr_0.6fr]'>
-            <div className='card bg-[#F7F5FF]'>
+            <div className='card bg-[#f5fbfa]'>
               {isRoadmapLoading ? (
-                <div className='h-24 rounded-xl bg-[#EDEBFF] animate-pulse' />
+                <div className='h-24 rounded-xl bg-[#e7f5f4] animate-pulse' />
               ) : roadmapSummary ? (
                 <div>
-                  <p className='text-xs uppercase tracking-[0.2em] text-[#6C5DD3]'>Latest roadmap</p>
-                  <h3 className='mt-2 text-lg font-semibold text-[#1F2937]'>
+                  <p className='text-xs uppercase tracking-[0.2em] text-[#0ea5a4]'>Latest roadmap</p>
+                  <h3 className='mt-2 text-lg font-semibold text-[#0f172a]'>
                     {roadmapSummary.goal || roadmapSummary.title || 'Your roadmap'}
                   </h3>
-                  <p className='mt-1 text-sm text-[#6B7280]'>
+                  <p className='mt-1 text-sm text-[#51607b]'>
                     Level: {roadmapSummary.skillLevel || roadmapSummary.level || 'Beginner'}
                   </p>
                   <div className='mt-4 flex flex-wrap gap-2'>
@@ -296,8 +296,8 @@ const Home = () => {
                 </div>
               ) : (
                 <div>
-                  <h3 className='text-lg font-semibold text-[#1F2937]'>No roadmap yet</h3>
-                  <p className='mt-1 text-sm text-[#6B7280]'>
+                  <h3 className='text-lg font-semibold text-[#0f172a]'>No roadmap yet</h3>
+                  <p className='mt-1 text-sm text-[#51607b]'>
                     Generate a roadmap to guide your learning and match the right courses.
                   </p>
                   <button type='button' onClick={handleGoToAiPath} className='mt-4 btn-primary inline-flex items-center gap-2'>
@@ -309,12 +309,12 @@ const Home = () => {
             </div>
 
             <div className='card'>
-              <p className='text-xs uppercase tracking-[0.2em] text-[#6B7280]'>Popular paths</p>
-              <div className='mt-4 space-y-3 text-sm text-[#1F2937]'>
+              <p className='text-xs uppercase tracking-[0.2em] text-[#51607b]'>Popular paths</p>
+              <div className='mt-4 space-y-3 text-sm text-[#0f172a]'>
                 {['Frontend Developer', 'Data Analyst', 'AI Engineer', 'Full Stack Developer'].map((item) => (
                   <div key={item} className='flex items-center justify-between rounded-xl border border-gray-200 px-3 py-2'>
                     <span>{item}</span>
-                    <Zap className='h-4 w-4 text-[#6C5DD3]' />
+                    <Zap className='h-4 w-4 text-[#0ea5a4]' />
                   </div>
                 ))}
               </div>
@@ -326,7 +326,7 @@ const Home = () => {
       <section className='page-shell py-12'>
         <div className='flex items-center justify-between flex-wrap gap-4'>
           <div>
-            <h2 className='heading text-[#1F2937]'>Recommended courses</h2>
+            <h2 className='heading text-[#0f172a]'>Recommended courses</h2>
             <p className='desc'>Curated picks based on popular skills and learning goals.</p>
           </div>
           <button type='button' onClick={() => navigate('#explore')} className='btn-secondary inline-flex items-center gap-2'>
@@ -349,11 +349,11 @@ const Home = () => {
                   className='h-32 w-full rounded-xl object-cover'
                 />
                 <div className='mt-4'>
-                  <h3 className='font-semibold text-[#1F2937] line-clamp-2'>{course.title}</h3>
-                  <p className='mt-1 text-sm text-[#6B7280] line-clamp-2'>
+                  <h3 className='font-semibold text-[#0f172a] line-clamp-2'>{course.title}</h3>
+                  <p className='mt-1 text-sm text-[#51607b] line-clamp-2'>
                     {course.description || course.overview || 'Learn with structured lessons.'}
                   </p>
-                  <div className='mt-3 flex flex-wrap gap-3 text-xs text-[#6B7280]'>
+                  <div className='mt-3 flex flex-wrap gap-3 text-xs text-[#51607b]'>
                     {course.level ? (
                       <span className='inline-flex items-center gap-1'>
                         <BarChart2 className='h-3.5 w-3.5' />
@@ -388,7 +388,7 @@ const Home = () => {
         <div className='page-shell py-12'>
           <div className='flex items-center justify-between flex-wrap gap-4'>
             <div>
-              <h2 className='heading text-[#1F2937]'>Popular skills</h2>
+              <h2 className='heading text-[#0f172a]'>Popular skills</h2>
               <p className='desc'>Jump into a focused learning track.</p>
             </div>
           </div>
@@ -415,8 +415,8 @@ const Home = () => {
         <div className='card'>
           <div className='flex items-center justify-between flex-wrap gap-4'>
             <div>
-              <p className='text-xs uppercase tracking-[0.2em] text-[#6B7280]'>Quiz and practice</p>
-              <h2 className='mt-2 text-2xl font-bold text-[#1F2937]'>Practice what you learn</h2>
+              <p className='text-xs uppercase tracking-[0.2em] text-[#51607b]'>Quiz and practice</p>
+              <h2 className='mt-2 text-2xl font-bold text-[#0f172a]'>Practice what you learn</h2>
               <p className='mt-2 desc'>
                 Quizzes are generated inside your courses. Jump back into learning to practice.
               </p>
@@ -431,7 +431,7 @@ const Home = () => {
 
       <section id='explore' className='page-shell pb-16'>
         <div className='mb-6'>
-          <h2 className='heading text-[#1F2937]'>Explore courses</h2>
+          <h2 className='heading text-[#0f172a]'>Explore courses</h2>
           <p className='desc'>Search or browse the full catalog.</p>
         </div>
         <div className='rounded-2xl overflow-hidden border border-gray-200 bg-white shadow-sm'>
@@ -450,6 +450,7 @@ const Home = () => {
 }
 
 export default Home
+
 
 
 

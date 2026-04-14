@@ -30,15 +30,15 @@ const Analytics = () => {
     <div className="page-bg py-8">
       <div className="page-shell space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-[#1F2937]">Analytics</h1>
-        <p className="text-[#6B7280] mt-1">Revenue and enrollment trends</p>
+        <h1 className="text-3xl font-bold text-[#0f172a]">Analytics</h1>
+        <p className="text-[#51607b] mt-1">Revenue and enrollment trends</p>
       </div>
 
       <div className="card">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-xl font-semibold text-[#1F2937]">Revenue Trend</h2>
-            <p className="text-sm text-[#6B7280]">Last 7 days performance</p>
+            <h2 className="text-xl font-semibold text-[#0f172a]">Revenue Trend</h2>
+            <p className="text-sm text-[#51607b]">Last 7 days performance</p>
           </div>
         </div>
 
@@ -54,7 +54,7 @@ const Analytics = () => {
                 <XAxis dataKey="date" />
                 <YAxis />
                 <Tooltip formatter={(value) => [`INR ${value}`, 'Revenue']} />
-                <Line type="monotone" dataKey="revenue" stroke="#6C5DD3" strokeWidth={3} dot={false} activeDot={{ r: 6 }} />
+                <Line type="monotone" dataKey="revenue" stroke="#0ea5a4" strokeWidth={3} dot={false} activeDot={{ r: 6 }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
@@ -66,6 +66,7 @@ const Analytics = () => {
 }
 
 export default Analytics
+
 
 
 

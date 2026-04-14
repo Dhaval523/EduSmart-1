@@ -6,8 +6,8 @@ const Badge = ({ children, variant = "default" }) => {
     "inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold border";
   const styles =
     variant === "best"
-      ? "bg-[#FFE3DA] text-[#1F2937] border-gray-200"
-      : "bg-gray-100 text-[#1F2937] border-gray-200";
+      ? "bg-[#fde68a] text-[#0f172a] border-gray-200"
+      : "bg-gray-100 text-[#0f172a] border-gray-200";
   return <span className={`${base} ${styles}`}>{children}</span>;
 };
 
@@ -23,7 +23,7 @@ const CourseRecommendationCard = ({ course, isBestMatch, onStart, onView, onNavi
           onNavigate?.();
         }
       }}
-      className="w-full text-left flex gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md transition-shadow focus:outline-none focus:ring-2 focus:ring-[#A29BFE]/40"
+      className="w-full text-left flex gap-3 rounded-2xl border border-gray-200 bg-white p-4 shadow-sm hover:shadow-md transition-shadow focus:outline-none focus:ring-2 focus:ring-[#0f766e]/40"
     >
       {course.thumbnail ? (
         <img
@@ -32,17 +32,17 @@ const CourseRecommendationCard = ({ course, isBestMatch, onStart, onView, onNavi
           className="h-16 w-24 rounded-xl object-cover flex-shrink-0"
         />
       ) : (
-        <div className="h-16 w-24 rounded-xl bg-gray-100 flex items-center justify-center text-xs text-[#6B7280] flex-shrink-0">
+        <div className="h-16 w-24 rounded-xl bg-gray-100 flex items-center justify-center text-xs text-[#51607b] flex-shrink-0">
           No image
         </div>
       )}
       <div className="flex-1">
         <div className="flex items-start justify-between gap-2">
           <div>
-            <p className="text-sm font-semibold text-[#1F2937] line-clamp-2">{course.title}</p>
-            <p className="mt-1 text-xs text-[#6B7280] line-clamp-2">{course.description}</p>
+            <p className="text-sm font-semibold text-[#0f172a] line-clamp-2">{course.title}</p>
+            <p className="mt-1 text-xs text-[#51607b] line-clamp-2">{course.description}</p>
             {course.instructor ? (
-              <p className="mt-1 inline-flex items-center gap-1 text-[11px] text-[#6B7280]">
+              <p className="mt-1 inline-flex items-center gap-1 text-[11px] text-[#51607b]">
                 <User className="h-3 w-3" />
                 {course.instructor}
               </p>
@@ -55,16 +55,16 @@ const CourseRecommendationCard = ({ course, isBestMatch, onStart, onView, onNavi
                 Best match
               </Badge>
             ) : null}
-            <p className="text-[11px] font-semibold text-[#6B7280]">
+            <p className="text-[11px] font-semibold text-[#51607b]">
               Match score: {course.matchScore}
             </p>
           </div>
         </div>
         {course.matchReason ? (
-          <p className="mt-2 text-xs text-[#6B7280]">{course.matchReason}</p>
+          <p className="mt-2 text-xs text-[#51607b]">{course.matchReason}</p>
         ) : null}
         <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
-          <div className="flex flex-wrap gap-1 text-[11px] text-[#6B7280]">
+          <div className="flex flex-wrap gap-1 text-[11px] text-[#51607b]">
             {(course.tags?.length ? course.tags : course.topics)?.slice(0, 3).map((t) => (
               <span
                 key={t}
@@ -81,7 +81,7 @@ const CourseRecommendationCard = ({ course, isBestMatch, onStart, onView, onNavi
                 e.stopPropagation();
                 onView?.();
               }}
-              className="inline-flex items-center gap-2 rounded-2xl border border-gray-200 bg-white px-3 py-1.5 text-[11px] font-semibold text-[#1F2937] hover:bg-[#F7F7FB] transition-colors"
+              className="inline-flex items-center gap-2 rounded-2xl border border-gray-200 bg-white px-3 py-1.5 text-[11px] font-semibold text-[#0f172a] hover:bg-[#f5f7fb] transition-colors"
             >
               View details
             </button>
@@ -91,7 +91,7 @@ const CourseRecommendationCard = ({ course, isBestMatch, onStart, onView, onNavi
                 e.stopPropagation();
                 onStart?.();
               }}
-              className="inline-flex items-center gap-2 rounded-2xl bg-[#6C5DD3] px-3 py-1.5 text-[11px] font-semibold text-white hover:bg-[#F7F5FF]0 transition-colors"
+              className="inline-flex items-center gap-2 rounded-2xl bg-[#0ea5a4] px-3 py-1.5 text-[11px] font-semibold text-white hover:bg-[#f5fbfa]0 transition-colors"
             >
               Start course
             </button>
@@ -119,27 +119,27 @@ export const RecommendedCoursesDrawer = ({
 
   return (
     <div className="fixed inset-0 z-40 flex justify-end">
-      <div className="absolute inset-0 bg-[#6C5DD3]/40" onClick={onClose} />
-      <div className="relative z-50 h-full w-full max-w-md bg-[#F7F7FB] shadow-md border-l border-gray-200 flex flex-col">
+      <div className="absolute inset-0 bg-[#0ea5a4]/40" onClick={onClose} />
+      <div className="relative z-50 h-full w-full max-w-md bg-[#f5f7fb] shadow-md border-l border-gray-200 flex flex-col">
         <div className="flex items-center justify-between px-5 py-4 border-b border-gray-200 bg-white">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#6C5DD3]">
+            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-[#0ea5a4]">
               Recommended courses
             </p>
-            <p className="text-sm font-bold text-[#1F2937]">
+            <p className="text-sm font-bold text-[#0f172a]">
               {phase ? `Phase ${phase.id}: ${phase.title}` : "Selected phase"}
             </p>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-full p-1.5 hover:bg-gray-100 text-[#6B7280]"
+            className="rounded-full p-1.5 hover:bg-gray-100 text-[#51607b]"
           >
             <X className="h-4 w-4" />
           </button>
         </div>
 
-        <div className="px-5 py-3 border-b border-gray-200 bg-[#F7F7FB] text-xs text-[#6B7280]">
+        <div className="px-5 py-3 border-b border-gray-200 bg-[#f5f7fb] text-xs text-[#51607b]">
           These courses are selected based on this roadmap phase, your skill level and overall
           learning goal.
         </div>
@@ -168,7 +168,7 @@ export const RecommendedCoursesDrawer = ({
               {error}
             </div>
           ) : !hasRecs ? (
-            <div className="rounded-2xl border border-dashed border-gray-200 bg-white p-4 text-sm text-[#6B7280]">
+            <div className="rounded-2xl border border-dashed border-gray-200 bg-white p-4 text-sm text-[#51607b]">
               We could not find strong course matches for this phase. Try exploring all courses from
               the home page search instead.
             </div>
@@ -191,6 +191,7 @@ export const RecommendedCoursesDrawer = ({
     </div>
   );
 };
+
 
 
 

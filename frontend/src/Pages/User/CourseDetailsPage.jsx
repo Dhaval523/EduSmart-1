@@ -9,7 +9,7 @@ import { Clock, BarChart2, Tag, User, BookOpen, CheckCircle2, BadgeCheck, Lock, 
 const Chip = ({ children }) => <span className="chip">{children}</span>;
 
 const SectionTitle = ({ children }) => (
-  <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-[#6B7280]">
+  <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-[#51607b]">
     {children}
   </h3>
 );
@@ -101,7 +101,7 @@ const CourseDetailsPage = () => {
   if (!course) {
     return (
       <div className="page-bg flex items-center justify-center">
-        <div className="rounded-2xl border border-gray-200 bg-white p-6 text-center text-sm text-[#6B7280]">
+        <div className="rounded-2xl border border-gray-200 bg-white p-6 text-center text-sm text-[#51607b]">
           Course not found.
         </div>
       </div>
@@ -115,14 +115,14 @@ const CourseDetailsPage = () => {
           <div className="space-y-8">
             <div className="card">
               {showRoadmapLabel ? (
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#6C5DD3]">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[#0ea5a4]">
                   Recommended for your roadmap phase
                 </p>
               ) : null}
-              <h1 className="mt-2 text-3xl font-bold tracking-tight text-[#1F2937]">
+              <h1 className="mt-2 text-3xl font-bold tracking-tight text-[#0f172a]">
                 {course.title}
               </h1>
-              <p className="mt-3 text-sm text-[#6B7280] leading-relaxed">
+              <p className="mt-3 text-sm text-[#51607b] leading-relaxed">
                 {course.description || "Upgrade your skills with this professional course."}
               </p>
 
@@ -148,45 +148,45 @@ const CourseDetailsPage = () => {
 
             <div className="card">
               <SectionTitle>What you will learn</SectionTitle>
-              <ul className="mt-4 space-y-2 text-sm text-[#1F2937]">
+              <ul className="mt-4 space-y-2 text-sm text-[#0f172a]">
                 {(learningOutcomes?.length ? learningOutcomes : []).map((item) => (
                   <li key={item} className="flex items-start gap-2">
-                    <CheckCircle2 className="h-4 w-4 text-[#6C5DD3] mt-0.5" />
+                    <CheckCircle2 className="h-4 w-4 text-[#0ea5a4] mt-0.5" />
                     <span>{item}</span>
                   </li>
                 ))}
                 {learningOutcomes?.length === 0 ? (
-                  <li className="text-[#6B7280]">Clear learning outcomes will be shared inside the course.</li>
+                  <li className="text-[#51607b]">Clear learning outcomes will be shared inside the course.</li>
                 ) : null}
               </ul>
             </div>
 
             <div className="card">
               <SectionTitle>Modules preview</SectionTitle>
-              <ol className="mt-4 space-y-3 text-sm text-[#1F2937]">
+              <ol className="mt-4 space-y-3 text-sm text-[#0f172a]">
                 {modulePreview.length ? (
                   modulePreview.map((mod, index) => (
                     <li key={mod?._id || mod?.title || index} className="rounded-2xl border border-gray-200 bg-white p-3">
                       <div className="flex items-start gap-3">
-                        <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#6C5DD3] text-xs font-semibold text-white">
+                        <span className="mt-0.5 inline-flex h-6 w-6 items-center justify-center rounded-full bg-[#0ea5a4] text-xs font-semibold text-white">
                           {index + 1}
                         </span>
                         <div>
-                          <p className="font-semibold text-[#1F2937]">
+                          <p className="font-semibold text-[#0f172a]">
                             {mod?.title || mod?.name || `Module ${index + 1}`}
                           </p>
                           {mod?.description ? (
-                            <p className="mt-1 text-xs text-[#6B7280]">{mod.description}</p>
+                            <p className="mt-1 text-xs text-[#51607b]">{mod.description}</p>
                           ) : null}
-                          <div className="mt-2 flex flex-wrap gap-2 text-xs text-[#6B7280]">
+                          <div className="mt-2 flex flex-wrap gap-2 text-xs text-[#51607b]">
                             {mod?.duration ? <span>{mod.duration}</span> : null}
                             {mod?.isPreviewFree ? (
-                              <span className="inline-flex items-center gap-1 rounded-full bg-[#F7F5FF] px-2 py-0.5 text-[#6C5DD3]">
+                              <span className="inline-flex items-center gap-1 rounded-full bg-[#f5fbfa] px-2 py-0.5 text-[#0ea5a4]">
                                 <BadgeCheck className="h-3 w-3" /> Preview free
                               </span>
                             ) : null}
                             {!isPurchased && !mod?.isPreviewFree ? (
-                              <span className="inline-flex items-center gap-1 rounded-full bg-[#FFE3DA] px-2 py-0.5 text-[#F5B7A1]">
+                              <span className="inline-flex items-center gap-1 rounded-full bg-[#fde68a] px-2 py-0.5 text-[#f59e0b]">
                                 <Lock className="h-3 w-3" /> Locked
                               </span>
                             ) : null}
@@ -206,17 +206,17 @@ const CourseDetailsPage = () => {
                     </li>
                   ))
                 ) : (
-                  <li className="text-[#6B7280]">Modules will appear once available.</li>
+                  <li className="text-[#51607b]">Modules will appear once available.</li>
                 )}
               </ol>
               {modules.length > 4 ? (
-                <p className="mt-3 text-xs font-semibold text-[#6C5DD3]">View full curriculum</p>
+                <p className="mt-3 text-xs font-semibold text-[#0ea5a4]">View full curriculum</p>
               ) : null}
             </div>
 
             <div className="card">
               <SectionTitle>Requirements</SectionTitle>
-              <div className="mt-4 text-sm text-[#1F2937]">
+              <div className="mt-4 text-sm text-[#0f172a]">
                 {requirements.length ? (
                   <ul className="space-y-2">
                     {requirements.map((req) => (
@@ -227,27 +227,27 @@ const CourseDetailsPage = () => {
                     ))}
                   </ul>
                 ) : (
-                  <p className="text-[#6B7280]">No prerequisites required. Start from scratch.</p>
+                  <p className="text-[#51607b]">No prerequisites required. Start from scratch.</p>
                 )}
               </div>
             </div>
 
             <div className="card">
               <SectionTitle>Description</SectionTitle>
-              <p className="mt-4 text-sm text-[#1F2937] leading-relaxed">
+              <p className="mt-4 text-sm text-[#0f172a] leading-relaxed">
                 {overviewText || "Course overview will be available soon."}
               </p>
             </div>
 
             <div className="card">
               <SectionTitle>Instructor</SectionTitle>
-              <div className="mt-4 flex items-center gap-3 text-sm text-[#1F2937]">
-                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#6C5DD3] text-white">
+              <div className="mt-4 flex items-center gap-3 text-sm text-[#0f172a]">
+                <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-[#0ea5a4] text-white">
                   <User className="h-4 w-4" />
                 </span>
                 <div>
-                  <p className="font-semibold text-[#1F2937]">{course.instructor || "EduSmart team"}</p>
-                  <p className="text-xs text-[#6B7280]">Industry professional & course author</p>
+                  <p className="font-semibold text-[#0f172a]">{course.instructor || "EduSmart team"}</p>
+                  <p className="text-xs text-[#51607b]">Industry professional & course author</p>
                 </div>
               </div>
             </div>
@@ -263,24 +263,24 @@ const CourseDetailsPage = () => {
                     className="w-full h-48 object-cover rounded-2xl"
                   />
                 ) : (
-                  <div className="w-full h-48 rounded-2xl bg-gray-100 flex items-center justify-center text-sm text-[#6B7280]">
+                  <div className="w-full h-48 rounded-2xl bg-gray-100 flex items-center justify-center text-sm text-[#51607b]">
                     No thumbnail
                   </div>
                 )}
 
                 <div className="mt-4 space-y-3">
                   <div className="flex items-baseline gap-2">
-                    <p className="text-2xl font-bold text-[#1F2937]">INR {course.amount}</p>
+                    <p className="text-2xl font-bold text-[#0f172a]">INR {course.amount}</p>
                     {!isPurchased ? (
-                      <p className="text-xs text-[#6B7280]">One-time purchase</p>
+                      <p className="text-xs text-[#51607b]">One-time purchase</p>
                     ) : (
-                      <span className="inline-flex items-center rounded-full bg-[#F7F5FF] px-2.5 py-1 text-xs font-semibold text-[#6C5DD3]">
+                      <span className="inline-flex items-center rounded-full bg-[#f5fbfa] px-2.5 py-1 text-xs font-semibold text-[#0ea5a4]">
                         Purchased
                       </span>
                     )}
                   </div>
 
-                  <div className="grid gap-2 text-xs text-[#6B7280]">
+                  <div className="grid gap-2 text-xs text-[#51607b]">
                     <div className="flex items-center gap-2">
                       <BookOpen className="h-4 w-4" />
                       {modules.length ? `${modules.length} modules` : "Structured modules"}
@@ -295,7 +295,7 @@ const CourseDetailsPage = () => {
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-gray-200 bg-[#F7F7FB] px-3 py-2 text-xs text-[#6B7280]">
+                  <div className="rounded-2xl border border-gray-200 bg-[#f5f7fb] px-3 py-2 text-xs text-[#51607b]">
                     {course.subcategory || course.category || "Learning track"} - {course.isPublished ? "Published" : "Draft"}
                   </div>
 
@@ -327,6 +327,7 @@ const CourseDetailsPage = () => {
 };
 
 export default CourseDetailsPage;
+
 
 
 

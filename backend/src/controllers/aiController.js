@@ -1,6 +1,7 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { ENV } from "../config/env.js";
 import { LearningPath } from "../models/LearningPath.js";
+import { ChatHistory } from "../models/chatHistory.model.js";
 import {
   buildFallbackRoadmap,
   normalizeRoadmapResponse,
@@ -149,6 +150,105 @@ export const getLearningPaths = async (req, res) => {
     return res.status(500).json({
       success: false,
       message: "Failed to fetch learning paths."
+    });
+  }
+};
+
+const buildChatPrompt = ({
+  courseTitle,
+  sectionTitle,
+  lessonTitle,
+  userMessage,
+  timestamp
+}) => {
+  const safeCourse = courseTitle || "Unknown Course";
+  const safeLesson = lessonTitle || "Unknown Lesson";
+  const safeSection = sectionTitle || "";
+  const timeLine = typeof timestamp === "number" ? `Video time: ${Math.floor(timestamp)}s` : "";
+
+  return `You are a friendly expert tutor.
+Respond in a clean structured format with short lines and spacing.
+Do NOT write in one paragraph.
+
+Format exactly like this:
+
+Title: <short title>
+Definition: <simple 1-2 line definition>
+Explanation:
+- <bullet 1>
+- <bullet 2>
+Example: <simple real-world example>
+Quick Tip: <one short tip>
+
+Rules:
+- Keep total length short (3-6 lines max).
+- Use simple words.
+- If unclear, ask a short follow-up question.
+
+Course: ${safeCourse}
+Lesson: ${safeLesson}
+${safeSection ? `Section: ${safeSection}\n` : ""}${timeLine ? `${timeLine}\n` : ""}Question: ${userMessage}`;
+};
+
+export const chatWithAI = async (req, res) => {
+  try {
+    const {
+      message,
+      courseTitle,
+      sectionTitle,
+      lessonTitle,
+      timestamp,
+      courseId,
+      lessonId
+    } = req.body;
+
+    if (!message || !String(message).trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Message is required."
+      });
+    }
+
+    const prompt = buildChatPrompt({
+      courseTitle,
+      sectionTitle,
+      lessonTitle,
+      timestamp,
+      userMessage: String(message).trim()
+    });
+
+    const result = await model.generateContent(prompt);
+    const aiText =
+      result?.response?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
+
+    const responseText =
+      aiText ||
+      "I couldn't generate a response right now. Please try rephrasing your question.";
+
+    if (req.user?._id) {
+      await ChatHistory.create({
+        userId: req.user._id,
+        courseId: courseId || null,
+        lessonId: lessonId || null,
+        courseTitle: courseTitle || "",
+        sectionTitle: sectionTitle || "",
+        lessonTitle: lessonTitle || "",
+        timestamp: typeof timestamp === "number" ? timestamp : null,
+        message: String(message).trim(),
+        response: responseText
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      response: responseText
+    });
+  } catch (error) {
+    const safeError = error?.message || JSON.stringify(error);
+    console.error("chatWithAI error:", safeError);
+    return res.status(500).json({
+      success: false,
+      message: "AI response failed. Please try again."
     });
   }
 };

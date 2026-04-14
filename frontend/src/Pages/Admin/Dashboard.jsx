@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom'
 
 const Dashboard = () => {
   return (
-    <div className='min-h-screen bg-[#F7F7FB]'>
+    <div className='min-h-screen bg-[#f5f7fb]'>
       <DashboardSideBar />
       <main className='ml-64 min-h-screen'>
         <Outlet />
@@ -14,5 +14,6 @@ const Dashboard = () => {
 }
 
 export default Dashboard
+
 
 

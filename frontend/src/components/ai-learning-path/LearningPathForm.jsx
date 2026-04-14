@@ -17,12 +17,12 @@ const defaultTopics = [
 const SectionLabel = ({ title, optional, hint }) => (
   <div className="mb-2">
     <div className="flex items-center justify-between">
-      <label className="text-sm font-semibold text-[#1F2937]">{title}</label>
+      <label className="text-sm font-semibold text-[#0f172a]">{title}</label>
       {optional ? (
-        <span className="text-xs font-semibold text-[#6B7280]">Optional</span>
+        <span className="text-xs font-semibold text-[#51607b]">Optional</span>
       ) : null}
     </div>
-    {hint ? <p className="mt-1 text-xs text-[#6B7280]">{hint}</p> : null}
+    {hint ? <p className="mt-1 text-xs text-[#51607b]">{hint}</p> : null}
   </div>
 );
 
@@ -33,8 +33,8 @@ const TopicChip = ({ active, label, onClick }) => (
     className={[
       "px-3 py-1.5 rounded-full text-sm font-semibold border transition-colors",
       active
-        ? "bg-[#F5B7A1] text-[#1F2937] border-[#F5B7A1]"
-        : "bg-[#FFF2EE] text-[#1F2937] border-gray-200 hover:bg-[#FFE3DA]"
+        ? "bg-[#f59e0b] text-[#0f172a] border-[#f59e0b]"
+        : "bg-[#fef3c7] text-[#0f172a] border-gray-200 hover:bg-[#fde68a]"
     ].join(" ")}
   >
     {label}
@@ -86,13 +86,13 @@ export const LearningPathForm = ({
     <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
       {showHeader ? (
         <>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#F5B7A1]">
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#f59e0b]">
             Roadmap generator
           </p>
-          <h2 className="mt-2 text-xl font-black tracking-tight text-[#1F2937]">
+          <h2 className="mt-2 text-xl font-black tracking-tight text-[#0f172a]">
             Build your personalized plan
           </h2>
-          <p className="mt-2 text-sm text-[#6B7280]">
+          <p className="mt-2 text-sm text-[#51607b]">
             Preferred topics are optional - leave them empty and the AI will choose the best topics for your goal.
             goal.
           </p>
@@ -110,7 +110,7 @@ export const LearningPathForm = ({
             onChange={(e) => setField("goal", e.target.value)}
             type="text"
             placeholder="Become a Data Analyst"
-            className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#1F2937] placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#A29BFE]/40"
+            className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#0f172a] placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0f766e]/40"
           />
         </div>
 
@@ -119,7 +119,7 @@ export const LearningPathForm = ({
           <select
             value={value.level}
             onChange={(e) => setField("level", e.target.value)}
-            className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#1F2937] shadow-sm focus:outline-none focus:ring-2 focus:ring-[#A29BFE]/40"
+            className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#0f172a] shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0f766e]/40"
           >
             <option value="Beginner">Beginner</option>
             <option value="Intermediate">Intermediate</option>
@@ -154,12 +154,12 @@ export const LearningPathForm = ({
               onChange={(e) => setCustomTopic(e.target.value)}
               type="text"
               placeholder="Add a topic (optional)"
-              className="flex-1 rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm text-[#1F2937] placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#A29BFE]/40"
+              className="flex-1 rounded-2xl border border-gray-200 bg-white px-4 py-2 text-sm text-[#0f172a] placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0f766e]/40"
             />
             <button
               type="button"
               onClick={addCustomTopic}
-              className="inline-flex items-center gap-2 rounded-2xl bg-[#F5B7A1] px-4 py-2 text-sm font-semibold text-[#1F2937] hover:bg-[#F2A88E] transition-colors"
+              className="inline-flex items-center gap-2 rounded-2xl bg-[#f59e0b] px-4 py-2 text-sm font-semibold text-[#0f172a] hover:bg-[#fbbf24] transition-colors"
             >
               <Plus className="h-4 w-4" />
               Add
@@ -175,7 +175,7 @@ export const LearningPathForm = ({
               onChange={(e) => setField("learningTimePerWeek", e.target.value)}
               type="text"
               placeholder="8-10 hours"
-              className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#1F2937] placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#A29BFE]/40"
+              className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#0f172a] placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0f766e]/40"
             />
           </div>
           <div>
@@ -185,7 +185,7 @@ export const LearningPathForm = ({
               onChange={(e) => setField("targetOutcome", e.target.value)}
               type="text"
               placeholder="Job-ready"
-              className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#1F2937] placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#A29BFE]/40"
+              className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#0f172a] placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0f766e]/40"
             />
           </div>
         </div>
@@ -197,7 +197,7 @@ export const LearningPathForm = ({
             onChange={(e) => setField("learningStyle", e.target.value)}
             type="text"
             placeholder="Project-based"
-            className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#1F2937] placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#A29BFE]/40"
+            className="w-full rounded-2xl border border-gray-200 bg-white px-4 py-3 text-sm text-[#0f172a] placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-[#0f766e]/40"
           />
         </div>
 
@@ -209,15 +209,15 @@ export const LearningPathForm = ({
               type="button"
               onClick={onTrySubmit}
               disabled={!!isLoading}
-              className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#6C5DD3] px-4 py-3 text-sm font-semibold text-white hover:bg-[#5B4FC4] transition-colors disabled:opacity-70"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-2xl bg-[#0ea5a4] px-4 py-3 text-sm font-semibold text-white hover:bg-[#0f766e] transition-colors disabled:opacity-70"
             >
               <Wand2 className="h-4 w-4" />
               {isLoading ? "Generating roadmap..." : "Generate roadmap"}
             </button>
 
             {isLoading ? (
-              <div className="flex items-center gap-3 text-sm text-[#6B7280]">
-                <span className="h-4 w-4 rounded-full border-2 border-[#A29BFE] border-t-transparent animate-spin" />
+              <div className="flex items-center gap-3 text-sm text-[#51607b]">
+                <span className="h-4 w-4 rounded-full border-2 border-[#0f766e] border-t-transparent animate-spin" />
                 Gemini is creating a structured plan with phases, projects and milestones...
               </div>
             ) : null}
@@ -227,6 +227,7 @@ export const LearningPathForm = ({
     </div>
   );
 };
+
 
 
 

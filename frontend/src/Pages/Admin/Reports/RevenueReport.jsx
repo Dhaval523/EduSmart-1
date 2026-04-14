@@ -1,4 +1,4 @@
-import ReportHeaderFilters from "@/components/reports/ReportHeaderFilters"
+﻿import ReportHeaderFilters from "@/components/reports/ReportHeaderFilters"
 import ReportKpiCard from "@/components/reports/ReportKpiCard"
 import { ReportCardSkeleton, ReportEmpty } from "@/components/reports/ReportState"
 import ReportTable from "@/components/reports/ReportTable"
@@ -60,7 +60,7 @@ const RevenueReport = () => {
           ) : (
             <>
               <div className="card">
-                <h2 className="text-lg font-bold text-[#1F2937]">Revenue Over Time</h2>
+                <h2 className="text-lg font-bold text-[#0f172a]">Revenue Over Time</h2>
                 <div className="h-80 mt-4">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={chartRows}>
@@ -68,13 +68,13 @@ const RevenueReport = () => {
                       <XAxis dataKey="date" />
                       <YAxis />
                       <Tooltip formatter={(value) => [formatINR(value), "Revenue"]} />
-                      <Line dataKey="amount" type="monotone" stroke="#6C5DD3" strokeWidth={3} dot={false} />
+                      <Line dataKey="amount" type="monotone" stroke="#0ea5a4" strokeWidth={3} dot={false} />
                     </LineChart>
                   </ResponsiveContainer>
                 </div>
               </div>
               <div className="card">
-                <h2 className="text-lg font-bold text-[#1F2937]">Revenue by Course</h2>
+                <h2 className="text-lg font-bold text-[#0f172a]">Revenue by Course</h2>
                 <div className="h-80 mt-4">
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={barRows}>
@@ -82,7 +82,7 @@ const RevenueReport = () => {
                       <XAxis dataKey="courseName" hide />
                       <YAxis />
                       <Tooltip formatter={(value) => [formatINR(value), "Revenue"]} />
-                      <Bar dataKey="revenue" fill="#A29BFE" radius={[8, 8, 0, 0]} />
+                      <Bar dataKey="revenue" fill="#0f766e" radius={[8, 8, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
@@ -98,4 +98,5 @@ const RevenueReport = () => {
 }
 
 export default RevenueReport
+
 
