@@ -17,7 +17,7 @@ const DashboardSideBar = () => {
     { to: '/home', label: 'Home', icon: Home, exact: true },
     { to: '/admin', label: 'Overview', icon: LayoutDashboard, exact: true },
     { to: '/admin/courses', label: 'Courses', icon: ShoppingBag, exact: false },
-    { to: '/admin/orders', label: 'Orders', icon: ReceiptText, exact: true },
+    { to: '/admin/orders', label: 'Enrollments', icon: ReceiptText, exact: true },
     { to: '/admin/users', label: 'Users', icon: Users, exact: true },
     { to: '/reports', label: 'Reports', icon: FileBarChart2, exact: true }
   ]

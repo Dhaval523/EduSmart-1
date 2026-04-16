@@ -49,7 +49,7 @@ const Users = () => {
         name: user.fullName,
         email: user.email,
         role: user.admin ? 'Admin' : 'Student',
-        orders: user.orderCount ?? 0,
+        enrollments: user.orderCount ?? 0,
         spent: user.totalSpent ?? 0,
         purchased: user.purchasedCount ?? 0,
         joined: new Date(user.createdAt).toLocaleDateString()
@@ -60,7 +60,7 @@ const Users = () => {
         { key: 'name', label: 'Full Name' },
         { key: 'email', label: 'Email' },
         { key: 'role', label: 'Role' },
-        { key: 'orders', label: 'Orders' },
+        { key: 'enrollments', label: 'Enrollments' },
         { key: 'spent', label: 'Total Spent (INR)' },
         { key: 'purchased', label: 'Purchased Courses' },
         { key: 'joined', label: 'Joined' }
@@ -153,13 +153,13 @@ const Users = () => {
                 <option value="oldest">Oldest first</option>
                 <option value="name_asc">Name A-Z</option>
                 <option value="name_desc">Name Z-A</option>
-                <option value="orders_desc">Most orders</option>
+                <option value="orders_desc">Most enrollments</option>
                 <option value="spent_desc">Highest spend</option>
               </select>
             </div>
 
             <div className="flex items-center gap-2">
-              <div className="text-xs text-[#51607b]">Total orders: {summary.totalOrders ?? 0}</div>
+              <div className="text-xs text-[#51607b]">Total enrollments: {summary.totalOrders ?? 0}</div>
 
               <button
                 onClick={() => setFilters({
@@ -194,7 +194,7 @@ const Users = () => {
                 <tr className="border-b border-gray-200">
                   <th className="text-left px-6 py-4 font-semibold">User</th>
                   <th className="text-left px-4 py-4 font-semibold">Role</th>
-                  <th className="text-left px-4 py-4 font-semibold">Orders</th>
+                  <th className="text-left px-4 py-4 font-semibold">Enrollments</th>
                   <th className="text-left px-4 py-4 font-semibold">Spent</th>
                   <th className="text-left px-4 py-4 font-semibold">Purchased</th>
                   <th className="text-left px-4 py-4 font-semibold">Joined</th>

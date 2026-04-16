@@ -1,6 +1,7 @@
 import { Course } from "../models/course.model.js";
 import { Modules } from "../models/module.model.js";
 import { Progress } from "../models/progress.model.js";
+import { markCourseCompleted } from "../utils/certificateService.js";
 
 export const markModuleComplete = async (req, res) => {
     try {
@@ -41,9 +42,33 @@ export const markModuleComplete = async (req, res) => {
             { upsert: true, new: true, setDefaultsOnInsert: true }
         );
 
+        let courseCompleted = false;
+        let certificate = null;
+        try {
+            const course = await Course.findById(courseId).select("modules");
+            const totalModules = course?.modules?.length || 0;
+
+            if (totalModules > 0) {
+                const completedCount = await Progress.countDocuments({
+                    user: userId,
+                    course: courseId,
+                    completed: true
+                });
+
+                courseCompleted = completedCount >= totalModules;
+                if (courseCompleted) {
+                    certificate = await markCourseCompleted(userId, courseId);
+                }
+            }
+        } catch (certError) {
+            console.log(`certificate generation error, ${certError?.message || certError}`);
+        }
+
         return res.status(200).json({
             success: true,
-            progress
+            progress,
+            courseCompleted,
+            certificate
         });
     } catch (error) {
         console.log(`error from markModuleComplete, ${error?.message || error}`);

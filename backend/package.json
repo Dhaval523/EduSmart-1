@@ -8,6 +8,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon index.js",
     "seed": "node seed.js",
+    "seed:meera": "node seed.meera.js",
+    "seed:payments": "node seed.payments.js",
     "start": "node index.js"
   },
   "keywords": [],
@@ -27,6 +29,7 @@
     "multer": "^2.0.2",
     "multer-storage-cloudinary": "^4.0.0",
     "nodemon": "^3.1.11",
+    "puppeteer": "^24.10.2",
     "stripe": "^11.8.0"
   }
 }

@@ -31,9 +31,9 @@ const PaymenSuccess = () => {
           <CheckCircle className='w-14 h-14 text-[#0ea5a4]' />
         </div>
 
-        <h1 className='text-3xl font-bold text-[#0f172a] mb-4'>Payment Successful!</h1>
+        <h1 className='text-3xl font-bold text-[#0f172a] mb-4'>Enrollment Successful!</h1>
         <p className='text-[#51607b] mb-8'>
-          Thank you for your purchase. Your course access is now active.
+          You are now enrolled. Your course access is now active.
         </p>
 
         <div className='space-y-4 mb-10'>

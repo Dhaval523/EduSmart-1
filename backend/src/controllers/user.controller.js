@@ -5,6 +5,17 @@ import jwt from 'jsonwebtoken'
 import { ENV } from "../config/env.js";
 import cloudinary from "../config/cloudinary.js";
 
+const getTokenCookieOptions = (req) => {
+    const isProd = ENV.NODE_ENV === "production"
+    const isSecure = isProd || req.secure || req.headers["x-forwarded-proto"] === "https"
+
+    return {
+        maxAge: 1 * 24 * 60 * 60 * 1000,
+        httpOnly: true,
+        secure: isSecure,
+        sameSite: isSecure ? "none" : "lax"
+    }
+}
 
 
 export const Register = async(req ,res)=>{
@@ -38,13 +49,13 @@ export const Register = async(req ,res)=>{
         const token = await jwt.sign({userId:newUser._id},ENV.JWT_SECRET )
 
         if(newUser.email === ENV.ADMIN){
-            return res.status(201).cookie("token", token, {maxAge:1*24*60*60*1000, httpOnly:true, secure:true, sameSite:"none"}).json({
+            return res.status(201).cookie("token", token, getTokenCookieOptions(req)).json({
                 message:`welcome back admin ${newUser.fullName}`,
                 
             })
         }
 
-        return res.status(201).cookie("token", token, {maxAge:1*24*60*60*1000, httpOnly:true, secure:true, sameSite:"none"}).json({
+        return res.status(201).cookie("token", token, getTokenCookieOptions(req)).json({
                 message:`welcome back  ${newUser.fullName}`
             })
 
@@ -98,10 +109,7 @@ export const Login = async(req,res)=>{
 
 
         res.cookie("token",token,{
-            maxAge:1*24*60*60*1000,
-            httpOnly:true,
-            secure:true,
-            sameSite:"none"
+            ...getTokenCookieOptions(req)
         })
 
         if(user.admin){
@@ -152,7 +160,7 @@ export const getUser = async(req,res)=>{
 
 export const logout=async(req,res)=>{
     try {
-        return res.cookie("token","").status(201).json({
+        return res.cookie("token","", { ...getTokenCookieOptions(req), maxAge: 0 }).status(201).json({
             message:"User logged out"
         })
     } catch (error) {

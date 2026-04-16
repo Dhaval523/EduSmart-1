@@ -10,7 +10,7 @@ const StatCard = ({ title, value, icon: Icon }) => (
     </div>
     <div>
       <p className="text-xs font-semibold text-[#51607b] uppercase tracking-[0.18em]">{title}</p>
-      <p className="text-2xl font-black text-[#0f172a]">{value ?? '-'}</p>
+      <p className="text-2xl font-semibold text-[#0f172a]">{value ?? '-'}</p>
     </div>
   </div>
 )
@@ -106,19 +106,19 @@ const DashboardAnalytics = () => {
             </div>
 
             <div className="card">
-              <h2 className="text-lg font-bold text-[#0f172a]">Recent Orders</h2>
+              <h2 className="text-lg font-bold text-[#0f172a]">Recent Enrollments</h2>
               <div className="mt-4 space-y-3">
                 {(data?.recentOrders || []).map((order) => (
                   <div key={order._id} className="flex items-center justify-between text-sm">
                     <div>
                       <p className="font-semibold text-[#0f172a]">{order.course?.title || 'Course'}</p>
-                      <p className="text-xs text-[#51607b]">₹ {order.totalAmount}</p>
+                      <p className="text-xs text-[#51607b]">₹ {order.totalAmount} {order.paymentId ? `· ${order.paymentId}` : ''}</p>
                     </div>
                     <span className="text-xs text-[#51607b]">{new Date(order.createdAt).toLocaleDateString()}</span>
                   </div>
                 ))}
                 {!data?.recentOrders?.length ? (
-                  <p className="text-sm text-[#51607b]">No orders yet.</p>
+                  <p className="text-sm text-[#51607b]">No enrollments yet.</p>
                 ) : null}
               </div>
             </div>

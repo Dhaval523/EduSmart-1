@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { generateNextPaymentId } from "../utils/paymentId.js";
 
 const orderSchema  = new mongoose.Schema({
     user:{
@@ -17,11 +18,22 @@ const orderSchema  = new mongoose.Schema({
         required:true
     },
 
+    paymentId:{
+        type:String,
+        unique:true,
+        trim:true,
+        default:""
+    },
+
     stripeSessionId:{
         type:String,
         unique:true
     }
 },{timestamps:true})
 
+orderSchema.pre("save", async function () {
+    if (this.paymentId) return;
+    this.paymentId = await generateNextPaymentId(this.createdAt || new Date());
+});
 
 export const Order = mongoose.model("Order", orderSchema)

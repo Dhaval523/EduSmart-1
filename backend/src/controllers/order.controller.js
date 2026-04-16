@@ -75,6 +75,7 @@ export const getAdminOrders = async (req, res) => {
       {
         $addFields: {
           orderIdStr: { $toString: "$_id" },
+          paymentId: { $ifNull: ["$paymentId", ""] },
           userName: "$user.fullName",
           userEmail: "$user.email",
           courseTitle: "$course.title"
@@ -89,6 +90,7 @@ export const getAdminOrders = async (req, res) => {
             { userName: { $regex: searchRegex } },
             { userEmail: { $regex: searchRegex } },
             { courseTitle: { $regex: searchRegex } },
+            { paymentId: { $regex: searchRegex } },
             { orderIdStr: { $regex: searchRegex } },
             { stripeSessionId: { $regex: searchRegex } }
           ]
@@ -104,6 +106,7 @@ export const getAdminOrders = async (req, res) => {
       {
         $project: {
           totalAmount: 1,
+          paymentId: 1,
           stripeSessionId: 1,
           createdAt: 1,
           user: {
@@ -164,7 +167,7 @@ export const getAdminOrders = async (req, res) => {
     console.error("getAdminOrders error:", error)
     return res.status(500).json({
       success: false,
-      message: "Failed to fetch orders"
+      message: "Failed to fetch enrollments"
     })
   }
 }

@@ -89,7 +89,7 @@ export const checkoutSuccess=async(req,res)=>{
 
         if(existingOrder){
             return res.status(201).json({
-                message:"Order already created"
+                message:"Enrollment already created"
             })
         }
 
@@ -102,7 +102,7 @@ export const checkoutSuccess=async(req,res)=>{
             const user = await User.findById(userId)
             if(user?.purchasedCourse?.some((id) => String(id) === String(courseId))){
                 return res.status(409).json({
-                    message:"Course already purchased"
+                    message:"Course already enrolled"
                 })
             }
 
@@ -122,14 +122,14 @@ export const checkoutSuccess=async(req,res)=>{
             )
 
             return res.status(201).json({
-                message:"payment succesfully",
+                message:"Enrollment successful",
                 orderId: newOrder._id
             })
         }
 
 
         return res.status(401).json({
-            message:"Payment failed"
+            message:"Enrollment failed"
         })
     } catch (error) {
         console.log(error, "from checkout success")

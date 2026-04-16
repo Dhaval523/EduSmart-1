@@ -45,7 +45,7 @@ const CourseDetailsPage = () => {
       : "Start Learning"
     : isPending
       ? "Processing..."
-      : "Buy Now";
+      : "Enroll Now";
 
   const overviewText = course?.overview || course?.description || "";
   const topics = course?.tags?.length ? course.tags : toArray(course?.description).slice(0, 4);
@@ -272,10 +272,10 @@ const CourseDetailsPage = () => {
                   <div className="flex items-baseline gap-2">
                     <p className="text-2xl font-bold text-[#0f172a]">INR {course.amount}</p>
                     {!isPurchased ? (
-                      <p className="text-xs text-[#51607b]">One-time purchase</p>
+                      <p className="text-xs text-[#51607b]">One-time enrollment</p>
                     ) : (
                       <span className="inline-flex items-center rounded-full bg-[#f5fbfa] px-2.5 py-1 text-xs font-semibold text-[#0ea5a4]">
-                        Purchased
+                        Enrolled
                       </span>
                     )}
                   </div>

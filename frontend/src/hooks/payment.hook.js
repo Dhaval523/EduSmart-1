@@ -27,7 +27,7 @@ export const useCheckoutSuccess=()=>{
             toast.success(data.message)
         },
         onError:(err)=>{
-            toast.error(err?.response?.data?.message || "Payment failed")
+            toast.error(err?.response?.data?.message || "Enrollment failed")
         }
     })
 }

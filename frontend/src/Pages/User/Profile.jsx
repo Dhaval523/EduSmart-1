@@ -182,7 +182,7 @@ const Profile = () => {
                       <BookOpen className='h-5 w-5' />
                     </span>
                     <div>
-                      <p className='text-sm font-semibold text-[#0f172a]'>Purchased courses</p>
+                      <p className='text-sm font-semibold text-[#0f172a]'>Enrolled courses</p>
                       <p className='text-xs text-[#51607b]'>All-time access</p>
                     </div>
                   </div>

@@ -5,6 +5,7 @@ import { useGetComment } from '@/hooks/module.hook'
 import { useCreateComment } from '@/hooks/comment.hook'
 import { useCreateQuiz, useGetQuiz } from '@/hooks/quiz.hook'
 import { useGetCourseProgress, useMarkModuleComplete } from '@/hooks/progress.hook'
+import { useGetCertificate } from '@/hooks/certificate.hook'
 import { ModuleVideoPlayer } from '@/components/ModuleVideoPlayer'
 import { Spinner } from '@/components/ui/spinner'
 import AIChatbot from '@/components/AIChatbot'
@@ -37,7 +38,7 @@ const LockedModuleState = ({ onUnlock }) => (
     </div>
     <h3 className='mt-4 text-xl font-semibold text-[#0f172a]'>Locked module</h3>
     <p className='mt-2 text-sm text-[#51607b] max-w-md'>
-      Purchase the course to unlock this module and access quizzes, resources, and progress tracking.
+      Enroll in the course to unlock this module and access quizzes, resources, and progress tracking.
     </p>
     <button type='button' onClick={onUnlock} className='mt-6 btn-primary'>
       Unlock Course
@@ -48,7 +49,7 @@ const LockedModuleState = ({ onUnlock }) => (
 const PreviewModeBanner = () => (
   <div className='flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2 text-xs text-[#0f172a]'>
     <BadgeCheck className='h-4 w-4 text-[#0f172a]' />
-    Preview mode - purchase to unlock full course features.
+    Preview mode - enroll to unlock full course features.
   </div>
 )
 
@@ -95,6 +96,17 @@ const CourseLearningPage = () => {
   const totalModules = progressData?.totalModules || modules.length || 0
   const completedCount = progressData?.completedCount || 0
   const percent = progressData?.percent || 0
+  const isCourseCompleted = Boolean(isPurchased && totalModules > 0 && percent === 100)
+
+  const {
+    data: certificateData,
+    isFetching: isCertificateLoading,
+    isError: isCertificateError,
+    refetch: refetchCertificate
+  } = useGetCertificate(courseId, isCourseCompleted)
+
+  const certificateUrl = certificateData?.certificate?.certificateUrl
+  const certificateViewUrl = `${import.meta.env.VITE_BASE_URL}/certificates/${courseId}/pdf`
 
   const { data: comments } = useGetComment(isPurchased ? selectedModule?._id : null)
   const { mutate: createComment } = useCreateComment()
@@ -194,7 +206,7 @@ const CourseLearningPage = () => {
                 <div className='h-full flex items-center justify-center text-center text-[#51607b]'>
                   <div>
                     <p className='text-lg font-semibold text-[#0f172a]'>Select a module to watch</p>
-                    <p className='text-sm text-[#51607b] mt-2'>Preview modules are available before purchase</p>
+                    <p className='text-sm text-[#51607b] mt-2'>Preview modules are available before enrollment</p>
                   </div>
                 </div>
               )}
@@ -278,7 +290,7 @@ const CourseLearningPage = () => {
               </div>
             ) : (
               <div className='text-center text-sm text-[#51607b]'>
-                Comments are available after purchase.
+                Comments are available after enrollment.
               </div>
             )}
           </div>
@@ -312,6 +324,41 @@ const CourseLearningPage = () => {
                     style={{ width: `${percent}%` }}
                   />
                 </div>
+
+                {isCourseCompleted ? (
+                  <div className='mt-4 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-gray-200 bg-white px-4 py-3'>
+                    <div>
+                      <p className='text-sm font-semibold text-[#0f172a]'>Certificate</p>
+                      <p className='text-xs text-[#51607b]'>
+                        {isCertificateLoading
+                          ? 'Preparing your certificate...'
+                          : certificateUrl
+                            ? 'Your certificate is ready to download.'
+                            : isCertificateError
+                              ? 'Could not fetch certificate. Try again.'
+                              : 'Certificate is available.'}
+                      </p>
+                    </div>
+                    {certificateUrl ? (
+                      <button
+                        type='button'
+                        onClick={() => window.open(certificateViewUrl, '_blank')}
+                        className='btn-secondary px-4 py-2 text-sm'
+                      >
+                        View Certificate
+                      </button>
+                    ) : (
+                      <button
+                        type='button'
+                        onClick={() => refetchCertificate()}
+                        disabled={isCertificateLoading}
+                        className='btn-secondary px-4 py-2 text-sm'
+                      >
+                        {isCertificateLoading ? 'Generating...' : 'Generate'}
+                      </button>
+                    )}
+                  </div>
+                ) : null}
               </div>
             ) : null}
 
